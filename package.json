@@ -1,6 +1,6 @@
 {
-  "name": "ks-ucombat-website",
-  "version": "0.0.0",
+  "name": "ksu-combat-website",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",

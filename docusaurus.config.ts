@@ -3,8 +3,8 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'KSU Combat Robotics',
+  tagline: 'KSU Combat Robotics is a student organization at Kent State University that designs, builds, and competes in combat robotics events at a variety of weight classes.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -56,24 +56,24 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'USINGimg/social-card.png',
     navbar: {
-      title: 'My Site',
+      title: 'Home',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'KSU Combat Robotics Logo',
         src: 'img/logo.svg',
       },
       items: [
+        //{
+         //type: 'docSidebar',
+          //sidebarId: 'tutorialSidebar',
+          //position: 'left',
+          //label: 'Tutorial',
+        //},
+        {to: '/blog', label: 'Team Updates', position: 'left'},
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Tutorial',
-        },
-        {to: '/blog', label: 'Blog', position: 'left'},
-        {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
+          href: 'https://kent.campuslabs.com/engage/organization/combatrobotics',
+          label: 'KSU Engage',
           position: 'right',
         },
       ],
@@ -82,46 +82,47 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
           title: 'More',
           items: [
             {
-              label: 'Blog',
+              label: 'Team Updates',
               to: '/blog',
             },
+          ],
+        },
+        {
+          title: 'Connect',
+          items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: 'Instagram',
+              href: 'https://www.instagram.com/ksucombatrobotics/',
+            },
+          ],
+        },
+        {
+          title: 'Contact',
+          items: [
+            {
+              label: 'Email',
+              href: '#',
+            },
+          ],  
+        },
+        {
+          title: 'Legal',
+          items: [
+            {
+              label: 'Kent State CSI',
+              to: 'https://www.kent.edu/csi',
+            },
+            {
+              label: 'Anti-Hazing Policy',
+              to: 'https://www.kent.edu/studentconduct/anti-hazing',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} KSU Combat Robotics - Built with Docusaurus`,
     },
     prism: {
       theme: prismThemes.github,

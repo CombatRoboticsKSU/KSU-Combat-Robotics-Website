@@ -1,52 +1,44 @@
+import React from 'react';
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+  Img: string; // Image source as a string
   description: JSX.Element;
 };
 
 const FeatureList: FeatureItem[] = [
   {
     title: 'Flash-BANG',
-    Svg: require('@site/static/USINGimg/Logo Stacked.svg').default,
+    Img: 'USINGimg/FlashBang.jpg',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Hit them Hard, Hit them Fast <br />
+        <br />
+        Flash-BANG is named after our school's mascot, a golden eagle named Flash. It takes significant inspiration from Battlebots like Minotaur & Copperhead.
       </>
     ),
   },
   {
     title: 'BIG-ISH',
-    Svg: require('@site/static/USINGimg/Logo Stacked.svg').default,
+    Img: 'USINGimg/Bigish.JPG',
     description: (
       <>
         It's not HUGE, It's not small, It's BIG-ISH <br />
         <br />
-        BIG-ISH is build to resemble the Battlebot HUGE, but at the 12lb* weight class.
-      </>
-    ),
-  },
-  {
-    title: 'Powered by React',
-    Svg: require('@site/static/USINGimg/Logo Stacked.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        BIG-ISH is built to resemble the Battlebot HUGE, but at the 12lb weight class. It also features significant improvements & design tweaks that contribute to its ability to be competitive.
       </>
     ),
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({ title, Img, description }: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx('col col--6')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <img src={Img} className={styles.featureImg} alt={title} />
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
