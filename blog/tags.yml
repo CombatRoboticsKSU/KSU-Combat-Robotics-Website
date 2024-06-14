@@ -14,3 +14,13 @@ hola:
   label: Hola
   permalink: /hola
   description: Hola tag description
+
+
+dev:
+  label: Dev
+  permalink: /dev
+  description: Dev tag description
+bots:
+  label: Bots
+  permalink: /bots
+  description: Bots tag description

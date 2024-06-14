@@ -70,6 +70,7 @@ const config: Config = {
           //position: 'left',
           //label: 'Tutorial',
         //},
+        {to: '/sponsorsphip', label: 'Sponsors', position: 'left'},
         {to: '/blog', label: 'Team Updates', position: 'left'},
         {
           href: 'https://kent.campuslabs.com/engage/organization/combatrobotics',
