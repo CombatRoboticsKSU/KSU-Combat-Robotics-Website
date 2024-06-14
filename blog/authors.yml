@@ -3,29 +3,28 @@ austint:
   name: Austin Thebner
   title: President
   #url:
-  image_url: https://yt3.googleusercontent.com/RV16SM21KLnpj8jkp-QGlwYW_QNNMP058IY9jgmT0_-JG5uwVi6V4t0aAxvSHriQIYnzbaBO3w=s176-c-k-c0x00ffffff-no-rj
+  image_url: /USINGimg/austint.jpg
 
 gregw:
   name: Gregory Wenner
   title: Vice President
   #url:
-  #image_url:
+  image_url: /USINGimg/greg.jpg
 
 adamt:
   name: Adam Turniski
   title: Treasurer
   #url:
-  image_url: static/USINGimg/adamt.png
+  image_url: /USINGimg/adam.jpg
 
 annaa:
   name: Anna Anello
   title: Funding Chair
   #url: https://github.com/Ollena5
-  image_url: https://media.licdn.com/dms/image/D5603AQHFFK-o_hCIZQ/profile-displayphoto-shrink_400_400/0/1682648061792?e=1723680000&v=beta&t=rjDxzUWtv4uoZrWBR9--P3eUkLp1uw6Q9mwtqgWpjOA
-
-
+  image_url: /USINGimg/anna.jpg
+  
 austins:
   name: Austin Sternberg
   title: Project Manager
   #url: https://yoyojesus.w3spaces.com/
-  image_url: https://media.licdn.com/dms/image/D5603AQHfWrJ8AhX--Q/profile-displayphoto-shrink_400_400/0/1688346768180?e=1723680000&v=beta&t=GAKDL4pXBX1YNE542fdhOTgesVpw_P42KN7ZtrYCosI
+  image_url: /USINGimg/austins.jpg

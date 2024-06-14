@@ -22,7 +22,7 @@ const InstagramPage: React.FC = () => {
 
   return (
     <Layout title="Instagram Feed">
-      <div style={{ textAlign: 'center', padding: '20px' }}>
+      <div style={{ textAlign: 'center', padding: '20px'}}>
         <h1>Our Instagram Feed</h1>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
           {posts.map((post: any) => (

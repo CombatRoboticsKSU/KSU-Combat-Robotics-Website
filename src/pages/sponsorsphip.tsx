@@ -32,17 +32,25 @@ export default function Home(): JSX.Element {
       description="Information about current sponsors, and the way to sponsor us in the future">
       <HomepageHeader />
       <main>
-        <p className='hero__title'>Current Sponsors:</p>
-        <ul>
-          <li>WardJet</li>
-          <li>IT Gresa</li>
-          <li>Bad-Ass Motors</li>
-          <li>Repeat Robotics</li>
-          <li>SendCutSend</li>
-        </ul>
+        <div style={{ textAlign: 'center', padding: '20px'}}>
+          <p className='hero__title'>Current Sponsors:</p>
+        </div>
 
-        <p className='hero__title'>Interested in Sponsoring Us?</p>
-        <p className='hero_subtitle'>Here are the details</p>
+        <div style={{ textAlign: 'center', padding: '20px'}}>
+          <ul style={{ listStyleType: 'none', padding: 0 }}>
+            <li><img src='/USINGimg/WARDjet.jpg' alt='WARDjet'></img></li>
+            <li><img src='/USINGimg/ITGresa.jpg' alt='IT Gresa'></img></li>
+            <li><img src='/USINGimg/BadAss.png' alt='Bad-Ass Motors'></img></li>
+            <li><img src='/USINGimg/repeat.webp' alt='Repeat Robotics'></img></li>
+            <li><img src='/USINGimg/SendCutSend.png' alt='SendCutSend'></img></li>
+          </ul>
+        </div>
+        
+
+        <div style={{ textAlign: 'center', padding: '20px'}}>
+            <p className='hero__title'>Interested in Sponsoring Us?</p>
+            <p className='hero_subtitle'>Here are the details</p>
+        </div>
       </main>
     </Layout>
   );

@@ -87,9 +87,21 @@ const config: Config = {
           title: 'More',
           items: [
             {
+              label: 'Home',
+              to: '/',
+            },
+            {
               label: 'Team Updates',
               to: '/blog',
             },
+            {
+              label: 'Sponsors',
+              to: '/sponsorsphip',
+            },
+            {
+              label: 'Instagram Feed',
+              to: '/instagram',
+            }
           ],
         },
         {
@@ -106,7 +118,7 @@ const config: Config = {
           items: [
             {
               label: 'Email',
-              href: '#',
+              href: 'mailto:ksu.fightingrobotics@gmail.com',
             },
           ],  
         },
