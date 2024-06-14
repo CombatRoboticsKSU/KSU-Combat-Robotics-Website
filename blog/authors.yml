@@ -1,26 +1,9 @@
-endi:
-  name: Endilie Yacop Sucipto
-  title: Maintainer of Docusaurus
-  url: https://github.com/endiliey
-  image_url: https://github.com/endiliey.png
-
-yangshun:
-  name: Yangshun Tay
-  title: Front End Engineer @ Facebook
-  url: https://github.com/yangshun
-  image_url: https://github.com/yangshun.png
-
-slorber:
-  name: Sébastien Lorber
-  title: Docusaurus maintainer
-  url: https://sebastienlorber.com
-  image_url: https://github.com/slorber.png
-
+#officers are the most likely to contribute to this site, here are their author tags - update this every election
 austint:
   name: Austin Thebner
   title: President
   #url:
-  #image_url:
+  image_url: https://yt3.googleusercontent.com/RV16SM21KLnpj8jkp-QGlwYW_QNNMP058IY9jgmT0_-JG5uwVi6V4t0aAxvSHriQIYnzbaBO3w=s176-c-k-c0x00ffffff-no-rj
 
 gregw:
   name: Gregory Wenner
@@ -37,12 +20,12 @@ adamt:
 annaa:
   name: Anna Anello
   title: Funding Chair
-  url: https://github.com/Ollena5
+  #url: https://github.com/Ollena5
   image_url: https://media.licdn.com/dms/image/D5603AQHFFK-o_hCIZQ/profile-displayphoto-shrink_400_400/0/1682648061792?e=1723680000&v=beta&t=rjDxzUWtv4uoZrWBR9--P3eUkLp1uw6Q9mwtqgWpjOA
 
 
 austins:
   name: Austin Sternberg
   title: Project Manager
-  url: https://yoyojesus.w3spaces.com/
+  #url: https://yoyojesus.w3spaces.com/
   image_url: https://media.licdn.com/dms/image/D5603AQHfWrJ8AhX--Q/profile-displayphoto-shrink_400_400/0/1688346768180?e=1723680000&v=beta&t=GAKDL4pXBX1YNE542fdhOTgesVpw_P42KN7ZtrYCosI

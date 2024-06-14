@@ -15,7 +15,7 @@ hola:
   permalink: /hola
   description: Hola tag description
 
-
+#KSU Combat Tags
 dev:
   label: Dev
   permalink: /dev

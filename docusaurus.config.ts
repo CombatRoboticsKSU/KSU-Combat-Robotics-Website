@@ -72,6 +72,7 @@ const config: Config = {
         //},
         {to: '/sponsorsphip', label: 'Sponsors', position: 'left'},
         {to: '/blog', label: 'Team Updates', position: 'left'},
+        {to: '/instagram', label: 'Instagram Feed', position: 'left'},
         {
           href: 'https://kent.campuslabs.com/engage/organization/combatrobotics',
           label: 'KSU Engage',
