@@ -7,6 +7,7 @@ import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
+
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
@@ -26,6 +27,7 @@ function HomepageHeader() {
 
 export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
+  const w = 500;
   return (
     <Layout
       title={`Sponsorship`}
@@ -36,15 +38,15 @@ export default function Home(): JSX.Element {
           <p className='hero__title'>Current Sponsors:</p>
         </div>
 
-        <div style={{ textAlign: 'center', padding: '20px'}}>
-          <ul style={{ listStyleType: 'none', padding: 0 }}>
-            <li><img src='/USINGimg/WARDjet.jpg' alt='WARDjet'></img></li>
-            <li><img src='/USINGimg/ITGresa.jpg' alt='IT Gresa'></img></li>
-            <li><img src='/USINGimg/BadAss.png' alt='Bad-Ass Motors'></img></li>
-            <li><img src='/USINGimg/repeat.webp' alt='Repeat Robotics'></img></li>
-            <li><img src='/USINGimg/SendCutSend.png' alt='SendCutSend'></img></li>
-          </ul>
-        </div>
+          <div className='sponsorshipPage'style={{ textAlign: 'center', padding: '20px'}}>
+            <ul style={{ listStyleType: 'none', padding: 0 }}>
+              <li><img src='/USINGimg/WARDjet.jpg' alt='WARDjet' width={w} height="auto"></img></li>
+              <li><img src='/USINGimg/ITGresa.jpg' alt='IT Gresa' width={w} height="auto"></img></li>
+              <li><img src='/USINGimg/BadAss.png' alt='Bad-Ass Motors' width={w} height="auto"></img></li>
+              <li><img src='/USINGimg/repeat.webp' alt='Repeat Robotics' width={w} height="auto"></img></li>
+              <li><img src='/USINGimg/SendCutSend.png' alt='SendCutSend' width={w} height="auto"></img></li>
+            </ul>
+          </div>
         
 
         <div style={{ textAlign: 'center', padding: '20px'}}>

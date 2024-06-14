@@ -15,8 +15,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'CombatRoboticsKSU', // Usually your GitHub org/user name.
+  projectName: 'KSU-Combat-Robotics-Website', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -33,19 +33,19 @@ const config: Config = {
     [
       'classic',
       {
-        docs: {
-          sidebarPath: './sidebars.ts',
+        //docs: {
+          //sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
+          //editUrl:
+            //'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        //},
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/CombatRoboticsKSU/KSU-Combat-Robotics-Website/tree/main',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -58,6 +58,7 @@ const config: Config = {
     // Replace with your project's social card
     image: 'USINGimg/social-card.png',
     navbar: {
+      style: 'dark',
       title: 'Home',
       logo: {
         alt: 'KSU Combat Robotics Logo',
