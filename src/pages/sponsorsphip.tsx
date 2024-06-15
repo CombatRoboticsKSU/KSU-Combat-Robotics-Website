@@ -4,6 +4,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
+import EmailForm from '@site/src/components/EmailForm';
 
 import styles from './index.module.css';
 
@@ -51,7 +52,7 @@ export default function Home(): JSX.Element {
 
         <div style={{ textAlign: 'center', padding: '20px'}}>
             <p className='hero__title'>Interested in Sponsoring Us?</p>
-            <p className='hero_subtitle'>Here are the details</p>
+            <EmailForm />
         </div>
       </main>
     </Layout>
