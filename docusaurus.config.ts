@@ -55,7 +55,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
     image: 'USINGimg/social-card.png',
     navbar: {
       style: 'dark',
@@ -65,15 +64,9 @@ const config: Config = {
         src: 'img/logo.svg',
       },
       items: [
-        //{
-         //type: 'docSidebar',
-          //sidebarId: 'tutorialSidebar',
-          //position: 'left',
-          //label: 'Tutorial',
-        //},
-        {to: '/sponsorsphip', label: 'Sponsors', position: 'left'},
-        {to: '/blog', label: 'Team Updates', position: 'left'},
-        {to: '/instagram', label: 'Instagram Feed', position: 'left'},
+        { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },
+        { to: '/blog', label: 'Team Updates', position: 'left' },
+        { to: 'https://www.instagram.com/ksucombatrobotics/', label: 'Instagram Feed', position: 'left' },
         {
           href: 'https://kent.campuslabs.com/engage/organization/combatrobotics',
           label: 'KSU Engage',
@@ -87,22 +80,10 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {
-              label: 'Home',
-              to: '/',
-            },
-            {
-              label: 'Team Updates',
-              to: '/blog',
-            },
-            {
-              label: 'Sponsors',
-              to: '/sponsorsphip',
-            },
-            {
-              label: 'Instagram Feed',
-              to: '/instagram',
-            }
+            { label: 'Home', to: '/' },
+            { label: 'Team Updates', to: '/blog' },
+            { label: 'Sponsors', to: '/sponsorsphip' },
+            { label: 'Instagram Feed', to: '/instagram' },
           ],
         },
         {
@@ -110,7 +91,11 @@ const config: Config = {
           items: [
             {
               label: 'Instagram',
-              href: 'https://www.instagram.com/ksucombatrobotics/',
+              to: 'https://www.instagram.com/ksucombatrobotics/',
+              logo: {
+                alt: 'Instagram',
+                src: 'static/USINGimg/insta.png', // Path to your Instagram logo file
+              },
             },
           ],
         },
@@ -121,7 +106,7 @@ const config: Config = {
               label: 'Email',
               href: 'mailto:ksu.fightingrobotics@gmail.com',
             },
-          ],  
+          ],
         },
         {
           title: 'Legal',
@@ -143,7 +128,7 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
-  } satisfies Preset.ThemeConfig,
+  } as Preset.ThemeConfig,
 };
 
 export default config;
