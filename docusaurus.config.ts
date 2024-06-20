@@ -1,5 +1,5 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
@@ -10,7 +10,6 @@ const config: Config = {
   // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
@@ -27,32 +26,37 @@ const config: Config = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
-  
   },
 
   presets: [
     [
       'classic',
-      
       {
-        //docs: {
-          //sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          //editUrl:
-            //'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        //},
         blog: {
+          path: './blog', // Path to your main blog directory
+          routeBasePath: 'blog', // URL route for your main blog
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/CombatRoboticsKSU/KSU-Combat-Robotics-Website/tree/main',
+          //editUrl: 'https://github.com/CombatRoboticsKSU/KSU-Combat-Robotics-Website/tree/main',
         },
         theme: {
           customCss: './src/css/custom.css',
         },
       } satisfies Preset.Options,
+    ],
+  ],
+
+  plugins: [
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'wiki',
+        path: './wiki', // Path to your wiki directory
+        routeBasePath: 'wiki', // URL route for your wiki
+        showReadingTime: true,
+        //editUrl: 'https://github.com/CombatRoboticsKSU/KSU-Combat-Robotics-Website/tree/main',
+        blogSidebarTitle: 'Our Bots', // Custom title for the wiki sidebar
+        blogSidebarCount: 'ALL',
+      },
     ],
   ],
 
@@ -71,6 +75,8 @@ const config: Config = {
       },
       items: [
         { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },
+        { to: '/contact', label: 'Contact Us', position: 'left' },
+        { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
         { href: 'https://www.instagram.com/ksucombatrobotics/',
           label: 'Instagram Feed', 
@@ -135,7 +141,7 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
-  } as Preset.ThemeConfig,
+  } satisfies Preset.ThemeConfig,
 };
 
 export default config;

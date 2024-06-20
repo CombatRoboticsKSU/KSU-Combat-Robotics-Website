@@ -50,10 +50,7 @@ export default function Home(): JSX.Element {
           </div>
         
 
-        <div style={{ textAlign: 'center', padding: '20px'}}>
-            <p className='hero__title'>Interested in Sponsoring Us?</p>
-            <EmailForm />
-        </div>
+        
       </main>
     </Layout>
   );

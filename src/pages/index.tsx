@@ -17,6 +17,15 @@ function HomepageHeader() {
         <img src='./USINGimg/longlogo.png'></img>
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <div className='row'>
+          <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
+            <Link to="/history">
+              <button style={{ fontSize: '30px', padding: '20px 30px' }}>
+                Club History
+              </button>
+            </Link>
+          </div>
+        </div>
         {/*<p>*Quick Note: This site is best viewed under the dark mode settings. Please click the little sun icon in the top right corner.</p>*/}
       </div>
     </header>

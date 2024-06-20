@@ -21,7 +21,6 @@ const EmailForm: React.FC = () => {
 
   return (
       <div style={{ textAlign: 'center', padding: '20px' }}>
-        <h1>Contact Us for Sponsorship Opportunities</h1>
         {submitted ? (
           <p>Thank you for your message. We will get back to you soon.</p>
         ) : (

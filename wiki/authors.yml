@@ -1,0 +1,30 @@
+#officers are the most likely to contribute to this site, here are their author tags - update this every election
+austint:
+  name: Austin Thebner
+  title: President
+  #url:
+  image_url: /USINGimg/austint.jpg
+
+gregw:
+  name: Gregory Wenner
+  title: Vice President
+  #url:
+  image_url: /USINGimg/greg.jpg
+
+adamt:
+  name: Adam Turniski
+  title: Treasurer
+  #url:
+  image_url: /USINGimg/adam.jpg
+
+annaa:
+  name: Anna Anello
+  title: Funding Chair
+  #url: https://github.com/Ollena5
+  image_url: /USINGimg/anna.jpg
+  
+austins:
+  name: Austin Sternberg
+  title: Project Manager
+  #url: https://yoyojesus.w3spaces.com/
+  image_url: /USINGimg/austins.jpg

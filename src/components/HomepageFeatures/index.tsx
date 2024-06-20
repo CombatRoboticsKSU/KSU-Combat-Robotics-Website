@@ -14,7 +14,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: (
       <Link to="/flash-bang">
-        <button>
+        <button style={{ fontSize: '25px', padding: '15px 25px' }}>
           Flash-BANG
         </button>
       </Link>
@@ -31,7 +31,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: (
       <Link to="/big-ish">
-        <button>
+        <button style={{ fontSize: '25px', padding: '15px 25px' }}>
           Big-ISH
         </button>
       </Link>
