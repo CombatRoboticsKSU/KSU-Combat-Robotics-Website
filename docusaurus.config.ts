@@ -27,11 +27,13 @@ const config: Config = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
+  
   },
 
   presets: [
     [
       'classic',
+      
       {
         //docs: {
           //sidebarPath: './sidebars.ts',
@@ -56,7 +58,7 @@ const config: Config = {
 
   themeConfig: {
     image: 'USINGimg/social-card.png',
-    style: 'dark',
+    defaultMode: 'dark',
 
     navbar: {
       style: 'dark',
