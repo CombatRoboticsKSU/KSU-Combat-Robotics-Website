@@ -6,7 +6,7 @@ const config: Config = {
   title: 'KSU Combat Robotics',
   tagline: 'KSU Combat Robotics is a student organization at Kent State University that designs, builds, and competes in combat robotics events at a variety of weight classes.',
   favicon: 'img/favicon.ico',
-
+  
   // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -56,6 +56,8 @@ const config: Config = {
 
   themeConfig: {
     image: 'USINGimg/social-card.png',
+    style: 'dark',
+
     navbar: {
       style: 'dark',
       title: 'Home',
