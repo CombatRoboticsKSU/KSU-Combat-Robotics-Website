@@ -17,7 +17,7 @@ function HomepageHeader() {
         <img src='./USINGimg/longlogo.png'></img>
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <p>*Quick Note: This site is best viewed under the dark mode settings. Please click the little sun icon in the top right corner.</p>
+        {/*<p>*Quick Note: This site is best viewed under the dark mode settings. Please click the little sun icon in the top right corner.</p>*/}
       </div>
     </header>
       
