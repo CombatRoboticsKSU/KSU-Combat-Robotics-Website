@@ -66,7 +66,9 @@ const config: Config = {
       items: [
         { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
-        { to: 'https://www.instagram.com/ksucombatrobotics/', label: 'Instagram Feed', position: 'left' },
+        { href: 'https://www.instagram.com/ksucombatrobotics/',
+          label: 'Instagram Feed', 
+          position: 'right' },
         {
           href: 'https://kent.campuslabs.com/engage/organization/combatrobotics',
           label: 'KSU Engage',
@@ -83,7 +85,6 @@ const config: Config = {
             { label: 'Home', to: '/' },
             { label: 'Team Updates', to: '/blog' },
             { label: 'Sponsors', to: '/sponsorsphip' },
-            { label: 'Instagram Feed', to: '/instagram' },
           ],
         },
         {
@@ -91,7 +92,7 @@ const config: Config = {
           items: [
             {
               label: 'Instagram',
-              to: 'https://www.instagram.com/ksucombatrobotics/',
+              href: 'https://www.instagram.com/ksucombatrobotics/',
               logo: {
                 alt: 'Instagram',
                 src: 'static/USINGimg/insta.png', // Path to your Instagram logo file
