@@ -1,17 +1,24 @@
 import React from 'react';
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
+import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 type FeatureItem = {
-  title: string;
+  title: JSX.Element;
   Img: string; // Image source as a string
   description: JSX.Element;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Flash-BANG',
+    title: (
+      <Link to="/flash-bang">
+        <button>
+          Flash-BANG
+        </button>
+      </Link>
+    ),
     Img: 'USINGimg/FlashBang.jpg',
     description: (
       <>
@@ -22,7 +29,13 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: 'BIG-ISH',
+    title: (
+      <Link to="/big-ish">
+        <button>
+          Big-ISH
+        </button>
+      </Link>
+    ),
     Img: 'USINGimg/Bigish.JPG',
     description: (
       <>
@@ -38,7 +51,7 @@ function Feature({ title, Img, description }: FeatureItem) {
   return (
     <div className={clsx('col col--6')}>
       <div className="text--center">
-        <img src={Img} className={styles.featureImg} alt={title} />
+        <img src={Img} className={styles.featureImg} alt={title.toString()} />
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
