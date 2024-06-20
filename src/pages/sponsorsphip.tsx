@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import HomepageFeatures from '@site/src/components/HomepageFeatures/index';
 import Heading from '@theme/Heading';
-import EmailForm from '@site/src/components/EmailForm';
+import EmailForm from '@site/src/components/EmailForm/index';
 
 import styles from './index.module.css';
 
@@ -44,7 +44,7 @@ export default function Home(): JSX.Element {
               <li><img src='/USINGimg/WARDjet.jpg' alt='WARDjet' width={w} height="auto"></img></li>
               <li><img src='/USINGimg/ITGresa.jpg' alt='IT Gresa' width={w} height="auto"></img></li>
               <li><img src='/USINGimg/BadAss.png' alt='Bad-Ass Motors' width={w} height="auto"></img></li>
-              <li><img src='/USINGimg/repeat.webp' alt='Repeat Robotics' width={w} height="auto"></img></li>
+              <li><img src='/USINGimg/Repeat.png' alt='Repeat Robotics' width={w} height="auto"></img></li>
               <li><img src='/USINGimg/SendCutSend.png' alt='SendCutSend' width={w} height="auto"></img></li>
             </ul>
           </div>

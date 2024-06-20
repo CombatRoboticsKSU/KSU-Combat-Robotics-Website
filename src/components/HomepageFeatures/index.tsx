@@ -41,7 +41,6 @@ function Feature({ title, Img, description }: FeatureItem) {
         <img src={Img} className={styles.featureImg} alt={title} />
       </div>
       <div className="text--center padding-horiz--md">
-        <img src='USINGimg/ksu.png' className={styles.ksuLogo} alt='KSU Logo' />
         <Heading as="h3">{title}</Heading>
         <p>{description}</p>
       </div>

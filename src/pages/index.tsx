@@ -14,12 +14,10 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
-          {siteConfig.title}
+        <img src='./USINGimg/longlogo.png'></img>
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          
-        </div>
+        
       </div>
     </header>
   );
@@ -33,7 +31,7 @@ export default function Home(): JSX.Element {
       description="Landing page for KSU Combat Robotics domain">
       <HomepageHeader />
       <main>
-        <PhotoCropper src="USINGimg/TEAM.JPG" height={1400} />
+        <PhotoCropper src="USINGimg/TEAM.png" height={1400} />
         <HomepageFeatures />
       </main>
     </Layout>
