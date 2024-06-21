@@ -72,13 +72,13 @@ description: "Detailed information about Big-ISH."
 
 
 ## Team Members
-- **Designer:** Originally designed by Brendon Steele, 2024 redesign: Matt Shultzman
+- **Designer:** Originally designed by Brendon Steele, 2024 redesign: Matt Schutzman
 - **Builder:** KSU JV team
-- **Bot Champion** Matt Shultzman
+- **Bot Champion** Matt Schutzman
 - **Bot Champion History:** 
     - Austin Theber (2022) 
     - Austin Sternberg (2023)
-    - Matt Shultzman (2024)
+    - Matt Schutzman (2024)
 
 ## Additional Information
 <!-- Any other relevant information, anecdotes, or fun facts about the bot-->
