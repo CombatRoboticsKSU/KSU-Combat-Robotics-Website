@@ -65,13 +65,14 @@ const config: Config = {
     colorMode: {
       defaultMode: 'dark'
     },
+    customCss: require.resolve('./src/css/custom.css'),
 
     navbar: {
       style: 'dark',
       title: 'Home',
       logo: {
         alt: 'KSU Combat Robotics Logo',
-        src: 'img/logo.svg',
+        src: 'USINGimg/Logos.png',
       },
       items: [
         { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },

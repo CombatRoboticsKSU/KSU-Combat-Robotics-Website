@@ -28,3 +28,19 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: #013975;
 }
+
+/* Navbar background color */
+.navbarDefault.navbar {
+  background-color: #013975; /* Replace with your desired color */
+}
+
+/* Footer background color */
+.footer {
+  background-color: #013975; /* Replace with your desired color */
+}
+
+/* Navbar background color */
+.navbar {
+  background-color: #013975; /* Replace with your desired color */
+}
+
