@@ -1,59 +1,85 @@
 ---
-title: "Bot Name"
-description: "Detailed information about Bot Name."
+title: "Big-ISH"
+description: "Detailed information about Big-ISH."
 ---
 
-# Bot Name
+# Big-ISH
 
 ## Overview
-A brief description of the bot, its design, and its capabilities.
+<!-- A brief description of the bot, its design, and its capabilities.-->
+
 
 ## Specifications
-- **Weight Class:** [Weight Class]
-- **Dimensions:** [Dimensions]
-- **Weapon:** [Weapon Type]
-- **Drive:** [Drive Type]
-- **Material:** [Material Type]
+- **Weight Class:** 12 lbs
+- **Body Material:** Welded 6061 Aluminum
+- **Weapon:** 3 pound vertical spinning blade made of 1/2" AR500 steel
+- **Weapon Drive:** Propdrive 4248 650kv, 2:1 reduction
+- **Drive:** RS-550 motor, 64:1 BaneBots direct drive, 12 inch tall wheels made of 1/4" Tegris
+- **Power:** 3s LiPo on drive, 5s LiPo on weapon
 
 ## Competition Record
 
-### [Competition Name]
-- **Location:** [Location]
-- **Date:** [Date]
-- **Wins:** [Number of Wins]
-- **Losses:** [Number of Losses]
-- **Outcome:** [Overall Outcome or Achievement]
+### NHRL March 26, 2022
+- **Location:** Norwalk, CN
+- **Date:** March 26, 2022
+- **Fights:** 5
+- **Wins:** 3
+- **Losses:** 2
+- **KOs:** 3
+- **KO'd:** 1
+- **Outcome:** Elimination 2A
 
-### [Competition Name]
-- **Location:** [Location]
-- **Date:** [Date]
-- **Wins:** [Number of Wins]
-- **Losses:** [Number of Losses]
-- **Outcome:** [Overall Outcome or Achievement]
+### NRHL November 12, 2022
+- **Location:** Norwalk, CN
+- **Date:** November 12, 2022
+- **Fights:** 6
+- **Wins:** 4
+- **Losses:** 2
+- **KOs:** 2
+- **KO'd:** 1
+- **Outcome:** Elimination Final, 3rd Place
 
-### [Competition Name]
-- **Location:** [Location]
-- **Date:** [Date]
-- **Wins:** [Number of Wins]
-- **Losses:** [Number of Losses]
-- **Outcome:** [Overall Outcome or Achievement]
+### NHRL December 17, 2022
+- **Location:** Norwalk, CN
+- **Date:** December 17, 2022
+- **Fights:** 2
+- **Wins:** 0
+- **Losses:** 2
+- **KOs:** 0
+- **KO'd:** 1
+- **Outcome:** Elimination 1
+
+### XtremeBots 2024
+- **Location:** Dayton, Ohio
+- **Date:** March 22, 2024
+- **Fights:** 3
+- **Wins:** 1
+- **Losses:** 2
+- **KOs:** 1
+- **KO'd:** 1
+- **Outcome:** 
 
 ## Gallery
-A section for images of the bot in action, at rest, or during competitions.
+<!-- A section for images of the bot in action, at rest, or during competitions. -->
+
 
 
 
 ## Media Coverage
-Links to articles, videos, or other media coverage of the bot.
+<!--  Links to articles, videos, or other media coverage of the bot. -->
+
 
 
 
 ## Team Members
-- **Designer:** [Designer Name]
-- **Builder:** [Builder Name]
-- **Operator:** [Operator Name]
-- **Support:** [Support Member Name]
+- **Designer:** Originally designed by Brendon Steele, 2024 redesign: Matt Shultzman
+- **Builder:** KSU JV team
+- **Bot Champion** Matt Shultzman
+- **Bot Champion History:** 
+    - Austin Theber (2022) 
+    - Austin Sternberg (2023)
+    - Matt Shultzman (2024)
 
 ## Additional Information
-Any other relevant information, anecdotes, or fun facts about the bot.
+<!-- Any other relevant information, anecdotes, or fun facts about the bot-->
 
