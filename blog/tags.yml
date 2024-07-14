@@ -1,20 +1,3 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
-
 #KSU Combat Tags
 dev:
   label: Dev
@@ -24,3 +7,11 @@ bots:
   label: Bots
   permalink: /bots
   description: Bots tag description
+events:
+  label: Events
+  permalink: /events
+  description: Events tag description
+updates:
+  label: Updates
+  permalink: /updates
+  description: Updates tag description

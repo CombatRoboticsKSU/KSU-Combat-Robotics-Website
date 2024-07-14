@@ -16,7 +16,7 @@ export default function Home(): JSX.Element {
         <main>
           <div style={{ width: '100%', height: '100vh' }}>
             <div style={{ textAlign: 'center', padding: '10px'}}>
-                <p className='hero__title'>Questions? Comments? Which to support us? Let us know!</p>
+                <p className='hero__title'>Questions? Comments? Want to support us? Let us know!</p>
                 <EmailForm />
             </div>
           </div>

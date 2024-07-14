@@ -28,3 +28,10 @@ austins:
   title: Project Manager
   #url: https://yoyojesus.w3spaces.com/
   image_url: /USINGimg/austins.jpg
+
+#in the event we need a general 'team' author, here is its information
+team:
+  name: The KSU Combat Robotics Team
+  title: Go Flashes!
+  #url:
+  image_url: /USINGimg/logos.png
