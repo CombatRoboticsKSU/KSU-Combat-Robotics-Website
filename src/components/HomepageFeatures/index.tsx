@@ -13,7 +13,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: (
-      <Link to="/wiki/Flash-Bang">
+      <Link to='/wiki/Flash-Bang'>
         <button style={{ fontSize: '25px', padding: '15px 25px' }}>
           Flash-BANG
         </button>
