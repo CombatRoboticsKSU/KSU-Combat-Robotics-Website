@@ -1,7 +1,7 @@
 ---
 title: "Big-ISH"
 description: "Detailed information about Big-ISH."
-slug: Big-ISH
+slug: Bigish
 ---
 
 # Big-ISH

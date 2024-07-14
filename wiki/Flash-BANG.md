@@ -1,7 +1,7 @@
 ---
 title: "Flash-BANG"
 description: "Detailed information about Flash-BANG."
-slug: Flash-BANG
+slug: flashbang
 ---
 
 

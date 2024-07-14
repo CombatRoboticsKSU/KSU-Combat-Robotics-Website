@@ -5,21 +5,21 @@ import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 type FeatureItem = {
-  title: React.ReactNode; // More flexible for various content
+  title: React.ReactNode; // Allowing JSX or text
   Img: string;
-  description: React.ReactNode;
+  description: React.ReactNode; // Allowing JSX or text
 };
 
 const FeatureList: FeatureItem[] = [
   {
     title: (
-      <Link to="/wiki/Flash-Bang">
+      <Link to="/wiki/flashbang">
         <button style={{ fontSize: '25px', padding: '15px 25px' }}>
           Flash-BANG
         </button>
       </Link>
     ),
-    Img: 'USINGimg/FlashBang.jpg',
+    Img: 'USINGimg/FlashBang.jpg', // Assuming the image is in the static folder
     description: (
       <>
         Hit them Hard, Hit them Fast <br />
@@ -30,13 +30,13 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: (
-      <Link to="/wiki/Big-ISH">
+      <Link to="/wiki/bigish">
         <button style={{ fontSize: '25px', padding: '15px 25px' }}>
           Big-ISH
         </button>
       </Link>
     ),
-    Img: 'USINGimg/Bigish.JPG',
+    Img: 'USINGimg/Bigish.JPG', // Assuming the image is in the static folder
     description: (
       <>
         It's not HUGE, It's not small, It's BIG-ISH <br />
