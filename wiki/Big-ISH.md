@@ -76,14 +76,14 @@ slug: bigish
 
 
 ## Team Members
-- **Designer:** Originally designed by Brendon Steele, 2024 redesign: Matt Schutzman
+- **Designer:** Originally designed by Brendan Steele, 2024 redesign: Matt Schutzman
 - **Builder:** KSU JV team
 - **Bot Champion** Matt Schutzman
 - **Bot Champion History:**  
     - Matt Schutzman (2024-)
     - Austin Sternberg (2023-2024)
     - Austin Theber (2022-2023)
-    - Brendon Steele (2020-2022)
+    - Brendan Steele (2020-2022)
 
 ## Additional Information
 <!-- Any other relevant information, anecdotes, or fun facts about the bot-->
