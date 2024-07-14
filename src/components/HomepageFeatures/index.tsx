@@ -30,7 +30,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: (
-      <Link to="wiki/Big-ISH">
+      <Link to="/wiki/Big-ISH">
         <button style={{ fontSize: '25px', padding: '15px 25px' }}>
           Big-ISH
         </button>
