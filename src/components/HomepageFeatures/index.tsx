@@ -5,15 +5,15 @@ import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 type FeatureItem = {
-  title: JSX.Element;
-  Img: string; // Image source as a string
-  description: JSX.Element;
+  title: React.ReactNode; // More flexible for various content
+  Img: string;
+  description: React.ReactNode;
 };
 
 const FeatureList: FeatureItem[] = [
   {
     title: (
-      <Link to='../wiki/Flash-Bang'>
+      <Link to="/wiki/Flash-Bang">
         <button style={{ fontSize: '25px', padding: '15px 25px' }}>
           Flash-BANG
         </button>
@@ -30,7 +30,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: (
-      <Link to="../wiki/Big-ISH">
+      <Link to="/wiki/Big-ISH">
         <button style={{ fontSize: '25px', padding: '15px 25px' }}>
           Big-ISH
         </button>
@@ -51,7 +51,7 @@ function Feature({ title, Img, description }: FeatureItem) {
   return (
     <div className={clsx('col col--6')}>
       <div className="text--center">
-        <img src={Img} className={styles.featureImg} alt={title.toString()} />
+        <img src={Img} className={styles.featureImg} alt="Feature" />
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
