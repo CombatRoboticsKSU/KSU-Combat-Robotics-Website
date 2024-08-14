@@ -44,8 +44,8 @@ export default function Home(): JSX.Element {
               <li><img src='/USINGimg/WARDjet.jpg' alt='WARDjet' width={w} height="auto"></img></li>
               <li><img src='/USINGimg/ITGresa.jpg' alt='IT Gresa' width={w} height="auto"></img></li>
               <li><img src='/USINGimg/BadAss.png' alt='Bad-Ass Motors' width={w} height="auto"></img></li>
-              <li><img src='/USINGimg/Repeat.png' alt='Repeat Robotics' width={w} height="auto"></img></li>
-              <li><img src='/USINGimg/SendCutSend.png' alt='SendCutSend' width={w} height="auto"></img></li>
+              <li><img src='/USINGimg/repeat_g.jpg' alt='Repeat Robotics' width={w} height="auto"></img></li>
+              <li><img src='/USINGimg/send_g.jpg' alt='SendCutSend' width={w} height="auto"></img></li>
             </ul>
           </div>
         

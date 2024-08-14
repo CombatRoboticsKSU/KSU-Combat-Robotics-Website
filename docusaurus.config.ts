@@ -91,6 +91,7 @@ const config: Config = {
           title: 'More',
           items: [
             { label: 'Home', to: '/' },
+            { label: 'KSU BOT Wiki', to: '/wiki' },
             { label: 'Team Updates', to: '/blog' },
             { label: 'Sponsors', to: '/sponsorsphip' },
           ],
