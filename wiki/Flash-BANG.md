@@ -52,10 +52,10 @@ slug: flashbang
 
 ## Gallery
 <!-- A section for images of the bot in action, at rest, or during competitions. -->
-![203 bot config](https://cdn.discordapp.com/attachments/1073063426672304209/1086844985644691527/IMG_20230318_113859714_HDR.jpg?ex=66953805&is=6693e685&hm=d10efa590f9051821608d879c11441d33afcfedf1d434da4a7c1a48e125ead01&)
-![botprogress](https://cdn.discordapp.com/attachments/1073063426672304209/1083914300462207036/IMG_20230310_191725510.jpg?ex=66951a9b&is=6693c91b&hm=da37a9a0f61b3b33edebfcf1c99a10861051315747e4a463254fa2480ef35bd4&)
-![ray](https://media.discordapp.net/attachments/1120463476947689565/1122295956063404143/20230624_182343.jpg?ex=6694fd4f&is=6693abcf&hm=290af8878087c5e39e215c0b4337e43cb490b98b9f10c973fe6c976bec50d57a&=&format=webp&width=1660&height=1246)
-![hi!](https://cdn.discordapp.com/attachments/1073063426672304209/1152436812179046474/image.png?ex=669537ab&is=6693e62b&hm=7b8d2e6e0adb3b2d7b0a6927fbec1012251be65f44a81e4ef023de04d8db531c&)
+![frame](img/frame.jpg)
+![botprogress](img/work_in_p.jpg)
+![ray](img/rayb.jpg)
+![hi!](img/hi.jpg)
 
 ## Media Coverage
 <!-- Links to articles, videos, or other media coverage of the bot. -->
