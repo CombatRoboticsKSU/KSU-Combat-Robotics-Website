@@ -63,7 +63,7 @@ slug: bigish
 ## Gallery
 <!-- A section for images of the bot in action, at rest, or during competitions. -->
 ![old bot config](img/bigish_old.jpg)
-![action shot](img/b_action.jpg)
+![action shot](img/B_action.jpg)
 ![action shot](img/b_action2.jpg)
 ![old weapon](img/b_oldw.jpg)
 ![old team photo](img/team_old.jpg)
