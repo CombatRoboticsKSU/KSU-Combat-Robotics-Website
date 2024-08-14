@@ -69,7 +69,7 @@ const config: Config = {
       },
       items: [
         { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },
-        { to: '/contact', label: 'Contact Us', position: 'left' },
+        { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' },
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
         {
