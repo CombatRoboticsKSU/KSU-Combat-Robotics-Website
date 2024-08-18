@@ -26,6 +26,9 @@ function HomepageHeader() {
             </Link>
           </div>
         </div>
+        <br/>
+        <br/>
+        <p className="hero__subtitle">We meet every Friday from 4-7pm in 120 AEB. <br/> Being a club member is <i>ONLY</i> available to KSU Students. </p>
         {/*<p>*Quick Note: This site is best viewed under the dark mode settings. Please click the little sun icon in the top right corner.</p>*/}
       </div>
     </header>
