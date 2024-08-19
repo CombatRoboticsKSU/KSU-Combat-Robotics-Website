@@ -19,17 +19,13 @@ function HomepageHeader() {
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className='row'>
-          {/* <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
-            <Link to="/history">
-              <button style={{ fontSize: '30px', padding: '20px 30px' }}>
-                Club History
-              </button>
-            </Link>
-          </div> */}
+          <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
+         
+          </div> 
         </div>
         <br/>
         <br/>
-        <p className="hero__subtitle">We meet every Friday from 4-7pm in 120 AEB. <br/> Being a club member is <i>ONLY</i> available to KSU Students. </p>
+        <p className="hero__subtitle">We meet every Friday from 5-7pm in 120 AEB. <br/> Being a club member is <i>ONLY</i> available to KSU Students. </p>
         {/*<p>*Quick Note: This site is best viewed under the dark mode settings. Please click the little sun icon in the top right corner.</p>*/}
       </div>
     </header>
