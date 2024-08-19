@@ -5,6 +5,7 @@ import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
 import PhotoCropper from '@site/src/components/PhotoCropper/';
+import { Analytics } from "@vercel/analytics/react"
 
 import styles from './index.module.css';
 
@@ -46,6 +47,7 @@ export default function Home(): JSX.Element {
       <main>
         <PhotoCropper src="USINGimg/TEAM.png" height={1700} />
         <HomepageFeatures />
+        <Analytics/>
       </main>
     </Layout>
   );
