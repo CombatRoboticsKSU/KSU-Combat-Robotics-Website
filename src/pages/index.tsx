@@ -41,7 +41,7 @@ export default function Home(): JSX.Element {
       description="Landing page for KSU Combat Robotics domain">
       <HomepageHeader />
       <main>
-        <PhotoCropper src="USINGimg/TEAM.png" height={1700} />
+        <PhotoCropper src="USINGimg/TEAM.png" height="full" />
         <HomepageFeatures />
         <Analytics/>
       </main>
