@@ -2,7 +2,7 @@
 dev:
   label: Dev
   permalink: /dev
-  description: Dev tag description
+  description: Dev tag description - example stuff
 bots:
   label: Bots
   permalink: /bots
@@ -15,3 +15,7 @@ updates:
   label: Updates
   permalink: /updates
   description: Updates tag description
+info:
+  label: Info
+  permalink: /info
+  description: Info tag description
