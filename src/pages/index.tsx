@@ -20,7 +20,14 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className='row'>
           <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
-         
+          <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
+            <Link to="https://discord.com/invite/qxqDEgcKns">
+              <button style={{ fontSize: '30px', padding: '20px 30px' }}>
+                Club History
+                Discord
+              </button>
+            </Link>
+          </div>
           </div> 
         </div>
         <br/>
