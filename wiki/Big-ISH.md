@@ -22,7 +22,7 @@ slug: bigish
 ## Competition Record
 
 ### NHRL March 26, 2022
-- **Location:** Norwalk, CN
+- **Location:** Norwalk, CT
 - **Date:** March 26, 2022
 - **Fights:** 5
 - **Wins:** 3
@@ -32,7 +32,7 @@ slug: bigish
 - **Outcome:** Elimination 2A
 
 ### NRHL November 12, 2022
-- **Location:** Norwalk, CN
+- **Location:** Norwalk, CT
 - **Date:** November 12, 2022
 - **Fights:** 6
 - **Wins:** 4
@@ -42,7 +42,7 @@ slug: bigish
 - **Outcome:** Elimination Final, 3rd Place
 
 ### NHRL December 17, 2022
-- **Location:** Norwalk, CN
+- **Location:** Norwalk, CT
 - **Date:** December 17, 2022
 - **Fights:** 2
 - **Wins:** 0
@@ -80,7 +80,7 @@ slug: bigish
 - **Builder:** KSU JV team
 - **Bot Champion** Matt Schutzman
 - **Bot Champion History:**  
-    - Matt Schutzman (2024-)
+    - Matt Schutzman (2024-Current)
     - Austin Sternberg (2023-2024)
     - Austin Theber (2022-2023)
     - Brendan Steele (2020-2022)

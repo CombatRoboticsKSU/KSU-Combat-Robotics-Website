@@ -14,7 +14,7 @@ slug: SorApp
 
 ## Specifications
 - **Weight Class:** 15 lbs (divided in half so each bot is 7.5lbs)
-- **Body Material:** Welded 6061 Aluminum
+- **Body Material:** Mechanically Fastened 6061 Aluminum
 - **Weapon:** 6061 Aluminum Wedgelets (2 on each bot)
 - **Drive:** 775 motors attached with sprockets and chained to the drive wheels
 - **Power:** 10s NIMH Battery
@@ -47,7 +47,7 @@ slug: SorApp
 - **Designer:** Originally designed by Maddie Wilson, 2017 Redesign by Mike Nelson
 - **Status:** Retired
 - **Bot Champion History:**
-    - Mike Wilson(2017-2018)
+    - Mike Nelson(2017-2018)
     - Maddie Wilson (2016-2017)
 
 ## Additional Information

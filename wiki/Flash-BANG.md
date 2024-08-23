@@ -22,7 +22,7 @@ slug: flashbang
 ## Competition Record
 
 ### NHRL March 18, 2023
-- **Location:** Norwalk, CN
+- **Location:** Norwalk, CT
 - **Date:** March 18, 2023
 - **Fights:** 3
 - **Wins:** 2
@@ -32,7 +32,7 @@ slug: flashbang
 - **Outcome:** Rival
 
 ### NHRL June 24, 2023
-- **Location:** Norwalk, CN
+- **Location:** Norwalk, CT
 - **Date:** June 24, 2023
 - **Fights:** 3
 - **Wins:** 1
@@ -68,7 +68,7 @@ Our local newspaper has covered our bot a few years ago, read about it [here](ht
 - **Builder:** KSU Combat Varsity Team
 - **Bot Champion:** Mike U.
 - **Bot Champion History:** 
-  - Mike U. (2024-)
+  - Mike U. (2024-Current)
   - Austin T (2022-2024)
 
 ## Additional Information
