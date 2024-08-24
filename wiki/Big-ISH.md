@@ -66,6 +66,7 @@ slug: bigish
 ![action shot](img/B_action.jpg)
 ![action shot](img/b_action2.jpg)
 ![old weapon](img/b_oldw.jpg)
+![Johnathon Shlutz](img/johnathons.JPG)
 ![old team photo](img/team_old.jpg)
 
 
