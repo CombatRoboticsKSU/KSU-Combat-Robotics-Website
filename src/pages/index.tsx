@@ -19,13 +19,6 @@ function HomepageHeader() {
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className='row'>
-          <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
-            <Link to="https://discord.com/invite/qxqDEgcKns">
-              <button style={{ fontSize: '30px', padding: '20px 30px' }}>
-                Discord
-              </button>
-            </Link>
-          </div> 
         </div>
         <br/>
         <br/>
