@@ -50,6 +50,7 @@ export default function Home(): JSX.Element {
         <PhotoCropper src="USINGimg/TEAM.png" height="full" />
         <HomepageFeatures />
         <Analytics/>
+        <SpeedInsights/>
       </main>
     </Layout>
   );
