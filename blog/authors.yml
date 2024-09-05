@@ -29,6 +29,24 @@ austins:
   #url: https://yoyojesus.w3spaces.com/
   image_url: /USINGimg/austins.jpg
 
+katiep:
+  name: Katie Pudloski
+  title: Social Media Lead
+  #url:
+  image_url: /USINGimg/katie.jpg
+
+matts:
+  name: Matt Shutzman
+  title: Biggish Champion
+  #url:
+  image_url: /USINGimg/matt.jpg
+
+mikeyu:
+  name: Mikey Uher 
+  title: Flashbang Champion
+  #url:
+  image_url: /USINGimg/mikey.jpg
+
 #in the event we need a general 'team' author, here is its information
 team:
   name: The KSU Combat Robotics Team
