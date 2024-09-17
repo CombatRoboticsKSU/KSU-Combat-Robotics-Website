@@ -31,7 +31,7 @@ slug: bigish
 - **KO'd:** 1
 - **Outcome:** Elimination 2A
 
-### NRHL November 12, 2022
+### NHRL November 12, 2022
 - **Location:** Norwalk, CT
 - **Date:** November 12, 2022
 - **Fights:** 6
