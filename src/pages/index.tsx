@@ -48,6 +48,13 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <PhotoCropper src="USINGimg/TEAM.png" height="full" />
+        <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
+            <Link to='/history'>
+              <button style={{ fontSize: '40px', padding: '20px 30px' }}>
+                Club History
+              </button>
+            </Link>
+          </div> 
         <HomepageFeatures />
         <Analytics/>
         <SpeedInsights/>

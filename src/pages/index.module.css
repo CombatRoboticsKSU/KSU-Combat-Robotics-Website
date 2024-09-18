@@ -21,3 +21,13 @@
   align-items: center;
   justify-content: center;
 }
+
+@media (max-width: 768px) {
+  section {
+    flex-direction: column;
+    text-align: center;
+  }
+  img {
+    margin: 0 auto 20px auto;
+  }
+}

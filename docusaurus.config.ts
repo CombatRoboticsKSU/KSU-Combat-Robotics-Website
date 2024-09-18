@@ -94,6 +94,7 @@ const config: Config = {
             { label: 'KSU BOT Wiki', to: '/wiki' },
             { label: 'Team Updates', to: '/blog' },
             { label: 'Sponsors', to: '/sponsorsphip' },
+            { label: 'History', to: '/history' },
           ],
         },
         {
