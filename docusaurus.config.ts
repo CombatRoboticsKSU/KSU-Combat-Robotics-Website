@@ -62,7 +62,7 @@ const config: Config = {
 
     navbar: {
       style: 'dark',
-      title: 'Home',
+      title: '',
       logo: {
         alt: 'KSU Combat Robotics Logo',
         src: 'USINGimg/Logos.png',
