@@ -30,6 +30,15 @@ export default function Home(): JSX.Element {
       description="Linear series of events and milestones of our club">
       <main>
         <HomepageHeader />
+
+       {/* Embedded Local Video */}
+        {/*<div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
+          <video width="640" height="360" controls>
+            <source src="/USINGimg/Xbots Promo Video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>*/}
+
         <div style={{ width: '100%', padding: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ maxWidth: '1500', padding: '20px' }}>
 
@@ -53,7 +62,15 @@ export default function Home(): JSX.Element {
                   equipped with titanium wedges that allowed for a strong control game. They were active from the start until 2019 
                   when Big-Ish was introduced. During their years, they went through a few revisions until they found success at Dayton 
                   and the National Robotics League’s competition in Pittsburg. Their final and most successful redesign was wide-body bots with 6061 
-                  Aluminum wedges equipped to the front of the bots.
+                  Aluminum wedges equipped to the front of the bots. The twins would be moved to the junior team in late 2017, and then retired after 2019.
+                </p>
+                <p>
+                After many competitions with The Twins the team decided to create a bot with a more aggressive style. This led to the idea of OSHA Approved. It was 
+                designed by Mike Nelson and kept the defensive style of the twins but added a proper weapon. The design was very low profile, with a cut off pyramid 
+                look to it. Aluminum wedges surrounded the rectangular body of the bot entirely except where the weapon was. It came equipped with a dual spinning 
+                vertical blade set up, which greatly helped the aggressive style the club was developing. Over its few years of life OSHA Approved was seen only at 
+                NRL competitions. For the 2018 season, OSHA Approved became OSHA Improved with a significant changes to its weapon and armor. Unfortunately, the 
+                OSHA series of bots where decommissioned in late 2019.
                 </p>
               </div>
             </section>
@@ -61,7 +78,7 @@ export default function Home(): JSX.Element {
             {/* Section 2: Big-Ish Introduction */}
             <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
               <img
-                src="/USINGimg/Bigish.JPG"
+                src="/USINGimg/bigish_old.jpg"
                 alt="Big-Ish"
                 style={{ width: '400px', marginRight: '20px', borderRadius: '8px' }}
               />
