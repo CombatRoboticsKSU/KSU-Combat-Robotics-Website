@@ -36,7 +36,7 @@ export default function Home(): JSX.Element {
             {/* Section 1: Beginnings */}
             <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
               <img
-                src="/USINGimg/team_w.jpg"
+                src="/USINGimg/team_w.JPG"
                 alt="Beginnings"
                 style={{ width: '400px', marginRight: '20px', borderRadius: '8px' }}
               />
@@ -61,7 +61,7 @@ export default function Home(): JSX.Element {
             {/* Section 2: Big-Ish Introduction */}
             <section style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
               <img
-                src="/USINGimg/Bigish.jpg"
+                src="/USINGimg/Bigish.JPG"
                 alt="Big-Ish"
                 style={{ width: '400px', marginRight: '20px', borderRadius: '8px' }}
               />
