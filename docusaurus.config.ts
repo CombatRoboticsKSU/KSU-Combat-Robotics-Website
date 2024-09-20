@@ -68,7 +68,7 @@ const config: Config = {
         src: 'USINGimg/Logos.png',
       },
       items: [
-        { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },
+        { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },  //I know sponsorship is spelled wrong, but it works and that is the name of the page file
         { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' },
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
@@ -133,7 +133,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} KSU Combat Robotics - Built with Docusaurus`,
+      copyright: `KSU Combat Robotics is a registered organization of Kent State University - Built with Docusaurus`,
     },
     prism: {
       theme: prismThemes.github,

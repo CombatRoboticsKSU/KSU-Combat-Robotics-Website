@@ -61,7 +61,7 @@ export default function Home(): JSX.Element {
                   The first bots of the club were The Twins, <Link to="/wiki/SorApp">Sorcerer & Apprentice</Link>. The Twins were two seven and a half pound bots, 
                   equipped with titanium wedges that allowed for a strong control game. They were active from the start until 2019 
                   when Big-Ish was introduced. During their years, they went through a few revisions until they found success at Dayton 
-                  and the National Robotics League’s competition in Pittsburg. Their final and most successful redesign was wide-body bots with 6061 
+                  and the National Robotics League’s competition in Pittsburgh. Their final and most successful redesign was wide-body bots with 6061 
                   Aluminum wedges equipped to the front of the bots. The twins would be moved to the junior team in late 2017, and then retired after 2019.
                 </p>
                 <p>

@@ -7,7 +7,8 @@ import Heading from '@theme/Heading';
 import EmailForm from '@site/src/components/EmailForm/index';
 
 import styles from './index.module.css';
-
+//need to add information about how to sponsor us (sponsorship packages, etc)
+//add SKB Cases after Friday meeting (9/20/24)
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
@@ -15,7 +16,7 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
-          Our Sponsors / How to Sponsor the Team
+          Our Sponsors
         </Heading>
         <p className="hero__subtitle">Our generous sponsors make our bot projects & competitions possible. We would not be here without them.</p>
         <div className={styles.buttons}>
