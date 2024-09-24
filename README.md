@@ -21,9 +21,9 @@ Note: All contributions to this project must comply with the terms of the GNU Ge
 ## Getting Started
 To set up a local development environment, ensure you have Node.js installed on your machine. Then:
 
-Install the required dependencies by running npm install.
-Start the application using npm start.
-This will launch the website locally at http://localhost:3000.
+- Install the required dependencies by running `npm install`.
+- Start the application using `npm start`.
+- This will launch the website locally at `http://localhost:3000`.
 
 ## License
 This project is licensed under the GNU General Public License 2.0 (GPLv2).
