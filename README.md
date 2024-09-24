@@ -13,9 +13,10 @@ The Combat Robotics club at Kent State University is dedicated to developing inn
 ## Contributing to this Repository
 If you're interested in contributing code changes or enhancements to this website's source code, please follow these guidelines:
 
-Fork this repository by clicking on the "Fork" button at the top right corner.
-Clone your forked repository using git clone command.
-Create a new branch for any proposed changes and submit them as pull requests.
+- Fork this repository by clicking on the "Fork" button at the top right corner.
+- Clone your forked repository using git clone command.
+- Create a new branch for any proposed changes and submit them as pull requests.
+
 Note: All contributions to this project must comply with the terms of the GNU General Public License 2.0 (GPLv2). Please ensure that you understand and agree to these licensing terms before submitting your code.
 
 ## Getting Started
