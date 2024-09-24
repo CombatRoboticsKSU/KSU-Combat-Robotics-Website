@@ -44,7 +44,7 @@ export default function Home(): JSX.Element {
           <ul style={{ listStyleType: 'none', padding: '0px' }}>
             <li><a href='https://www.wardjet.com' target="_blank"><img src='/USINGimg/WARDjet.jpg' alt='WARDjet' width={w} height="auto"></img></a></li>
             <li><a href='https://itgresa.com' target="_blank"><img src='/USINGimg/ITGresa.jpg' alt='IT Gresa' width={w} height="auto"></img></a></li>
-            <li><a href='https://badasspower.com' target="_blank"><img src='/USINGimg/BadAss.png' alt='Bad-Ass Motors' width={w} height="auto"></img></a></li>
+            <li><a href='https://badasspower.com' target="_blank"><img src='/USINGimg/BadAss.jpg' alt='Bad-Ass Motors' width={w} height="auto"></img></a></li>
             <li><a href='https://repeat-robotics.com' target="_blank"><img src='/USINGimg/repeat_g.jpg' alt='Repeat Robotics' width={w} height="auto"></img></a></li>
             <li><a href='https://sendcutsend.com target="_blank"'><img src='/USINGimg/send_g.jpg' alt='SendCutSend' width={w} height="auto"></img></a></li>
             <li><a href='https://www.haascnc.com/content/ghf/en/home.html' target="_blank"><img src='/USINGimg/haascnc.jpg' alt='Gene Haas Foundation' width={w} height="auto"></img></a></li>
