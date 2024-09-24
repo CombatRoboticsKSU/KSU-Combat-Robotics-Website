@@ -48,6 +48,7 @@ export default function Home(): JSX.Element {
             <li><a href='https://repeat-robotics.com' target="_blank"><img src='/USINGimg/repeat_g.jpg' alt='Repeat Robotics' width={w} height="auto"></img></a></li>
             <li><a href='https://sendcutsend.com target="_blank"'><img src='/USINGimg/send_g.jpg' alt='SendCutSend' width={w} height="auto"></img></a></li>
             <li><a href='https://www.haascnc.com/content/ghf/en/home.html' target="_blank"><img src='/USINGimg/haascnc.jpg' alt='Gene Haas Foundation' width={w} height="auto"></img></a></li>
+            <li><a href='https://www.skbcases.com' target="_blank"><img src='/USINGimg/skb.jpg' alt='SKB Cases' width={w} height="auto"></img></a></li>
           </ul>
         </div>
 
