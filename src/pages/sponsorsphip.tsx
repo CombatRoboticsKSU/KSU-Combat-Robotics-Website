@@ -52,10 +52,8 @@ export default function Home(): JSX.Element {
         
         <div className='sponsorshipPage' style={{ textAlign: 'center', padding: '20px'}}>
           <h1>Interested in Sponsoring Our Team?</h1>
-          <p>Click <Link to="img/2024-Season Sponsorship Letter.pdf">here</Link> for our Sponsor Packet</p>
+          <p>Click <Link to="/img/Letter.pdf">here</Link> for our Sponsor Packet</p>
         </div>
-        
-
         
       </main>
     </Layout>
