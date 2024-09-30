@@ -24,7 +24,7 @@ function HomepageHeader() {
         <div className='row'>
         <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
             <Link to='/blog/2024minicomprules'>
-              <button style={{ fontSize: '30px', padding: '20px 30px' }}>
+              <button style={{ fontSize: '30px', padding: '20px 30px'}}>
                 3lb Competition Information
               </button>
             </Link>

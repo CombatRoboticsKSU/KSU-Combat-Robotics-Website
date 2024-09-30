@@ -55,7 +55,7 @@ slug: flashbang
 ![frame](img/frame.jpg)
 ![botprogress](img/work_in_p.jpg)
 ![ray](img/rayb.jpg)
-![hi!](img/hi.jpg)
+![hi!](img/hi2.jpg)
 
 ## Media Coverage
 <!-- Links to articles, videos, or other media coverage of the bot. -->
