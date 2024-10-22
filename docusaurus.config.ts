@@ -69,7 +69,7 @@ const config: Config = {
       },
       items: [
         { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },  //I know sponsorship is spelled wrong, but it works and that is the name of the page file
-        { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' },
+        { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
         {
