@@ -24,7 +24,7 @@ function HomepageHeader() {
         <div className='row'>
         <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
             <Link to='/blog/2024minicomprules'>
-              <button style={{ fontSize: '30px', padding: '20px 30px'}}>
+              <button style={{ fontSize: '30px', padding: '20px 30px' }}>
                 3lb Competition Information
               </button>
             </Link>
@@ -47,7 +47,9 @@ export default function Home(): JSX.Element {
       description="Landing page for KSU Combat Robotics domain">
       <HomepageHeader />
       <main>
-        <PhotoCropper src="USINGimg/TEAM.png" height="full" />
+        <div style={{ textAlign: 'center', padding: '25px'}}>
+          <img src='/USINGimg/TEAM.png' alt='Team' width="40%" height="auto"></img>
+        </div>
         <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
             <Link to='/history'>
               <button style={{ fontSize: '40px', padding: '20px 30px' }}>
