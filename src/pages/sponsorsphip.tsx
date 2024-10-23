@@ -4,7 +4,6 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures/index';
 import Heading from '@theme/Heading';
-import EmailForm from '@site/src/components/EmailForm/index';
 
 import styles from './index.module.css';
 //need to add information about how to sponsor us (sponsorship packages, etc)

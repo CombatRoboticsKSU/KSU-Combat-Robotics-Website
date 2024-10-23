@@ -31,3 +31,11 @@
     margin: 0 auto 20px auto;
   }
 }
+
+.board-members-container {
+  display: flex;
+  justify-content: space-around; /* Spread the cards evenly */
+  flex-wrap: wrap; /* Wrap if the screen is too narrow */
+  gap: 20px; /* Add space between the cards */
+  padding: 20px;
+}
