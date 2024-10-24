@@ -51,6 +51,18 @@ const config: Config = {
         blogSidebarCount: 'ALL',
       },
     ],
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        id: 'personalbots',
+        path: './personal_bots',
+        routeBasePath: 'pbots',
+        showReadingTime: true,
+        //editUrl: 'https://github.com/CombatRoboticsKSU/KSU-Combat-Robotics-Website/tree/main',
+        blogSidebarTitle: 'Personal Bots',
+        blogSidebarCount: 'ALL',
+      },
+    ],
   ],
 
   themeConfig: {
