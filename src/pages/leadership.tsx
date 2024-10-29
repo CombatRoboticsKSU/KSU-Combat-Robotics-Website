@@ -79,6 +79,7 @@ export default function Home(): JSX.Element {
               title="Project Manager"
               stats={["Years in Robotics: 8.5", "Club Member: 2 years", "Major: Computer Science","Fun Fact: He built this website!"]}
               bio="Austin is the club's Project Manager and has been a member for 2 years. He has been in combat robotics since 6th grade and is slowly developing his own 12lb bot."
+              linkedIn="https://www.linkedin.com/in/austin-sternberg-765620218/"
             />
           </div>
         </main>
