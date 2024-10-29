@@ -44,10 +44,12 @@
     background-color: #0077b5; /* LinkedIn blue */
     border-radius: 50%;
     margin-top: 16px;
+    visibility: hidden;
   }
   
   .boardMemberLinkedIn:hover {
     background-color: #005582; /* Darker blue on hover */
+    visibility: visible;
   }
   
   .linkedInIcon {

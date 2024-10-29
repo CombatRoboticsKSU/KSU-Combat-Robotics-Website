@@ -65,6 +65,7 @@ export default function Home(): JSX.Element {
               title="Fundraising Chair"
               stats={["Years in Robotics: 2", "Club Member: 2 years", "Major: Nueroscience & Computer Science"]}
               bio="Anna is the club's Fundraising Chair and has been a member for 2 years. She specializes in CAD and mechanical design."
+              linkedIn="https://www.linkedin.com/in/anna-anello-0ba40526a/"
               />
             <BoardMember
               name="Adam Turniski"
@@ -72,6 +73,7 @@ export default function Home(): JSX.Element {
               title="Treasurer"
               stats={["Years in Robotics: 2", "Club Member: 2 years", "Major: Mechatronics Engineering"]}
               bio="Adam is the club's Treasurer and has been a member for 1 year. He specializes in CAD and mechanical design."
+              linkedIn="https://www.linkedin.com/in/adam-turniski-a96192276/"
             />
             <BoardMember
               name="Austin Sternberg"
