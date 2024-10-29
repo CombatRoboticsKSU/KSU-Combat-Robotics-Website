@@ -55,7 +55,7 @@ export default function Home(): JSX.Element {
                 "Years in Robotics: 3",
                 "Club Member: 3 years",
                 "Major: Aerospace Engineering",
-                <>Personal Bot: <Link to="/pbots/flashstorm">Flash-STORM</Link></>
+                //<>Personal Bot: <Link to="/pbots/flashstorm">Flash-STORM</Link></>
               ]}
               bio="Greg is the club's Vice President and has been a member for 3 years. He specializes in electrical design and programming."
             />
