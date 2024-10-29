@@ -1,0 +1,14 @@
+#personal bot builder image loader
+#use these to show who built the bot
+#unlike the author files in the blog or wiki, we are NOT using titles here
+austint:
+  name: Austin Thebner
+  image_url: /USINGimg/austint.jpg
+
+gregw:
+  name: Gregory Wenner
+  image_url: /USINGimg/greg.jpg
+
+david:
+  name: David Dyer
+  image_url: /USINGimg/david.jpg
