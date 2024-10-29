@@ -114,7 +114,7 @@ const config: Config = {
           items: [
             {
               label: 'Instagram',
-              href: 'https://www.instagram.com/ksucombatrobotics/',
+              to: 'https://www.instagram.com/ksucombatrobotics/',
               logo: {
                 alt: 'Instagram',
                 src: 'static/USINGimg/insta.png',
@@ -128,7 +128,7 @@ const config: Config = {
             { label: 'Sponsors', to: '/sponsorsphip' },
             {
               label: 'Email',
-              href: 'mailto:ksu.fightingrobotics@gmail.com',
+              to: 'mailto:ksu.fightingrobotics@gmail.com',
             },
           ],
         },
