@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './BoardMember.module.css';
 import Link from '@docusaurus/Link';
-import LinkedInIcon from '@site/static/assets/img/LinkedIn-Logos/linkedIn.jpg'; // Adjust path as necessary
+import LinkedInIcon from '@site/static/img/LinkedIn-Logos/linkedIn.jpg'; // Adjust path as necessary
 
 interface BoardMemberProps {
   name: string;
