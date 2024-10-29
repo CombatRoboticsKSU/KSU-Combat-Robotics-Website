@@ -1,18 +1,17 @@
 import React from 'react';
 import styles from './BoardMember.module.css';
 import Link from '@docusaurus/Link';
+import LinkedInIcon from '@site/static/assets/img/LinkedIn-Logos/LI-In-Bug.png'; // Adjust path as necessary
 
-// Define the props interface here
 interface BoardMemberProps {
   name: string;
   imageSrc: string;
   title: string;
-  stats: (string | JSX.Element)[]; // Accepts strings or JSX for inline elements like links
+  stats: (string | JSX.Element)[];
   bio: string;
   linkedIn: string;
 }
 
-// Define the BoardMember component, which takes props matching the BoardMemberProps interface
 const BoardMember: React.FC<BoardMemberProps> = ({ name, imageSrc, title, stats, bio, linkedIn }) => {
   return (
     <div className={styles.boardMemberCard}>
@@ -26,7 +25,7 @@ const BoardMember: React.FC<BoardMemberProps> = ({ name, imageSrc, title, stats,
       </ul>
       <p className={styles.boardMemberBio}>{bio}</p>
       <Link to={linkedIn} className={styles.boardMemberLinkedIn} target="_blank" rel="noopener noreferrer">
-        LinkedIn Profile
+        <img src={LinkedInIcon} alt="LinkedIn" className={styles.linkedInIcon} />
       </Link>
     </div>
   );
