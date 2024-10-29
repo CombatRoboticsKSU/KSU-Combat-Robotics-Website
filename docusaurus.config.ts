@@ -84,6 +84,7 @@ const config: Config = {
         { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
+        { to: '/leadership', label: 'Leadership', position: 'left' },
         {
           href: 'https://www.instagram.com/ksucombatrobotics/',
           label: 'Instagram Feed', 
@@ -100,12 +101,11 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'More',
+          title: 'About',
           items: [
-            { label: 'Home', to: '/' },
             { label: 'KSU BOT Wiki', to: '/wiki' },
             { label: 'Team Updates', to: '/blog' },
-            { label: 'Sponsors', to: '/sponsorsphip' },
+            { label: 'Leadership', to: '/leadership' },
             { label: 'History', to: '/history' },
           ],
         },
@@ -123,8 +123,9 @@ const config: Config = {
           ],
         },
         {
-          title: 'Contact',
+          title: 'Sponsorship & Contact',
           items: [
+            { label: 'Sponsors', to: '/sponsorsphip' },
             {
               label: 'Email',
               href: 'mailto:ksu.fightingrobotics@gmail.com',
