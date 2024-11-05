@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './BoardMember.module.css';
 import Link from '@docusaurus/Link';
-import LinkedInIcon from '@site/static/img/LinkedIn-Logos/linkedIn.png'; // Adjust path as necessary
 
 interface BoardMemberProps {
   name: string;
@@ -24,9 +23,6 @@ const BoardMember: React.FC<BoardMemberProps> = ({ name, imageSrc, title, stats,
         ))}
       </ul>
       <p className={styles.boardMemberBio}>{bio}</p>
-      <Link to={linkedIn} className={styles.boardMemberLinkedIn} target="_blank" rel="noopener noreferrer">
-        <img src={LinkedInIcon} alt="LinkedIn" className={styles.linkedInIcon} />
-      </Link>
     </div>
   );
 };
