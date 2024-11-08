@@ -84,7 +84,7 @@ const config: Config = {
         { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
-        { to: '/leadership', label: 'Leadership', position: 'left' },
+        //{ to: '/leadership', label: 'Leadership', position: 'left' },
         {
           href: 'https://www.instagram.com/ksucombatrobotics/',
           label: 'Instagram Feed', 
