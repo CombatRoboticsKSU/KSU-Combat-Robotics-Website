@@ -22,9 +22,9 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <br/>
         <div className='row'>
-        <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
+        <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='/blog/2024minicomprules'>
-              <button style={{ fontSize: '30px', padding: '20px 30px' }}>
+              <button style={{ fontSize: '30px', padding: '15px 25px 15px 25px' }}>
                 3lb Competition Information
               </button>
             </Link>
