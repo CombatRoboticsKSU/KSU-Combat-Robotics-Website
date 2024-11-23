@@ -7,7 +7,7 @@ tags: [donation]
 # A Gift Back To Where It All Started.
 
 ## Brendan's Gift
-![Check_Photo](img/Check_Photo.jpg)
+![Check_Photo](img/Check_Photo.JPG)
 
 Brendan Steele, a former KSU Combat Robotics club member, recently brought us a $500 prize we had won several years ago out of his pocket. Brendan wanted to give back to the club to say thanks for helping him start what is now a significant part of his life. During his time in the club, Brendan helped design one of the winning bots in the past year, named Bigish. 
 
