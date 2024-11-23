@@ -19,3 +19,7 @@ info:
   label: Info
   permalink: /info
   description: Info tag description
+donation:
+  label: Donations
+  permalink: /donation
+  description: Donation tag description
