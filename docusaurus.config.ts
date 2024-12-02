@@ -63,6 +63,15 @@ const config: Config = {
         blogSidebarCount: 'ALL',
       },
     ],
+    [
+      '@docusaurus/plugin-sitemap',
+      {
+        changefreq: 'weekly', // Frequency of page changes
+        priority: 0.5, // Default priority for pages
+        ignorePatterns: ['/tags/**'], // Optional: Ignore certain patterns
+        filename: 'sitemap.xml', // Name of the generated sitemap file
+      },
+    ],
   ],
 
   themeConfig: {
