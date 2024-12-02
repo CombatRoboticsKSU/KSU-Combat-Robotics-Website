@@ -24,17 +24,17 @@ const config: Config = {
   presets: [
     [
       'classic',
-      {
-        blog: {
-          path: './blog',
-          routeBasePath: 'blog',
-          showReadingTime: true,
-          //editUrl: 'https://github.com/CombatRoboticsKSU/KSU-Combat-Robotics-Website/tree/main',
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      } satisfies PresetOptions,
+    {
+      blog: {
+        path: './blog',
+        routeBasePath: 'blog',
+        showReadingTime: true,
+      },
+      theme: {
+        customCss: require.resolve('./src/css/custom.css'),
+      },
+      sitemap: false, // Disable the default sitemap plugin included in the preset
+    },
     ],
   ],
 
