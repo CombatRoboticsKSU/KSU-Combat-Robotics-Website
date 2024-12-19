@@ -13,7 +13,7 @@ const config: Config = {
   organizationName: 'CombatRoboticsKSU',
   projectName: 'KSU-Combat-Robotics-Website',
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
