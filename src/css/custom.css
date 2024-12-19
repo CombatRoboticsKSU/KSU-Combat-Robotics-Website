@@ -43,3 +43,26 @@
 .navbar {
   background-color: #013975; /* Replace with your desired color */
 }
+
+/* Media Queries to adjust various attributes for mobile devices */
+@media (max-width: 768px) {
+  .row.footer__links {
+    display: flex;            /* Use flexbox for layout */
+    align-items: flex-start;  /* Align content from the top */
+    justify-content: space-between; /* Space out the divs */
+    gap: 25px;
+  }
+  
+  .row.footer__links div {
+    flex: 1;                  /* Equal width for each div */
+    margin: 0 10px;           /* Add spacing between divs */
+  }
+  
+  .row.footer__links div:first-child {
+    margin-left: 0;           /* Remove margin for the first div */
+  }
+  
+  .row.footer__links div:last-child {
+    margin-right: 0;          /* Remove margin for the last div */
+  }  
+}

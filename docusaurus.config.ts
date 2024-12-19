@@ -89,8 +89,10 @@ const config: Config = {
         src: 'USINGimg/Logos.png',
       },
       items: [
-        { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },  //I know sponsorship is spelled wrong, but it works and that is the name of the page file
-        { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
+        { to: '/sponsorship', label: 'Sponsors', position: 'left' },
+        /*
+          { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
+        */
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
         //{ to: '/leadership', label: 'Leadership', position: 'left' },
@@ -136,7 +138,7 @@ const config: Config = {
           items: [
             { label: 'Sponsors', to: '/sponsorsphip' },
             {
-              label: 'Email',
+              label: 'Email', // Note : I like EmailJS if we can get that set up
               to: 'mailto:ksu.fightingrobotics@gmail.com',
             },
           ],
