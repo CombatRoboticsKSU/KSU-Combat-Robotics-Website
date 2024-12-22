@@ -3,6 +3,7 @@
 austint:
   name: Austin Thebner
   title: President
+  lead: Test-Cage # Update Photo in ./static/USINGimg
   #url:
   image_url: /USINGimg/austint.jpg
 
@@ -27,6 +28,7 @@ annaa:
 austins:
   name: Austin Sternberg
   title: Project Manager
+  lead: Special Computer Unit # Update Photo in ./static/USINGimg
   #url: https://yoyojesus.w3spaces.com/
   image_url: /USINGimg/austins.jpg
 
@@ -39,12 +41,14 @@ katiep:
 matts:
   name: Matt Shutzman
   title: Biggish Champion
+  lead: Big-ISH # Update Photo in ./static/USINGimg
   #url:
   image_url: /USINGimg/matt.jpg
 
 mikeyu:
   name: Mikey Uher 
   title: Flashbang Champion
+  lead: Flash-bang # Update Photo in ./static/USINGimg
   #url:
   image_url: /USINGimg/mikey.jpg
 
