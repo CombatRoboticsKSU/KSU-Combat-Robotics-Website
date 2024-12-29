@@ -82,7 +82,7 @@ export default function Home(): JSX.Element {
           <p className='hero__title'>Current Sponsors:</p>
         </div>
 
-        <div className='sponsorshipPage' style={{ textAlign: 'center' }}>
+        <div className='sponsorshipPage' style={{ textAlign: 'center', paddingBottom: '75px' }}>
           <button
               onClick={() => sponsorsSlider.current?.slickPrev()}
               style={{
@@ -117,6 +117,16 @@ export default function Home(): JSX.Element {
               </div>
             ))}
           </Slider>
+        </div>
+
+        <div style={{ textAlign: 'center' }}>
+            <h2>Recent Donations!</h2>
+            <div style={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+              <ul>
+                <li>Brendan Steele</li>
+                <li>Sternberg Family</li>
+              </ul>
+            </div>
         </div>
 
         <div className='sponsorshipPage' style={{ textAlign: 'center', padding: '20px' }}>
