@@ -11,7 +11,7 @@ import styles from './index.module.css';
 //add SKB Cases after Friday meeting (9/20/24)
 
 // imported these to allow for a basic interactive slide show
-import React from 'react';
+import React, { useRef } from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -37,6 +37,7 @@ export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   const settings = {
     dots: true,
+    arrows: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -46,17 +47,18 @@ export default function Home(): JSX.Element {
     customPaging: (i) => ( // Custom dot button styling
       <button
         style={{
-          width: "10px",
-          height: "10px",
+          width: "20px",
+          height: "20px",
           borderRadius: "50%",
           background: "gray",
           border: "none",
-          margin: "5px",
           cursor: "pointer",
         }}
       />
     ),
   };
+
+  const sponsorsSlider = useRef<Slider>(null); // Auto assigns itself to the only Slider tag present
 
   // Add new sponsors when needed, the slider will handle the heavy lifting
   // the react-js slider is dynamic
@@ -81,7 +83,32 @@ export default function Home(): JSX.Element {
         </div>
 
         <div className='sponsorshipPage' style={{ textAlign: 'center' }}>
-          <Slider {...settings}>
+          <button
+              onClick={() => sponsorsSlider.current?.slickPrev()}
+              style={{
+                zIndex: 2,
+                cursor: 'pointer',
+                background: 'none',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '35px'
+              }}
+          >Back</button>
+
+          <button
+              onClick={() => sponsorsSlider.current?.slickNext()}
+              style={{
+                zIndex: 2,
+                cursor: 'pointer',
+                background: 'none',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '35px',
+                paddingLeft: '10%'
+              }}
+          >Next</button>
+
+          <Slider {...settings} ref={sponsorsSlider}>
             {sponsors.map((sponsor, index) => (
               <div key={index}>
                 <a href={sponsor.link} target="_blank" rel="noopener noreferrer">
