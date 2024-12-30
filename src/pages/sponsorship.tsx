@@ -119,7 +119,7 @@ export default function Home(): JSX.Element {
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <h2>Recent Donations!</h2>
           <div className="donor-grid">
-            {['Brendan Steele', 'Sternberg Family', 'John Doe', 'Jane Smith', 'Alex Johnson', 'Chris Lee'].map(
+            {['Brendan Steele', 'Sternberg Family'].map(
               (donor, index) => (
                 <div key={index} className="donor-name">
                   {donor}
@@ -128,7 +128,6 @@ export default function Home(): JSX.Element {
             )}
           </div>
         </div>
-
 
         <div className='sponsorshipPage' style={{ textAlign: 'center', padding: '20px' }}>
           <h1>Interested in Sponsoring Our Team?</h1>
