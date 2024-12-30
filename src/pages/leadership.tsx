@@ -39,10 +39,10 @@ export default function Home(): JSX.Element {
               name="Austin Thebner"
               imageSrc="/USINGimg/austint.jpg"
               title="President"
-              stats={[
-                "Years in Robotics: 4",
-                "Club Member: 3 years",
-                "Major: Mechanical Engineering",
+              stats={["Years in Robotic: 4 with no previous experience", 
+                "Club Member: 2 years", 
+                "Major: Mechanical engineering technology BA & Engineering technology ma",
+                "Fun Fact: I am colorblind",
                 <>Personal Bot: <Link to="/pbots/pnuematador">PNUEMATADOR</Link></>
               ]}
               bio="Austin has been leading the club for 3 years and specializes in mechanical design and strategy."
@@ -71,7 +71,7 @@ export default function Home(): JSX.Element {
               name="Austin Sternberg"
               imageSrc="/USINGimg/austins.jpg"
               title="Project Manager"
-              stats={["Years in Robotic: 4 with no previous experience", "Club Member: 2 years", "Major: Mechanical engineering technology BA & Engineering technology ma","Fun Fact: I am colorblind."]}
+              stats={["Years in Robotics: 8.5", "Club Member: 2 years", "Major: Computer Science","Fun Fact: I built this website!"]}
               bio="Austin is the club's Project Manager and has been a member for 2 years. He has been in combat robotics since 6th grade and is slowly developing his own 12lb bot."
             />
           </div>
