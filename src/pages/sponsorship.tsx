@@ -55,8 +55,10 @@ export default function Home(): JSX.Element {
     ),
   };
 
-  const sponsorsSlider = useRef<Slider>(null);
+  const sponsorsSlider = useRef<Slider>(null); // Auto assigns itself to the only Slider tag present
 
+  // Add new sponsors when needed, the slider will handle the heavy lifting
+  // the react-js slider is dynamic
   const sponsors = [
     { link: 'https://www.wardjet.com', src: '/USINGimg/WARDjet.jpg', alt: 'WARDjet' },
     { link: 'https://itgresa.com', src: '/USINGimg/ITGresa.jpg', alt: 'IT Gresa' },
@@ -77,21 +79,31 @@ export default function Home(): JSX.Element {
           <p className='hero__title'>Current Sponsors:</p>
         </div>
 
-        {/* Updated Slider Section with Buttons on the Sides */}
-        <div className='sponsorshipPage'>
+        <div className='sponsorshipPage' style={{ textAlign: 'center', paddingBottom: '75px' }}>
           <button
-            onClick={() => sponsorsSlider.current?.slickPrev()}
-            className="carousel-button left"
-          >
-            Back
-          </button>
+              onClick={() => sponsorsSlider.current?.slickPrev()}
+              style={{
+                zIndex: 2,
+                cursor: 'pointer',
+                background: 'none',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '35px'
+              }}
+          >Back</button>
 
           <button
-            onClick={() => sponsorsSlider.current?.slickNext()}
-            className="carousel-button right"
-          >
-            Next
-          </button>
+              onClick={() => sponsorsSlider.current?.slickNext()}
+              style={{
+                zIndex: 2,
+                cursor: 'pointer',
+                background: 'none',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '35px',
+                paddingLeft: '10%'
+              }}
+          >Next</button>
 
           <Slider {...settings} ref={sponsorsSlider}>
             {sponsors.map((sponsor, index) => (
@@ -104,16 +116,15 @@ export default function Home(): JSX.Element {
           </Slider>
         </div>
 
-        {/* Updated Donor Section with Grid Layout */}
         <div style={{ textAlign: 'center' }}>
           <h2>Recent Donations!</h2>
-          <div className="donor-grid">
-            {['Brendan Steele', 'Sternberg Family'].map((donor, index) => (
-              <div key={index} className="donor-name">
-                {donor}
-              </div>
-            ))}
-          </div>
+            <div className="donor-grid">
+              {['Brendan Steele', 'Sternberg Family'].map((donor, index) => (
+                <div key={index} className="donor-name">
+                  {donor}
+                </div>
+              ))}
+            </div>
         </div>
 
         <div className='sponsorshipPage' style={{ textAlign: 'center', padding: '20px' }}>
