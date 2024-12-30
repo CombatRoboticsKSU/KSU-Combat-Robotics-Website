@@ -14,3 +14,46 @@
   width: 200px;
    height: auto;
 }
+
+.donor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.donor-name {
+  background: #f0f0f0; /* Light gray background for the grid items */
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #11181C; /* Example: dark background */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+  transition: background-color 0.3s;
+}
+
+.carousel-button:hover {
+  background: #526397; /* Lighter background on hover */
+}
+
+.carousel-button.left {
+  left: 0;
+}
+
+.carousel-button.right {
+  right: 0;
+}

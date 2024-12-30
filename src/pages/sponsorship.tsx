@@ -2,10 +2,7 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures/index';
 import Heading from '@theme/Heading';
-import EmailForm from '@site/src/components/EmailForm/index';
-
 import styles from './index.module.css';
 //need to add information about how to sponsor us (sponsorship packages, etc)
 //add SKB Cases after Friday meeting (9/20/24)
@@ -58,10 +55,8 @@ export default function Home(): JSX.Element {
     ),
   };
 
-  const sponsorsSlider = useRef<Slider>(null); // Auto assigns itself to the only Slider tag present
+  const sponsorsSlider = useRef<Slider>(null);
 
-  // Add new sponsors when needed, the slider will handle the heavy lifting
-  // the react-js slider is dynamic
   const sponsors = [
     { link: 'https://www.wardjet.com', src: '/USINGimg/WARDjet.jpg', alt: 'WARDjet' },
     { link: 'https://itgresa.com', src: '/USINGimg/ITGresa.jpg', alt: 'IT Gresa' },
@@ -82,31 +77,21 @@ export default function Home(): JSX.Element {
           <p className='hero__title'>Current Sponsors:</p>
         </div>
 
-        <div className='sponsorshipPage' style={{ textAlign: 'center', paddingBottom: '75px' }}>
+        {/* Updated Slider Section with Buttons on the Sides */}
+        <div className='sponsorshipPage'>
           <button
-              onClick={() => sponsorsSlider.current?.slickPrev()}
-              style={{
-                zIndex: 2,
-                cursor: 'pointer',
-                background: 'none',
-                border: 'none',
-                borderRadius: '5px',
-                fontSize: '35px'
-              }}
-          >Back</button>
+            onClick={() => sponsorsSlider.current?.slickPrev()}
+            className="carousel-button left"
+          >
+            Back
+          </button>
 
           <button
-              onClick={() => sponsorsSlider.current?.slickNext()}
-              style={{
-                zIndex: 2,
-                cursor: 'pointer',
-                background: 'none',
-                border: 'none',
-                borderRadius: '5px',
-                fontSize: '35px',
-                paddingLeft: '10%'
-              }}
-          >Next</button>
+            onClick={() => sponsorsSlider.current?.slickNext()}
+            className="carousel-button right"
+          >
+            Next
+          </button>
 
           <Slider {...settings} ref={sponsorsSlider}>
             {sponsors.map((sponsor, index) => (
@@ -119,14 +104,16 @@ export default function Home(): JSX.Element {
           </Slider>
         </div>
 
+        {/* Updated Donor Section with Grid Layout */}
         <div style={{ textAlign: 'center' }}>
-            <h2>Recent Donations!</h2>
-            <div style={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
-              <ul>
-                <li>Brendan Steele</li>
-                <li>Sternberg Family</li>
-              </ul>
-            </div>
+          <h2>Recent Donations!</h2>
+          <div className="donor-grid">
+            {['Brendan Steele', 'Sternberg Family'].map((donor, index) => (
+              <div key={index} className="donor-name">
+                {donor}
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className='sponsorshipPage' style={{ textAlign: 'center', padding: '20px' }}>
