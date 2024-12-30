@@ -17,19 +17,23 @@
 
 .donor-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 20px;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust the width of each column */
+  gap: 20px; /* Space between items */
+  justify-content: center; /* Center the grid */
+  align-items: center; /* Vertically align items */
+  margin-top: 20px; /* Space above the grid */
 }
 
 .donor-name {
-  background: #f0f0f0; /* Light gray background for the grid items */
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1.5rem; /* Make the text larger */
+  font-weight: bold; /* Make the names bold for emphasis */
+  text-align: center; /* Center align each name */
+  padding: 10px; /* Add some padding for a cleaner look */
+  background-color: #f8f8f8; /* Optional: Light background for each donor block */
+  border-radius: 5px; /* Optional: Rounded corners for a modern look */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow for depth */
 }
+
 
 .carousel-button {
   position: absolute;

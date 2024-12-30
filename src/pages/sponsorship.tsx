@@ -116,15 +116,17 @@ export default function Home(): JSX.Element {
           </Slider>
         </div>
 
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', padding: '20px' }}>
           <h2>Recent Donations!</h2>
-            <div className="donor-grid">
-              {['Brendan Steele', 'Sternberg Family'].map((donor, index) => (
+          <div className="donor-grid">
+            {['Brendan Steele', 'Sternberg Family', 'John Doe', 'Jane Smith', 'Alex Johnson', 'Chris Lee'].map(
+              (donor, index) => (
                 <div key={index} className="donor-name">
                   {donor}
                 </div>
-              ))}
-            </div>
+              )
+            )}
+          </div>
         </div>
 
         <div className='sponsorshipPage' style={{ textAlign: 'center', padding: '20px' }}>
