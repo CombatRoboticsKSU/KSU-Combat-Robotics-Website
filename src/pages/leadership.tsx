@@ -58,7 +58,7 @@ export default function Home(): JSX.Element {
                 "Fun Fact: I am apart of a professional unicycling team.",
                 <>Personal Bot: <Link to="/pbots/Flashstorm">Flash-STORM</Link></>
               ]}
-              bio="Greg is the club's Vice President and has been a member for 3 years. He specializes in electrical design and programming."
+              bio= ""//"Greg is the club's Vice President and has been a member for 3 years. He specializes in electrical design and programming."
             />
             <BoardMember
               name="Adam Turniski"
