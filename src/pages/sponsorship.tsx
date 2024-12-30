@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import './sponsorship.module.css';
 import styles from './index.module.css';
 //need to add information about how to sponsor us (sponsorship packages, etc)
 //add SKB Cases after Friday meeting (9/20/24)

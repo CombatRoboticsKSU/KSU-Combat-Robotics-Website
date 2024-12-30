@@ -29,9 +29,9 @@
   font-weight: bold; /* Make the names bold for emphasis */
   text-align: center; /* Center align each name */
   padding: 10px; /* Add some padding for a cleaner look */
-  background-color: #f8f8f8; /* Optional: Light background for each donor block */
+  background-color: #001aff; /* Optional: Light background for each donor block */
   border-radius: 5px; /* Optional: Rounded corners for a modern look */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow for depth */
+  box-shadow: 0 2px 4px rgba(255, 238, 0, 0.1); /* Optional: Subtle shadow for depth */
 }
 
 
