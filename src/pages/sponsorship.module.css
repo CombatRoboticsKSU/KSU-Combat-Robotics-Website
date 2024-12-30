@@ -17,22 +17,23 @@
 
 .donor-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust the width of each column */
-  gap: 20px; /* Space between items */
-  justify-content: center; /* Center the grid */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid layout */
+  gap: 20px; /* Spacing between items */
+  justify-content: center; /* Center align the grid */
   align-items: center; /* Vertically align items */
-  margin-top: 20px; /* Space above the grid */
+  padding: 20px; /* Padding around the grid */
 }
 
 .donor-name {
-  font-size: 1.5rem; /* Make the text larger */
-  font-weight: bold; /* Make the names bold for emphasis */
-  text-align: center; /* Center align each name */
-  padding: 10px; /* Add some padding for a cleaner look */
-  background-color: #001aff; /* Optional: Light background for each donor block */
-  border-radius: 5px; /* Optional: Rounded corners for a modern look */
-  box-shadow: 0 2px 4px rgba(255, 238, 0, 0.1); /* Optional: Subtle shadow for depth */
+  font-size: 1.5rem; /* Larger font for donor names */
+  font-weight: bold; /* Bold text for emphasis */
+  text-align: center; /* Center-align text */
+  padding: 10px; /* Add space inside the container */
+  background-color: #f9f9f9; /* Light gray background */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
+
 
 
 .carousel-button {
