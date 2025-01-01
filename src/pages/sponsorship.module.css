@@ -62,3 +62,40 @@
 .carousel-button.right {
   right: 0;
 }
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  section {
+    flex-direction: column;
+    text-align: center;
+  }
+  img {
+    margin: 0 auto 20px auto;
+  }
+}
+
+.board-members-container {
+  display: flex;
+  justify-content: space-around; /* Spread the cards evenly */
+  flex-wrap: wrap; /* Wrap if the screen is too narrow */
+  gap: 20px; /* Add space between the cards */
+  padding: 20px;
+}

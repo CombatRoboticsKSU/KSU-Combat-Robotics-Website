@@ -39,7 +39,7 @@ export default function Home(): JSX.Element {
               imageSrc="/USINGimg/austint.jpg"
               title="President"
               stats={["Years in Robotic: 4 with no previous experience", 
-                "Club Member: 2 years", 
+                "Club Member: 4 years", 
                 "Major: Mechanical engineering technology BA & Engineering technology ma",
                 "Fun Fact: I am colorblind",
                 <>Personal Bot: <Link to="/pbots/pnuematador">PNUEMATADOR</Link></>
@@ -63,14 +63,21 @@ export default function Home(): JSX.Element {
               name="Adam Turniski"
               imageSrc="/USINGimg/adam.jpg"
               title="Treasurer"
-              stats={["Years in Robotics: 1", "Club Member: 2 years", "Major: Mechatronics Engineering", , "Fun Fact: I like to fish and cook and I am also apart of the AFS chapter at Kent."]}
+              stats={["Years in Robotics: 2", 
+                "Club Member: 2 years", "Major: Mechatronics Engineering",
+                "Fun Fact: I like to fish and cook and I am also apart of the AFS chapter at Kent."
+              ]}
               bio="Adam is an aspiring engineer from northeast Ohio that loves automation and robotics"
             />
             <BoardMember
               name="Austin Sternberg"
               imageSrc="/USINGimg/austins.jpg"
               title="Project Manager"
-              stats={["Years in Robotics: 8.5", "Club Member: 2 years", "Major: Computer Science","Fun Fact: I built this website!"]}
+              stats={["Years in Robotics: 8.5", 
+                "Club Member: 2 years", 
+                "Major: Computer Science",
+                "Fun Fact: I built this website!"
+              ]}
               bio="Austin is the club's Project Manager and has been a member for 2 years. He has been in combat robotics since 6th grade and is slowly developing his own 12lb bot."
             />
           </div>
