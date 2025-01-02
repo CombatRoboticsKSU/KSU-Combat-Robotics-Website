@@ -96,6 +96,7 @@ const config: Config = {
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         { to: '/blog', label: 'Team Updates', position: 'left' },
         { to: '/leadership', label: 'Leadership', position: 'left' },
+        { to: '/projects', label: 'Projects', position: 'left' },
         {
           href: 'https://www.instagram.com/ksucombatrobotics/',
           label: 'Instagram Feed', 
@@ -114,10 +115,17 @@ const config: Config = {
         {
           title: 'About',
           items: [
-            { label: 'KSU BOT Wiki', to: '/wiki' },
             { label: 'Team Updates', to: '/blog' },
             { label: 'Leadership', to: '/leadership' },
             { label: 'History', to: '/history' },
+            { label: 'Project Status', to: '/projects' },
+          ],
+        },
+        {
+          title: 'Our Bots',
+          items: [
+            { label: 'Personal Bots', to: '/pbots' },
+            { label: 'Club Owned Bots', to: '/wiki' },
           ],
         },
         {
