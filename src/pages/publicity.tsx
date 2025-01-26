@@ -54,7 +54,11 @@ export default function Home(): JSX.Element {
                 />
               </a>
               <div style={{ margin: '30px' }}>
-                <Heading as="h2">Kent State XBots at the NHRL Robot Combat League (May 1, 2022)</Heading>
+                <Heading as="h2">
+                  <a href='https://www.kent.edu/cae/news/kent-state-xbots-nhrl-robot-combat-league'>
+                  Kent State XBots at the NHRL Robot Combat League (May 1, 2022)
+                  </a>
+                </Heading>
                 <p>
                 In March, they competed at the Norwalk Havoc Robot League (NHRL) Robot Combat League in Norwalk, Connecticut.
                 Kent State XBots were able to fight their way to the Semi-Finals, which is something worth bragging about!
@@ -71,7 +75,11 @@ export default function Home(): JSX.Element {
                 />
               </a>
               <div style={{ margin: '30px' }}>
-                <Heading as="h2">Combat Robotics Team finds Success in first NHRL Season (February 13, 2023)</Heading>
+                <Heading as="h2">
+                  <a href='https://www.kent.edu/cae/news/combat-robotics-team-finds-success-first-nhrl-season'>
+                  Combat Robotics Team finds Success in first NHRL Season (February 13, 2023)
+                  </a>
+                </Heading>
                 <p>
                 On November 12th, 2022, the Kent State University Combat Robotics Team placed 3rd at a
                 Norwalk Havoc Robotics League (NHRL) competition, qualifying for the 2022 Championships in December 2023.
@@ -88,7 +96,11 @@ export default function Home(): JSX.Element {
                 />
               </a>
               <div style={{ margin: '30px' }}>
-                <Heading as="h2">Combat Robotics Team Continues to find Success (March 29, 2023)</Heading>
+                <Heading as="h2">
+                  <a href='https://kentstater.com/95378/uncategorized/combat-robotics-team-continues-to-find-success/'>
+                  Combat Robotics Team Continues to find Success (March 29, 2023)
+                  </a>
+                </Heading>
                 <p>
                 At the start of the semester the members of the Combat Robotics team weren’t sure whether they would be able
                 to compete at any more events because of a lack of funding, but thanks to a generous donation from the NHRL, the team has continued competing.
@@ -105,7 +117,11 @@ export default function Home(): JSX.Element {
                 />
               </a>
               <div style={{ margin: '30px' }}>
-                <Heading as="h2">Combat Robotics Team Makes 2023 NHRL Season Debut (April 20, 2023)</Heading>
+                <Heading as="h2">
+                  <a href='https://www.kent.edu/cae/news/combat-robotics-team-makes-2023-nhrl-season-debut'>
+                  Combat Robotics Team Makes 2023 NHRL Season Debut (April 20, 2023)
+                  </a>
+                </Heading>
                 <p>
                 At the start of the semester the members of the Combat Robotics team weren’t sure whether they would
                 be able to compete at any more events because of a lack of funding, but thanks to a generous donation from the NHRL, the team has continued competing.
@@ -122,7 +138,11 @@ export default function Home(): JSX.Element {
                 />
               </a>
               <div style={{ margin: '30px' }}>
-                <Heading as="h2">Combat Robotics Team Takes on Robotics Great at NHRL Competition (July 13, 2023)</Heading>
+                <Heading as="h2">
+                  <a href='https://www.kent.edu/cae/news/combat-robotics-team-takes-robotics-great-nhrl-competition'>
+                  Combat Robotics Team Takes on Robotics Great at NHRL Competition (July 13, 2023)
+                  </a>
+                </Heading>
                 <p>
                 In June, the Kent State University Combat Robotics Team took on another weekend of fierce competition
                 in the National Havoc Robotics League. After making some key modifications to their bot Flash-BANG,
