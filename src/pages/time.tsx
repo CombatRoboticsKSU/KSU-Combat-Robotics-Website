@@ -18,18 +18,6 @@ export default function TimeDatePage() {
     <div className="flex flex-col items-center p-4">
       <h1 className="text-xl font-bold">Time & Date</h1>
       <p className="text-lg mt-2">{dateTime.toLocaleString()}</p>
-      <input
-        type="datetime-local"
-        className="border rounded p-2 mt-4"
-        value={manualTime}
-        onChange={handleTimeChange}
-      />
-      <button
-        className="bg-blue-500 text-white px-4 py-2 mt-2 rounded"
-        onClick={handleSetTime}
-      >
-        Set Time
-      </button>
     </div>
   );
 }
