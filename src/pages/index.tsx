@@ -22,13 +22,22 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <br/>
         <div className='row'>
-        <div style={{width: 'auto', margin: 'auto'}}>
-            <Link to='/blog/2024minicomprules'>
-              <button style={{ fontSize: '30px', padding: '15px 25px 15px 25px' }}>
-                3lb Competition Information
+          <div style={{width: 'auto', margin: 'auto'}}>
+            <Link to='https://forms.gle/X3zqcZmmFKBerqPz5'>
+            <button style={{ fontSize: '30px', padding: '15px 25px 15px 25px', marginRight: '15px'}}>
+                3lb Competition Sign Up
+              </button>
+            </Link>
+            <Link to='https://forms.gle/x3p2VbEp6bgtNYE57'>
+              <button style={{ fontSize: '30px', padding: '15px 25px 15px 25px', marginTop: '15px'}}>
+                3d Printing Queue
               </button>
             </Link>
           </div> 
+        </div>
+        <div className='row'>
+          <div style={{width: '15px', margin: '15px'}}>
+          </div>
         </div>
         <br/>
         <p className="hero__subtitle">We meet every Friday from 5-7pm in 120 AEB. <br/> Being a club member is <i>ONLY</i> available to KSU Students. </p>
