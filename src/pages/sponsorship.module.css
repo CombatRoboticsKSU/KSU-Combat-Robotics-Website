@@ -14,3 +14,88 @@
   width: 200px;
    height: auto;
 }
+
+.donor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid layout */
+  gap: 20px; /* Spacing between items */
+  justify-content: center; /* Center align the grid */
+  align-items: center; /* Vertically align items */
+  padding: 20px; /* Padding around the grid */
+}
+
+.donor-name {
+  font-size: 1.5rem; /* Larger font for donor names */
+  font-weight: bold; /* Bold text for emphasis */
+  text-align: center; /* Center-align text */
+  padding: 10px; /* Add space inside the container */
+  background-color: #f9f9f9; /* Light gray background */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #11181C; /* Example: dark background */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+  transition: background-color 0.3s;
+}
+
+.carousel-button:hover {
+  background: #526397; /* Lighter background on hover */
+}
+
+.carousel-button.left {
+  left: 0;
+}
+
+.carousel-button.right {
+  right: 0;
+}
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  section {
+    flex-direction: column;
+    text-align: center;
+  }
+  img {
+    margin: 0 auto 20px auto;
+  }
+}
+
+.board-members-container {
+  display: flex;
+  justify-content: space-around; /* Spread the cards evenly */
+  flex-wrap: wrap; /* Wrap if the screen is too narrow */
+  gap: 20px; /* Add space between the cards */
+  padding: 20px;
+}

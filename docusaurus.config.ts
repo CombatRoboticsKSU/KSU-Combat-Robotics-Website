@@ -13,7 +13,7 @@ const config: Config = {
   organizationName: 'CombatRoboticsKSU',
   projectName: 'KSU-Combat-Robotics-Website',
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
@@ -24,17 +24,17 @@ const config: Config = {
   presets: [
     [
       'classic',
-      {
-        blog: {
-          path: './blog',
-          routeBasePath: 'blog',
-          showReadingTime: true,
-          //editUrl: 'https://github.com/CombatRoboticsKSU/KSU-Combat-Robotics-Website/tree/main',
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      } satisfies PresetOptions,
+    {
+      blog: {
+        path: './blog',
+        routeBasePath: 'blog',
+        showReadingTime: true,
+      },
+      theme: {
+        customCss: require.resolve('./src/css/custom.css'),
+      },
+      sitemap: false, // Disable the default sitemap plugin included in the preset
+    },
     ],
   ],
 
@@ -63,6 +63,15 @@ const config: Config = {
         blogSidebarCount: 'ALL',
       },
     ],
+    [
+      '@docusaurus/plugin-sitemap',
+      {
+        changefreq: 'weekly', // Frequency of page changes
+        priority: 0.5, // Default priority for pages
+        ignorePatterns: ['/tags/**'], // Optional: Ignore certain patterns
+        filename: 'sitemap.xml', // Name of the generated sitemap file
+      },
+    ],
   ],
 
   themeConfig: {
@@ -80,11 +89,22 @@ const config: Config = {
         src: 'USINGimg/Logos.png',
       },
       items: [
-        { to: '/sponsorsphip', label: 'Sponsors', position: 'left' },  //I know sponsorship is spelled wrong, but it works and that is the name of the page file
-        { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
+        { to: '/sponsorship', label: 'Sponsors', position: 'left' },
+        /*
+          { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
+        */
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
-        { to: '/blog', label: 'Team Updates', position: 'left' },
-        //{ to: '/leadership', label: 'Leadership', position: 'left' },
+        {
+          type: 'dropdown',
+          label: 'Updates',
+          position: 'left',
+          items: [
+            { to: '/blog', label: 'Team Updates' },
+            { to: '/publicity', label: 'Media Coverage' }
+          ]
+        },
+        { to: '/leadership', label: 'Leadership', position: 'left' },
+        { to: '/projects', label: 'Projects', position: 'left' },
         {
           href: 'https://www.instagram.com/ksucombatrobotics/',
           label: 'Instagram Feed', 
@@ -103,10 +123,17 @@ const config: Config = {
         {
           title: 'About',
           items: [
-            { label: 'KSU BOT Wiki', to: '/wiki' },
             { label: 'Team Updates', to: '/blog' },
             { label: 'Leadership', to: '/leadership' },
             { label: 'History', to: '/history' },
+            { label: 'Project Status', to: '/projects' },
+          ],
+        },
+        {
+          title: 'Our Bots',
+          items: [
+            { label: 'Personal Bots', to: '/pbots' },
+            { label: 'Club Owned Bots', to: '/wiki' },
           ],
         },
         {
@@ -127,7 +154,7 @@ const config: Config = {
           items: [
             { label: 'Sponsors', to: '/sponsorsphip' },
             {
-              label: 'Email',
+              label: 'Email', // Note : I like EmailJS if we can get that set up
               to: 'mailto:ksu.fightingrobotics@gmail.com',
             },
           ],
