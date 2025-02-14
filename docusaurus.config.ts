@@ -155,7 +155,8 @@ const config: Config = {
             { label: 'Sponsors', to: '/sponsorsphip' },
             {
               label: 'Email', // Note : I like EmailJS if we can get that set up
-              to: 'mailto:ksu.fightingrobotics@gmail.com',
+              to: '/contact'
+              // to: 'mailto:ksu.fightingrobotics@gmail.com',
             },
           ],
         },
