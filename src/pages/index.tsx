@@ -24,17 +24,29 @@ function HomepageHeader() {
         <div className='row'>
           <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/X3zqcZmmFKBerqPz5'>
-            <button style={{ fontSize: '30px', padding: '15px 25px 15px 25px', marginRight: '15px'}}>
+            <button style={{ fontSize: '30px', marginTop: '15px' }}>
                 3lb Competition Sign Up
               </button>
             </Link>
+          </div>
+
+          <div style={{width: 'auto', margin: 'auto'}}>
+            <Link to='https://docs.google.com/forms/d/e/1FAIpQLSeiaPnbH_JF4BzJubGB4r-1ZSY93uP1mn5HZaoALPcZM_qOgA/viewform?usp=header'>
+              <button style={{ fontSize: '30px', marginTop: '15px' }}>
+                3lb Guest Sign Up
+              </button>
+            </Link>
+          </div>
+          
+          <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/x3p2VbEp6bgtNYE57'>
-              <button style={{ fontSize: '30px', padding: '15px 25px 15px 25px', marginTop: '15px'}}>
+              <button style={{ fontSize: '30px', marginTop: '15px' }}>
                 3d Printing Queue
               </button>
             </Link>
           </div> 
         </div>
+
         <div className='row'>
           <div style={{width: '15px', margin: '15px'}}>
           </div>
