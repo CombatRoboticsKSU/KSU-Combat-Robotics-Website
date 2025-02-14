@@ -60,6 +60,17 @@ export default function Home(): JSX.Element {
               bio= ""//"Greg is the club's Vice President and has been a member for 3 years. He specializes in electrical design and programming."
             />
             <BoardMember
+              name="Ian Rohrbacher"
+              imageSrc="/USINGimg/ian.jpg"
+              title="Fundraising Chair"
+              stats={["Years in Robotics: 6", "Club Member: 2 years", "Major: Computer Science"]}
+              bio={[
+                "Ian is the club's Fundraising Chair. He has done FRC throughout high school and is still involved with FRC and now a VexU team. ",
+                "He has a lot of experience with integrating systems. He also worked on a cubesat project with his high school ",
+                <><Link to="https://phs.perkinsschools.org/perkins-robotics-club">details</Link>.</>
+              ]}
+              />
+            <BoardMember
               name="Adam Turniski"
               imageSrc="/USINGimg/adam.jpg"
               title="Treasurer"
