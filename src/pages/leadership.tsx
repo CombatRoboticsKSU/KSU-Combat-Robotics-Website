@@ -63,11 +63,14 @@ export default function Home(): JSX.Element {
               name="Ian Rohrbacher"
               imageSrc="/USINGimg/ian.jpg"
               title="Fundraising Chair"
-              stats={["Years in Robotics: 6", "Club Member: 2 years", "Major: Computer Science"]}
+              stats={[
+                "Years in Robotics: 6",
+                "Club Member: 2 years",
+                "Major: Computer Science",
+                <>Personal Website: <Link to="https://web.cs.kent.edu/~irohrbac/">Home</Link>.</>
+              ]}
               bio={[
-                "Ian is the club's Fundraising Chair. He has done FRC throughout high school and is still involved with FRC and now a VexU team. ",
-                "He has a lot of experience with integrating systems. He also worked on a cubesat project with his high school ",
-                <><Link to="https://phs.perkinsschools.org/perkins-robotics-club">details</Link>.</>
+                "Ian is the club's Fundraising Chair. They has done FIRST Robotics Competition throughout high school and is still involved with FIRST, mentoring their high school team and volunteering at events, and is now a part of Kent State's VexU team. They are the current driver of Big-ish"
               ]}
               />
             <BoardMember
