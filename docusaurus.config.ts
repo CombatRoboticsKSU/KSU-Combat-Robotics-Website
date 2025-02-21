@@ -152,7 +152,7 @@ const config: Config = {
         {
           title: 'Sponsorship & Contact',
           items: [
-            { label: 'Sponsors', to: '/sponsorsphip' },
+            { label: 'Sponsors', to: '/sponsorship' },
             {
               label: 'Email', // Note : I like EmailJS if we can get that set up
               to: 'mailto:ksu.fightingrobotics@gmail.com',
