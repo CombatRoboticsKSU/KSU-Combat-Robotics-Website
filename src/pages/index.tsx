@@ -22,13 +22,13 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <br/>
         <div className='row'>
-          <div style={{width: 'auto', margin: 'auto'}}>
+            {/* <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/X3zqcZmmFKBerqPz5'>
-            <button style={{ fontSize: '30px', marginTop: '15px' }}>
-                3lb Competition Sign Up
+              <button style={{ fontSize: '30px', marginTop: '15px' }}>
+              3lb Competition Sign Up
               </button>
             </Link>
-          </div>
+            </div> 
 
           <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://docs.google.com/forms/d/e/1FAIpQLSeiaPnbH_JF4BzJubGB4r-1ZSY93uP1mn5HZaoALPcZM_qOgA/viewform?usp=header'>
@@ -36,7 +36,7 @@ function HomepageHeader() {
                 3lb Guest Sign Up
               </button>
             </Link>
-          </div>
+          </div> */}
           
           <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/x3p2VbEp6bgtNYE57'>
@@ -44,7 +44,7 @@ function HomepageHeader() {
                 3d Printing Queue
               </button>
             </Link>
-          </div> 
+          </div>
         </div>
 
         <div className='row'>
