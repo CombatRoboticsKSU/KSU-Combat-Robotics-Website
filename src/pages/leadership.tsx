@@ -46,19 +46,7 @@ export default function Home(): JSX.Element {
               ]}
               bio="Austin has been leading the club for 3 years and specializes in mechanical design and strategy."
             />
-            <!-- <BoardMember
-              name="Gregory Wenner"
-              imageSrc="/USINGimg/greg.jpg"
-              title="Vice President"
-              stats={[
-                "Years in Robotics: 9",
-                "Club Member: 3 years",
-                "Major: Aerospace Engineering",
-                "Fun Fact: I am apart of a professional unicycling team.",
-                <>Personal Bot: <Link to="/pbots/Flashstorm">Flash-STORM</Link></>
-              ]}
-              bio= ""//"Greg is the club's Vice President and has been a member for 3 years. He specializes in electrical design and programming."
-            /> -->
+            
             <BoardMember
               name="Ian Rohrbacher"
               imageSrc="/USINGimg/ian.jpg"
