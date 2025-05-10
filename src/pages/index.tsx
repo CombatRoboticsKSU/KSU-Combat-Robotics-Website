@@ -69,7 +69,7 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <div style={{ textAlign: 'center', padding: '25px'}}>
-          <img src='/USINGimg/TEAM.png' alt='Team' width="40%" height="auto"></img>
+          <img src='/USINGimg/TEAM25.JPG' alt='Team' width="30%" height="auto"></img>
         </div>
         <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
             <Link to='/history'>
