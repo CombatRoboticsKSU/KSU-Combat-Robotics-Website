@@ -105,6 +105,11 @@ const config: Config = {
         },
         { to: '/leadership', label: 'Leadership', position: 'left' },
         { to: '/projects', label: 'Projects', position: 'left' },
+        { 
+          to: '/calendar',
+          label: 'Calendar',
+          position: 'right',
+        },
         {
           href: 'https://www.instagram.com/ksucombatrobotics/',
           label: 'Instagram Feed', 
