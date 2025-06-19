@@ -75,36 +75,11 @@ export default function Home(): JSX.Element {
       description="Information about current sponsors, and the way to sponsor us in the future">
       <HomepageHeader />
       <main>
-        <div style={{ textAlign: 'center', padding: '30px' }}>
+        <div style={{ textAlign: 'center', padding: '10px' }}> {/* Reduced padding */}
           <p className='hero__title'>Current Sponsors:</p>
         </div>
 
-        <div className='sponsorshipPage' style={{ textAlign: 'center', paddingBottom: '75px' }}>
-          <button
-              onClick={() => sponsorsSlider.current?.slickPrev()}
-              style={{
-                zIndex: 2,
-                cursor: 'pointer',
-                background: 'none',
-                border: 'none',
-                borderRadius: '5px',
-                fontSize: '35px'
-              }}
-          >Back</button>
-
-          <button
-              onClick={() => sponsorsSlider.current?.slickNext()}
-              style={{
-                zIndex: 2,
-                cursor: 'pointer',
-                background: 'none',
-                border: 'none',
-                borderRadius: '5px',
-                fontSize: '35px',
-                paddingLeft: '10%'
-              }}
-          >Next</button>
-
+        <div className='sponsorshipPage' style={{ textAlign: 'center', paddingBottom: '75px', position: 'relative' }}>
           <Slider {...settings} ref={sponsorsSlider}>
             {sponsors.map((sponsor, index) => (
               <div key={index}>
@@ -114,9 +89,49 @@ export default function Home(): JSX.Element {
               </div>
             ))}
           </Slider>
+
+          <div className={styles.sliderButtons} style={{ marginTop: '30px' }}> {/* Add margin to move below dots */}
+            <button
+                onClick={() => sponsorsSlider.current?.slickPrev()}
+                style={{
+                    background: '#0078D4',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    fontSize: '20px',
+                    padding: '10px 20px',
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = '#005A9E')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = '#0078D4')}
+            >
+                Back
+            </button>
+
+            <button
+                onClick={() => sponsorsSlider.current?.slickNext()}
+                style={{
+                    background: '#0078D4',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '5px',
+                    fontSize: '20px',
+                    padding: '10px 20px',
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = '#005A9E')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = '#0078D4')}
+            >
+                Next
+            </button>
+          </div>
         </div>
 
-        <div style={{ textAlign: 'center', padding: '20px' }}>
+        <div style={{ textAlign: 'center', padding: '20px', fontSize: '25px' }}>
           <h2>Recent Donations!</h2>
           <div className="donor-grid">
             {['Brendan Steele', 'Sternberg Family'].map(

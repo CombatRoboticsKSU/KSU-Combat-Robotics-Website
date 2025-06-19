@@ -105,6 +105,11 @@ const config: Config = {
         },
         { to: '/leadership', label: 'Leadership', position: 'left' },
         { to: '/projects', label: 'Projects', position: 'left' },
+        { 
+          to: '/calendar',
+          label: 'Calendar',
+          position: 'right',
+        },
         {
           href: 'https://www.instagram.com/ksucombatrobotics/',
           label: 'Instagram Feed', 
@@ -152,7 +157,7 @@ const config: Config = {
         {
           title: 'Sponsorship & Contact',
           items: [
-            { label: 'Sponsors', to: '/sponsorsphip' },
+            { label: 'Sponsors', to: '/sponsorship' },
             {
               label: 'Email', // Note : I like EmailJS if we can get that set up
               to: 'mailto:ksu.fightingrobotics@gmail.com',
