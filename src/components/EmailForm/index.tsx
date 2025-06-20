@@ -28,30 +28,13 @@ const EmailForm: React.FC = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    console.debug('Form updated:', { ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('Sending...');
-    console.debug('Submitting form:', form);
     try {
       const messageWithEmail = `${form.message}\n\nSender Email: ${form.email}`;
-      console.debug('Message sent to API:', {
-        from_name: form.name,
-        subject: form.title,
-        message: messageWithEmail,
-      });
-      console.log('About to send email with:', {
-        serviceId: safeServiceId,
-        templateId: safeTemplateId,
-        userId: safeUserId,
-        payload: {
-          from_name: form.name,
-          subject: form.title,
-          message: messageWithEmail,
-        },
-      });
       await emailjs.send(
         safeServiceId,
         safeTemplateId,
@@ -65,7 +48,6 @@ const EmailForm: React.FC = () => {
       );
       setStatus('Message sent!');
       setForm({ name: '', email: '', title: '', message: '' });
-      console.debug('Form reset after send');
     } catch (error) {
       setStatus('Failed to send. Please try again.');
       console.error('Email send failed:', error);
