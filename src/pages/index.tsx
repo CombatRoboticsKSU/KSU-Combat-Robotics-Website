@@ -21,8 +21,8 @@ function HomepageHeader() {
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <br/>
-        <div className='row'>
-            {/* <div style={{width: 'auto', margin: 'auto'}}>
+        {/* <div className='row'>
+            { <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/X3zqcZmmFKBerqPz5'>
               <button style={{ fontSize: '30px', marginTop: '15px' }}>
               3lb Competition Sign Up
@@ -36,7 +36,7 @@ function HomepageHeader() {
                 3lb Guest Sign Up
               </button>
             </Link>
-          </div> */}
+          </div> }
           
           <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/x3p2VbEp6bgtNYE57'>
@@ -45,7 +45,7 @@ function HomepageHeader() {
               </button>
             </Link>
           </div>
-        </div>
+        </div> */}
 
         <div className='row'>
           <div style={{width: '15px', margin: '15px'}}>

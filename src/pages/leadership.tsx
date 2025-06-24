@@ -41,7 +41,6 @@ function HomepageHeader2() {
   );
 }
 
-// Introducting the TWATS board XD
 export default function Home(): JSX.Element {
     const {siteConfig} = useDocusaurusContext();
     return (
