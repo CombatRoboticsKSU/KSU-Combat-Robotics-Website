@@ -5,7 +5,7 @@ import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 
 function Login() {
-        const EDGE_CONFIG_ID = process.env.EDGE_CONFIG_ID;
+        const EDGE_CONFIG_ID = process.env.REACT_APP_EDGE_CONFIG_ID;
         console.log(EDGE_CONFIG_ID, "EDGE_CONFIG_ID");
 
     const [session, setSession] = useState(null)
