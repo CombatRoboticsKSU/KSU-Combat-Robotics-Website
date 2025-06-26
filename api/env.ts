@@ -1,5 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-
 // Utility to return all non-secret envs (filter out secrets for safety)
 const PUBLIC_ENVS = [
   'NEXT_PUBLIC_SUPABASE_URL',
@@ -13,7 +11,11 @@ const PUBLIC_ENVS = [
   'SUPABASE_URL',
 ];
 
-module.exports = async function handler(req: NextApiRequest, res: NextApiResponse) {
+/**
+ * @param {import('next').NextApiRequest} req
+ * @param {import('next').NextApiResponse} res
+ */
+module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
