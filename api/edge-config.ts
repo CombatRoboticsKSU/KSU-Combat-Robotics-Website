@@ -1,7 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-
-
-module.exports = async function handler(req: NextApiRequest, res: NextApiResponse) {
+/**
+ * @param {import('next').NextApiRequest} req
+ * @param {import('next').NextApiResponse} res
+ */
+module.exports = async function handler(req, res) {
     // Debug log for envs
     console.log('EDGE_CONFIG_ID:', process.env.EDGE_CONFIG_ID);
     console.log('EDGE_CONFIG_TOKEN:', process.env.EDGE_CONFIG_TOKEN ? 'set' : 'not set');
