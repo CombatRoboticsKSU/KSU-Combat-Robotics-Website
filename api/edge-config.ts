@@ -1,3 +1,5 @@
+// @ts-ignore
+import fetch from 'node-fetch';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 module.exports = async function handler(req: NextApiRequest, res: NextApiResponse) {
