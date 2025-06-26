@@ -1,8 +1,11 @@
-// @ts-ignore
-import fetch from 'node-fetch';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+
 module.exports = async function handler(req: NextApiRequest, res: NextApiResponse) {
+    // Debug log for envs
+    console.log('EDGE_CONFIG_ID:', process.env.EDGE_CONFIG_ID);
+    console.log('EDGE_CONFIG_TOKEN:', process.env.EDGE_CONFIG_TOKEN ? 'set' : 'not set');
+    
     const EDGE_CONFIG_ID = process.env.EDGE_CONFIG_ID;
     const EDGE_CONFIG_TOKEN = process.env.EDGE_CONFIG_TOKEN;
     if (!EDGE_CONFIG_TOKEN) {
