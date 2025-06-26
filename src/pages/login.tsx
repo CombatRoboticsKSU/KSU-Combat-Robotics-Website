@@ -77,7 +77,7 @@ function Login() {
                             appearance={{ theme: ThemeSupa }}
                             theme={theme}
                             providers={['discord']}
-                            redirectTo='http://localhost:3000/login'
+                            redirectTo='http://ian.ksucombat.club/login'
                             onlyThirdPartyProviders
                         />
                     )}
