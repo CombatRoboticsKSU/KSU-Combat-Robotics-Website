@@ -17,5 +17,5 @@
     "isolatedModules": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "supabaseClient.js"]
+  "include": ["src", "supabaseClient.js", "api/edge-config.ts"]
 }
