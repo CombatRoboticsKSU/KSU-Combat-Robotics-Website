@@ -1,10 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+let supabase = null;
+let supabaseUrl = '';
+let supabaseAnonKey = '';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables.');
+// Fetch public envs from the API route at runtime
+export async function getSupabaseClient() {
+  if (supabase) return supabase;
+  const res = await fetch('/api/env');
+  const envs = await res.json();
+  supabaseUrl = envs.NEXT_PUBLIC_SUPABASE_URL;
+  supabaseAnonKey = envs.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables.');
+  }
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+  return supabase;
 }
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);

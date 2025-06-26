@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 module.exports = async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const EDGE_CONFIG_ID = process.env.REACT_APP_EDGE_CONFIG_ID;
-    const EDGE_CONFIG_TOKEN = process.env.REACT_APP_EDGE_CONFIG_TOKEN;
+    const EDGE_CONFIG_ID = process.env.EDGE_CONFIG_ID;
+    const EDGE_CONFIG_TOKEN = process.env.EDGE_CONFIG_TOKEN;
     if (!EDGE_CONFIG_TOKEN) {
         return res.status(500).json({ error: 'Edge Config token not set on server.' });
     }
