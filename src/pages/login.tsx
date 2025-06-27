@@ -53,6 +53,18 @@ function Login() {
         }
     };
 
+    const isWhitelisted = (() => {
+        if (!session || !session.user || !session.user.id || !edgeValue) return false;
+        if (Array.isArray(edgeValue)) {
+            return edgeValue.includes(session.user.id);
+        }
+        if (typeof edgeValue === 'string') {
+            // Allow comma or newline separated list, or single string
+            return edgeValue.split(/[,\n]/).map(s => s.trim()).includes(session.user.id);
+        }
+        return false;
+    })();
+
     if (!session) {
         return (
             <div style={{
@@ -83,7 +95,7 @@ function Login() {
                 </div>
             </div>
         );
-    } else {
+    } else if (isWhitelisted) {
         return (
             <div>
                 <button onClick={logOut}>Log Out</button>
@@ -106,6 +118,26 @@ function Login() {
                 </div>
             </div>
         )
+    } else {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+                textAlign: 'center'
+            }}>
+                <h2>Access Restricted</h2>
+                <p>
+                    Your account is not on the whitelist.<br />
+                    Please contact a member of the club to gain access.
+                </p>
+                <button onClick={logOut} style={{ marginTop: 20 }}>
+                    Log Out
+                </button>
+            </div>
+        );
     }
 }
 
