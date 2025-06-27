@@ -14,6 +14,7 @@ function Login() {
 
     useEffect(() => {
         fetch('/api/edge-config')
+        //fetch('http://localhost:4000/api/edge-config')
             .then(res => res.json())
             .then(data => setEdgeValue(data.value ?? null));
 
@@ -21,17 +22,24 @@ function Login() {
         setTheme(themeChoice === 'dark' ? 'dark' : 'supa');
 
         (async () => {
-            const supabaseClient = await getSupabaseClient();
-            setSupabase(supabaseClient);
-            supabaseClient.auth.getSession().then(({ data: { session } }) => {
-                setSession(session);
-            });
-            const {
-                data: { subscription },
-            } = supabaseClient.auth.onAuthStateChange((_event: any, session: any) => {
-                setSession(session);
-            });
-            return () => subscription.unsubscribe();
+            try {
+                const supabaseClient = await getSupabaseClient();
+                if (!supabaseClient) {
+                    throw new Error('Supabase client is undefined');
+                }
+                setSupabase(supabaseClient);
+                supabaseClient.auth.getSession().then(({ data: { session } }) => {
+                    setSession(session);
+                });
+                const {
+                    data: { subscription },
+                } = supabaseClient.auth.onAuthStateChange((_event: any, session: any) => {
+                    setSession(session);
+                });
+                return () => subscription.unsubscribe();
+            } catch (err) {
+                console.error('Error initializing Supabase client:', err);
+            }
         })();
     }, []);
 
@@ -43,18 +51,6 @@ function Login() {
         } else {
             setSession(null);
         }
-    };
-
-    const postEdgeConfig = async (newValue: string) => {
-        const res = await fetch('/api/edge-config', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ value: newValue })
-        });
-        const data = await res.json();
-        console.log('POST response:', data);
     };
 
     if (!session) {
@@ -71,12 +67,16 @@ function Login() {
                     transform: 'scale(1.7)',
                     transformOrigin: 'center',
                 }}>
-                    {supabase && (
+                    {!supabase ? (
+                        <div style={{ textAlign: 'center', fontSize: 18, color: '#888' }}>Loading authentication...</div>
+                    ) : (
                         <Auth
                             supabaseClient={supabase}
                             appearance={{ theme: ThemeSupa }}
                             theme={theme}
                             providers={['discord']}
+                            //redirectTo='http://localhost:3000/login'
+                            redirectTo='http://ian.ksucombat.club/login'
                             onlyThirdPartyProviders
                         />
                     )}
@@ -104,9 +104,6 @@ function Login() {
                     <span> {String(edgeValue)}</span>
                   )}
                 </div>
-                {/* <button onClick={() => postEdgeConfig('Hello from client!')}>
-                    Send POST to Edge Config
-                </button> */}
             </div>
         )
     }

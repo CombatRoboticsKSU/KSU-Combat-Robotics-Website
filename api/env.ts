@@ -19,7 +19,6 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-  // Only return public envs
   const envs: Record<string, string | undefined> = {};
   for (const key of PUBLIC_ENVS) {
     envs[key] = process.env[key];

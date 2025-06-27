@@ -3,10 +3,6 @@
  * @param {import('next').NextApiResponse} res
  */
 module.exports = async function handler(req, res) {
-    // Debug log for envs
-    console.log('EDGE_CONFIG_ID:', process.env.EDGE_CONFIG_ID);
-    console.log('EDGE_CONFIG_TOKEN:', process.env.EDGE_CONFIG_TOKEN ? 'set' : 'not set');
-    
     const EDGE_CONFIG_ID = process.env.EDGE_CONFIG_ID;
     const EDGE_CONFIG_TOKEN = process.env.EDGE_CONFIG_TOKEN;
     if (!EDGE_CONFIG_TOKEN) {
@@ -23,13 +19,16 @@ module.exports = async function handler(req, res) {
                     }
                 }
             );
-            if (!response.ok) {
-                return res.status(response.status).json({ error: 'Failed to fetch from Edge Config' });
+            const raw = await response.text();
+            let value;
+            try {
+                value = JSON.parse(raw);
+            } catch (e) {
+                value = raw;
             }
-            const value = await response.json();
-            return res.status(200).json({ value: value.value });
+            return res.status(200).json({ value });
         } catch (err) {
-            return res.status(500).json({ error: 'Error fetching from Edge Config' });
+            return res.status(500).json({ error: 'Error fetching from Edge Config', details: String(err) });
         }
     } else {
         return res.status(405).json({ error: 'Method not allowed' });
