@@ -97,11 +97,8 @@ async function handler(req, res) {
         path: '/',
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7, // 1 week
-      };
-      if (isProd) {
-        cookieOptions.domain = '.ksucombat.club';
-        cookieOptions.secure = true;
-      }
+        ...(isProd ? { domain: '.ksucombat.club', secure: true } : {})
+      } as any;
       res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({ ...user, guilds }), cookieOptions));
       console.log('User cookie set successfully. Options:', cookieOptions);
     } catch (err) {
