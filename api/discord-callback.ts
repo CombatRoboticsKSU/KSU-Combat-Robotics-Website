@@ -30,12 +30,14 @@ async function handler(req, res) {
       });
       return res.status(500).send('Missing required environment variables for Discord OAuth');
     }
+    const finalRedirectUri = `${redirectUri}/api/discord-callback`;
+    console.log('Final redirect_uri sent to Discord:', finalRedirectUri);
     const params = new URLSearchParams();
     params.append('client_id', clientId);
     params.append('client_secret', clientSecret);
     params.append('grant_type', 'authorization_code');
     params.append('code', code);
-    params.append('redirect_uri', `${redirectUri}/api/discord-callback`);
+    params.append('redirect_uri', finalRedirectUri);
     params.append('scope', 'identify guilds guilds.members.read');
 
     let tokenRes;
