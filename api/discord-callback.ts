@@ -1,19 +1,18 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import fetch from 'node-fetch';
-import cookie from 'cookie';
+const fetch = require('node-fetch');
+const cookie = require('cookie');
 
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const code = req.query.code as string;
+async function handler(req, res) {
+  const code = req.query.code;
   if (!code) {
     return res.status(400).send('Missing code');
   }
 
   // Exchange code for access token
   const params = new URLSearchParams();
-  params.append('client_id', process.env.DISCORD_CLIENT_ID!);
-  params.append('client_secret', process.env.DISCORD_CLIENT_SECRET!);
+  params.append('client_id', process.env.DISCORD_CLIENT_ID);
+  params.append('client_secret', process.env.DISCORD_CLIENT_SECRET);
   params.append('grant_type', 'authorization_code');
   params.append('code', code);
   params.append('redirect_uri', `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`);
@@ -54,3 +53,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Redirect to frontend login page
   res.redirect(`${frontendUrl}/login`);
 }
+
+module.exports = handler;

@@ -1,8 +1,6 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+const cookie = require('cookie');
 
-import cookie from 'cookie';
-
-export default function handler(req: VercelRequest, res: VercelResponse) {
+function handler(req, res) {
   // Destroy the user cookie
   res.setHeader('Set-Cookie', cookie.serialize('user', '', {
     httpOnly: false,
@@ -11,3 +9,5 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   }));
   res.json({ success: true });
 }
+
+module.exports = handler;
