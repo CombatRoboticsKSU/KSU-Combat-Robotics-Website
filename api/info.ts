@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import cookie from 'cookie';
+const cookie = require('cookie');
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
