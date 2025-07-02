@@ -91,13 +91,19 @@ async function handler(req, res) {
 
     // Store user info in a cookie (for demo; use a real session in production)
     try {
-      res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({ ...user, guilds }), {
+      const isProd = process.env.NODE_ENV === 'production';
+      const cookieOptions = {
         httpOnly: false, // for local dev: allow JS access
         path: '/',
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7, // 1 week
-      }));
-      console.log('User cookie set successfully.');
+      };
+      if (isProd) {
+        cookieOptions.domain = '.ksucombat.club';
+        cookieOptions.secure = true;
+      }
+      res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({ ...user, guilds }), cookieOptions));
+      console.log('User cookie set successfully. Options:', cookieOptions);
     } catch (err) {
       console.error('Error setting cookie:', err);
       return res.status(500).send('Error setting cookie');
