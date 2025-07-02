@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FaDiscord } from 'react-icons/fa';
 
 // Centralized API base URL
-const API_BASE_URL = 'http://localhost:4000';
-//const API_BASE_URL = '/api';
+//const API_BASE_URL = 'http://localhost:4000';
+const API_BASE_URL = 'api';
 
 function Login() {
     const [user, setUser] = useState<any>(null);
