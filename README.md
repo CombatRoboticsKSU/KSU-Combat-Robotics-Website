@@ -27,12 +27,10 @@ To set up a local development environment, ensure you have Node.js installed on 
 - This will launch the website locally at `http://localhost:3000`.
 
 ### Working on /login page
-- Go to @src/pages/login.tsx and add `redirectTo='http://localhost:3000/login'`. For any other domains redirect them there
-- Go to @src/pages/login.tsx and switch `fetch('/api/edge-config')` to `fetch('http://localhost:4000/api/edge-config')`
-- Go to @site/supabaseClient.js and switch `fetch('api/env')` to `fetch('http://localhost:4000/api/env')`
-- run `npm run run-api`
+- Go to @src/pages/login.tsx change `API_BASE_URL='/api'`
+- Start the local api with `npm run run-api`
 > [!WARNING]
-> Make sure to undo @src/pages/login.tsx @site/supabaseClient.js and before publishing to github
+> Make sure to undo @src/pages/login.tsx before publishing to github
 
 ## License
 This project is licensed under the GNU General Public License 2.0 (GPLv2).
