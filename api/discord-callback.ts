@@ -47,6 +47,7 @@ async function handler(req, res) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
       });
+      console.log('Token response status:', tokenRes.status);
     } catch (err) {
       console.error('Error fetching Discord token:', err);
       return res.status(500).send('Error fetching Discord token');
@@ -58,6 +59,7 @@ async function handler(req, res) {
     }
     const tokenData = await tokenRes.json();
     const accessToken = tokenData.access_token;
+    console.log('Successfully obtained access token.');
 
     // Fetch user info
     let userRes, user;
@@ -65,7 +67,9 @@ async function handler(req, res) {
       userRes = await fetch('https://discord.com/api/users/@me', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
+      console.log('User info response status:', userRes.status);
       user = await userRes.json();
+      console.log('Fetched user info:', user);
     } catch (err) {
       console.error('Error fetching Discord user info:', err);
       return res.status(500).send('Error fetching Discord user info');
@@ -77,7 +81,9 @@ async function handler(req, res) {
       guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
+      console.log('Guilds response status:', guildsRes.status);
       guilds = await guildsRes.json();
+      console.log('Fetched user guilds:', guilds);
     } catch (err) {
       console.error('Error fetching Discord user guilds:', err);
       return res.status(500).send('Error fetching Discord user guilds');
@@ -91,12 +97,14 @@ async function handler(req, res) {
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7, // 1 week
       }));
+      console.log('User cookie set successfully.');
     } catch (err) {
       console.error('Error setting cookie:', err);
       return res.status(500).send('Error setting cookie');
     }
 
     // Redirect to frontend login page
+    console.log('Redirecting to frontend login page:', `${frontendUrl}/login`);
     res.redirect(`${frontendUrl}/login`);
   } catch (err) {
     console.error('API /discord-callback error:', err);
