@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(mod => mod.default(...args));
 const cookie = require('cookie');
 
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
