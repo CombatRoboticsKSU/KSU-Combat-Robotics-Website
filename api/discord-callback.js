@@ -1,11 +1,12 @@
-const fetch = require('node-fetch');
 const cookie = require('cookie');
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
 
+
 async function handler(req, res) {
+  const fetch = (await import('node-fetch')).default;
   const code = Array.isArray(req.query.code) ? req.query.code[0] : req.query.code;
   if (!code) {
     res.status(400).send('Missing code');
