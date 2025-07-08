@@ -1,7 +1,6 @@
-import cookie from 'cookie';
-import type { NextApiRequest, NextApiResponse } from 'next';
+const cookie = require('cookie');
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+function handler(req, res) {
   // Destroy the user cookie
   res.setHeader('Set-Cookie', cookie.serialize('user', '', {
     httpOnly: true,
@@ -10,3 +9,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }));
   res.json({ success: true });
 }
+
+module.exports = handler;

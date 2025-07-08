@@ -1,7 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import cookie from 'cookie';
+const cookie = require('cookie');
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+function handler(req, res) {
   try {
     const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
     let user = null;
@@ -24,3 +23,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+module.exports = handler;

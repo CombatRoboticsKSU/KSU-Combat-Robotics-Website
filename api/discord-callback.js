@@ -1,13 +1,11 @@
-import fetch from 'node-fetch';
-import cookie from 'cookie';
+const fetch = require('node-fetch');
+const cookie = require('cookie');
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
 
-import type { NextApiRequest, NextApiResponse } from 'next';
-
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req, res) {
   const code = Array.isArray(req.query.code) ? req.query.code[0] : req.query.code;
   if (!code) {
     res.status(400).send('Missing code');
@@ -15,7 +13,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // Exchange code for access token
-
   const params = new URLSearchParams();
   if (clientId) params.append('client_id', clientId);
   if (clientSecret) params.append('client_secret', clientSecret);
@@ -30,33 +27,29 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     body: params,
   });
 
-
   if (!tokenRes.ok) {
     res.status(401).send('Failed to get access token');
     return;
   }
 
-  const tokenData: any = await tokenRes.json();
+  const tokenData = await tokenRes.json();
   const accessToken = tokenData && tokenData.access_token;
 
   // Fetch user info
-
   const userRes = await fetch('https://discord.com/api/users/@me', {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  const user: any = await userRes.json();
+  const user = await userRes.json();
 
   // Fetch guilds
-
   const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
-  const guilds = await guildsRes.json() as any[];
+  const guilds = await guildsRes.json();
 
   // Optionally, fetch member info for your guild to get roles
   const allowedGuildId = '972594004485103637';
-
-  let member: any = null;
+  let member = null;
   try {
     const memberRes = await fetch(`https://discord.com/api/users/@me/guilds/${allowedGuildId}/member`, {
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -68,7 +61,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Attach roles to the guild object
   if (Array.isArray(guilds)) {
-    guilds.forEach((g: any) => {
+    guilds.forEach((g) => {
       if (g.id === allowedGuildId && member && member.roles) {
         g.roles = member.roles;
       }
@@ -76,8 +69,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // Save user info in a cookie (for demo, not secure for production)
-
-  // Only spread if user is an object
   const userObj = (user && typeof user === 'object') ? { ...user, guilds } : { guilds };
   res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({ user: userObj }), {
     httpOnly: true,
@@ -90,4 +81,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.redirect('/login');
 }
 
-export default handler;
+module.exports = handler;
