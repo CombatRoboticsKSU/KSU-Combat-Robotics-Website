@@ -1,12 +1,12 @@
 
-import cookie from 'cookie';
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
 
-
 export default async function handler(req, res) {
+  // Dynamically import cookie inside the handler
+  const cookie = (await import('cookie')).default;
   try {
     // Log environment variables (do not log secrets in production!)
     console.log('DISCORD_CLIENT_ID:', clientId);
