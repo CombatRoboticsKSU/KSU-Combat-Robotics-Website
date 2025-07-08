@@ -1,14 +1,14 @@
-const cookie = require('cookie');
+
+import cookie from 'cookie';
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
 
-
-async function handler(req, res) {
+export default async function handler(req, res) {
   try {
     console.log('Handler started');
-    const fetch = (await import('node-fetch')).default;
+    // Use the global fetch provided by Next.js (no node-fetch)
     const code = Array.isArray(req.query.code) ? req.query.code[0] : req.query.code;
     if (!code) {
       console.log('No code in query');
@@ -105,5 +105,3 @@ async function handler(req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-
-export default handler;
