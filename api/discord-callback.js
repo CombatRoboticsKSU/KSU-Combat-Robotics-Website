@@ -84,7 +84,7 @@ module.exports = async (req, res) => {
     res.setHeader('Set-Cookie', cookie.serialize('session', sessionToken, {
       httpOnly: true,
       path: '/',
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 3,
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
     }));
