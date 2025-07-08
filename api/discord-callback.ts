@@ -93,13 +93,16 @@ async function handler(req, res) {
     try {
       const isProd = process.env.NODE_ENV === 'production';
       const cookieOptions = {
-        httpOnly: false, // for local dev: allow JS access
+        httpOnly: false, // for demo; set to true in production if not using JS to read
         path: '/',
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7, // 1 week
         ...(isProd ? { domain: '.ksucombat.club', secure: true } : {})
-      } as any;
-      res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({ ...user, guilds }), cookieOptions));
+      };
+      res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('user', JSON.stringify({ ...user, guilds }), cookieOptions)
+      );
       console.log('User cookie set successfully. Options:', cookieOptions);
     } catch (err) {
       console.error('Error setting cookie:', err);
