@@ -25,15 +25,26 @@ function Login() {
         setLoading(true);
         setError(null);
         fetch(`${API_BASE_URL}/info`, { credentials: 'include' })
-            .then(res => {
-                if (res.status === 401) return null;
+            .then(async res => {
+                if (res.status === 401) {
+                    // Not logged in, don't treat as error
+                    return null;
+                }
+                if (!res.ok) {
+                    // Other errors
+                    const text = await res.text();
+                    throw new Error(text || 'Failed to load authentication info.');
+                }
                 return res.json();
             })
             .then(userInfo => {
                 setUser(userInfo?.user ?? null);
             })
             .catch((err) => {
-                setError('Failed to load authentication info.');
+                // Only show error if it's not just 'not logged in'
+                if (err.message !== 'Not authenticated') {
+                    setError('Failed to load authentication info.');
+                }
                 setUser(null);
             })
             .finally(() => setLoading(false));
