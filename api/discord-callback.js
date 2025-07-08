@@ -1,7 +1,6 @@
-
-
 const cookie = require('cookie');
 const crypto = require('crypto');
+const redis = require('./redis');
 
 // In-memory session store (for demo only; use Redis or DB for production)
 const sessions = global._sessions || (global._sessions = {});
@@ -78,15 +77,14 @@ module.exports = async (req, res) => {
 
     // Generate a session token
     const sessionToken = crypto.randomBytes(32).toString('hex');
-    // Store user info in the session store
+    // Store user info in Redis
     const userObj = (user && typeof user === 'object') ? { ...user, guilds } : { guilds };
-    sessions[sessionToken] = { user: userObj, created: Date.now() };
-
+    await redis.set(`session:${sessionToken}`, JSON.stringify({ user: userObj }), 'EX', 60 * 60 * 24 * 7); // 1 week expiry
     // Set session token in cookie
     res.setHeader('Set-Cookie', cookie.serialize('session', sessionToken, {
       httpOnly: true,
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      maxAge: 60 * 60 * 24 * 7,
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
     }));

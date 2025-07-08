@@ -1,22 +1,22 @@
 const cookie = require('cookie');
-const crypto = require('crypto');
-
-// In-memory session store (for demo only; use Redis or DB for production)
-const sessions = global._sessions || (global._sessions = {});
+const redis = require('./redis');
 
 /**
  * API handler for /api/info
  * Reads the session token from the cookie, looks up the user in the session store, and returns user info.
  * Compatible with Vercel serverless environment.
  */
-function handler(req, res) {
+async function handler(req, res) {
   try {
     const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
     let user = null;
     if (cookies.session) {
-      const session = sessions[cookies.session];
-      if (session && session.user) {
-        user = session.user;
+      const sessionData = await redis.get(`session:${cookies.session}`);
+      if (sessionData) {
+        const session = JSON.parse(sessionData);
+        if (session && session.user) {
+          user = session.user;
+        }
       }
     }
     if (!user) {
