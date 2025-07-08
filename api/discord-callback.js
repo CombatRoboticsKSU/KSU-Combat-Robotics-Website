@@ -99,10 +99,11 @@ async function handler(req, res) {
     // Redirect to login page
     console.log('Redirecting to /login');
     res.redirect('/login');
+    return; // Prevent further execution after redirect
   } catch (err) {
     console.error('discord-callback error:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
-module.exports = handler;
+export default handler;
