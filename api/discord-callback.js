@@ -1,6 +1,10 @@
 
 
 const cookie = require('cookie');
+const crypto = require('crypto');
+
+// In-memory session store (for demo only; use Redis or DB for production)
+const sessions = global._sessions || (global._sessions = {});
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
@@ -8,15 +12,8 @@ const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
 
 module.exports = async (req, res) => {
   try {
-    // Log environment variables (do not log secrets in production!)
-    console.log('DISCORD_CLIENT_ID:', clientId);
-    console.log('DISCORD_CLIENT_SECRET defined:', !!clientSecret);
-    console.log('NEXT_PUBLIC_BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
-    console.log('redirectUri:', redirectUri);
-
     const code = Array.isArray(req.query.code) ? req.query.code[0] : req.query.code;
     if (!code) {
-      console.log('No code in query');
       res.status(400).send('Missing code');
       return;
     }
@@ -37,8 +34,6 @@ module.exports = async (req, res) => {
     });
 
     if (!tokenRes.ok) {
-      const text = await tokenRes.text();
-      console.log('Token exchange failed:', text);
       res.status(401).send('Failed to get access token');
       return;
     }
@@ -69,7 +64,7 @@ module.exports = async (req, res) => {
         member = await memberRes.json();
       }
     } catch (e) {
-      console.log('Error fetching member info:', e);
+      // ignore
     }
 
     // Attach roles to the guild object
@@ -81,20 +76,25 @@ module.exports = async (req, res) => {
       });
     }
 
-    // Save user info in a cookie (for demo, not secure for production)
+    // Generate a session token
+    const sessionToken = crypto.randomBytes(32).toString('hex');
+    // Store user info in the session store
     const userObj = (user && typeof user === 'object') ? { ...user, guilds } : { guilds };
-    res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({ user: userObj }), {
+    sessions[sessionToken] = { user: userObj, created: Date.now() };
+
+    // Set session token in cookie
+    res.setHeader('Set-Cookie', cookie.serialize('session', sessionToken, {
       httpOnly: true,
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 1 week
       sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
     }));
 
     // Redirect to login page
-    res.redirect('/login');
-    return; // Prevent further execution after redirect
+    res.writeHead(302, { Location: '/login' }).end();
+    return;
   } catch (err) {
-    // Print the error stack and message for debugging
     console.error('discord-callback error:', err && err.stack ? err.stack : err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
