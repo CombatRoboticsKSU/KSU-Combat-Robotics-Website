@@ -1,17 +1,12 @@
 
 
-// Force Node.js runtime on Vercel/Next.js
-export const config = {
-  runtime: 'nodejs',
-};
+const cookie = require('cookie');
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
 
-export default async function handler(req, res) {
-  // Dynamically import cookie inside the handler
-  const cookie = (await import('cookie')).default;
+module.exports = async (req, res) => {
   try {
     // Log environment variables (do not log secrets in production!)
     console.log('DISCORD_CLIENT_ID:', clientId);
