@@ -1,121 +1,91 @@
-const fetch = (...args) => import('node-fetch').then(mod => mod.default(...args));
-const cookie = require('cookie');
+import fetch from 'node-fetch';
+import cookie from 'cookie';
 
-const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+const clientId = process.env.DISCORD_CLIENT_ID;
+const clientSecret = process.env.DISCORD_CLIENT_SECRET;
+const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
 
 async function handler(req, res) {
-  try {
-    // Log all relevant environment variables
-    console.log('DISCORD_CLIENT_ID:', process.env.DISCORD_CLIENT_ID);
-    console.log('DISCORD_CLIENT_SECRET:', process.env.DISCORD_CLIENT_SECRET ? '[set]' : '[missing]');
-    console.log('NEXT_PUBLIC_BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL);
-    console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
-    console.log('Request query:', req.query);
-
-    const code = req.query.code;
-    if (!code) {
-      console.error('Missing code in query');
-      return res.status(400).send('Missing code');
-    }
-
-    // Exchange code for access token
-    const clientId = process.env.DISCORD_CLIENT_ID || '';
-    const clientSecret = process.env.DISCORD_CLIENT_SECRET || '';
-    const redirectUri = process.env.NEXT_PUBLIC_BASE_URL || '';
-    if (!clientId || !clientSecret || !redirectUri) {
-      console.error('Missing required environment variables:', {
-        clientId,
-        clientSecret: clientSecret ? '[set]' : '[missing]',
-        redirectUri
-      });
-      return res.status(500).send('Missing required environment variables for Discord OAuth');
-    }
-    const finalRedirectUri = `${redirectUri}/api/discord-callback`;
-    console.log('Final redirect_uri sent to Discord:', finalRedirectUri);
-    const params = new URLSearchParams();
-    params.append('client_id', clientId);
-    params.append('client_secret', clientSecret);
-    params.append('grant_type', 'authorization_code');
-    params.append('code', code);
-    params.append('redirect_uri', finalRedirectUri);
-    params.append('scope', 'identify guilds guilds.members.read');
-
-    let tokenRes;
-    try {
-      tokenRes = await fetch('https://discord.com/api/oauth2/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString(),
-      });
-      console.log('Token response status:', tokenRes.status);
-    } catch (err) {
-      console.error('Error fetching Discord token:', err);
-      return res.status(500).send('Error fetching Discord token');
-    }
-    if (!tokenRes.ok) {
-      const err = await tokenRes.text();
-      console.error('Failed to get token:', err);
-      return res.status(401).send('Failed to get token: ' + err);
-    }
-    const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
-    console.log('Successfully obtained access token.');
-
-    // Fetch user info
-    let userRes, user;
-    try {
-      userRes = await fetch('https://discord.com/api/users/@me', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      console.log('User info response status:', userRes.status);
-      user = await userRes.json();
-      console.log('Fetched user info:', user);
-    } catch (err) {
-      console.error('Error fetching Discord user info:', err);
-      return res.status(500).send('Error fetching Discord user info');
-    }
-
-    // Fetch user guilds
-    let guildsRes, guilds;
-    try {
-      guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      console.log('Guilds response status:', guildsRes.status);
-      guilds = await guildsRes.json();
-      console.log('Fetched user guilds:', guilds);
-    } catch (err) {
-      console.error('Error fetching Discord user guilds:', err);
-      return res.status(500).send('Error fetching Discord user guilds');
-    }
-
-    // Store user info in a cookie (for demo; use a real session in production)
-    try {
-      const isProd = process.env.NODE_ENV === 'production';
-      const cookieOptions = {
-        httpOnly: false, // for demo; set to true in production if not using JS to read
-        path: '/',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-        ...(isProd ? { domain: '.ksucombat.club', secure: true } : {})
-      };
-      res.setHeader(
-        'Set-Cookie',
-        cookie.serialize('user', JSON.stringify({ ...user, guilds }), cookieOptions)
-      );
-      console.log('User cookie set successfully. Options:', cookieOptions);
-    } catch (err) {
-      console.error('Error setting cookie:', err);
-      return res.status(500).send('Error setting cookie');
-    }
-
-    // Redirect to frontend login page
-    console.log('Redirecting to frontend login page:', `${frontendUrl}/login`);
-    res.redirect(`${frontendUrl}/login`);
-  } catch (err) {
-    console.error('API /discord-callback error:', err);
-    res.status(500).send('Internal server error');
+  const code = req.query.code;
+  if (!code) {
+    res.status(400).send('Missing code');
+    return;
   }
+
+  // Exchange code for access token
+
+  const params = new URLSearchParams();
+  if (clientId) params.append('client_id', clientId);
+  if (clientSecret) params.append('client_secret', clientSecret);
+  params.append('grant_type', 'authorization_code');
+  params.append('code', code);
+  params.append('redirect_uri', redirectUri);
+  params.append('scope', 'identify guilds guilds.members.read');
+
+  const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params,
+  });
+
+
+  if (!tokenRes.ok) {
+    res.status(401).send('Failed to get access token');
+    return;
+  }
+
+  const tokenData: any = await tokenRes.json();
+  const accessToken = tokenData && tokenData.access_token;
+
+  // Fetch user info
+
+  const userRes = await fetch('https://discord.com/api/users/@me', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const user: any = await userRes.json();
+
+  // Fetch guilds
+
+  const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const guilds = await guildsRes.json() as any[];
+
+  // Optionally, fetch member info for your guild to get roles
+  const allowedGuildId = '972594004485103637';
+
+  let member: any = null;
+  try {
+    const memberRes = await fetch(`https://discord.com/api/users/@me/guilds/${allowedGuildId}/member`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (memberRes.ok) {
+      member = await memberRes.json();
+    }
+  } catch (e) {}
+
+  // Attach roles to the guild object
+  if (Array.isArray(guilds)) {
+    guilds.forEach((g: any) => {
+      if (g.id === allowedGuildId && member && member.roles) {
+        g.roles = member.roles;
+      }
+    });
+  }
+
+  // Save user info in a cookie (for demo, not secure for production)
+
+  // Only spread if user is an object
+  const userObj = (user && typeof user === 'object') ? { ...user, guilds } : { guilds };
+  res.setHeader('Set-Cookie', cookie.serialize('user', JSON.stringify({ user: userObj }), {
+    httpOnly: true,
+    path: '/',
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    sameSite: 'lax',
+  }));
+
+  // Redirect to login page
+  res.redirect('/login');
 }
 
-module.exports = handler;
+export default handler;

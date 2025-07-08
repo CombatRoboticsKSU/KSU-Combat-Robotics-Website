@@ -1,23 +1,20 @@
-const cookie = require('cookie');
+import type { NextApiRequest, NextApiResponse } from 'next';
+import cookie from 'cookie';
 
-
-function handler(req, res) {
-  try {
-    const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-    let user = null;
-    if (cookies.user) {
-      try {
-        user = JSON.parse(cookies.user);
-      } catch (e) {
-        console.error('Failed to parse user cookie:', e);
-        user = null;
-      }
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  let user = null;
+  if (cookies.user) {
+    try {
+      const parsed = JSON.parse(cookies.user);
+      user = parsed.user || null;
+    } catch (e) {
+      user = null;
     }
-    res.json({ user });
-  } catch (err) {
-    console.error('API /info error:', err);
-    res.status(500).json({ error: 'Internal server error' });
   }
+  if (!user) {
+    res.status(401).json({ error: 'Not authenticated' });
+    return;
+  }
+  res.status(200).json({ user });
 }
-
-module.exports = handler;
