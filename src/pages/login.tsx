@@ -76,7 +76,6 @@ function Login() {
         setError(null);
         try {
             const res = await fetch(`${API_BASE_URL}/logout`, { credentials: 'include' });
-            console.log('Logout response:', res);
             if (res.ok) {
                 setUser(null);
                 if (window.location.pathname !== '/login') {
@@ -85,11 +84,9 @@ function Login() {
             } else {
                 const text = await res.text();
                 setError('Logout failed.' + text);
-                console.error('Logout failed:', text);
             }
         } catch (err) {
             setError('Logout failed.' + err);
-            console.error('Logout failed 2:', err);
         }
         setLoading(false);
     };

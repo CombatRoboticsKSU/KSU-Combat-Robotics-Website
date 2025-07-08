@@ -20,9 +20,11 @@ async function handler(req, res) {
       }
     }
     if (!user) {
+      // No user session found, return 401 (handled gracefully by frontend)
       res.status(401).json({ error: 'Not authenticated' });
       return;
     }
+    // User session found, return user info
     res.status(200).json({ user });
   } catch (err) {
     console.error('API /api/info error:', err);
