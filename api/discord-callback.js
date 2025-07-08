@@ -7,12 +7,15 @@ const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
 
 async function handler(req, res) {
   try {
+    console.log('Handler started');
     const fetch = (await import('node-fetch')).default;
     const code = Array.isArray(req.query.code) ? req.query.code[0] : req.query.code;
     if (!code) {
+      console.log('No code in query');
       res.status(400).send('Missing code');
       return;
     }
+    console.log('Code received:', code);
 
     // Exchange code for access token
     const params = new URLSearchParams();
@@ -23,6 +26,7 @@ async function handler(req, res) {
     params.append('redirect_uri', redirectUri);
     params.append('scope', 'identify guilds guilds.members.read');
 
+    console.log('Requesting token from Discord');
     const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -30,9 +34,12 @@ async function handler(req, res) {
     });
 
     if (!tokenRes.ok) {
+      const text = await tokenRes.text();
+      console.log('Token exchange failed:', text);
       res.status(401).send('Failed to get access token');
       return;
     }
+    console.log('Token exchange succeeded');
 
     const tokenData = await tokenRes.json();
     const accessToken = tokenData && tokenData.access_token;
