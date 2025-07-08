@@ -1,5 +1,10 @@
 
 
+// Force Node.js runtime on Vercel/Next.js
+export const config = {
+  runtime: 'nodejs',
+};
+
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
