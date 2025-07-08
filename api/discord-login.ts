@@ -1,4 +1,6 @@
-function handler(req, res) {
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+function handler(req: NextApiRequest, res: NextApiResponse) {
   const clientId = process.env.DISCORD_CLIENT_ID;
   const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
   const scope = 'identify guilds guilds.members.read';
