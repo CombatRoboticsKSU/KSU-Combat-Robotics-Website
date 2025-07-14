@@ -22,5 +22,5 @@ yarn-error.log*
 todo.md
 
 .vercel
-
+.env
 .vscode/settings.json
