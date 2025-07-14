@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FaDiscord } from 'react-icons/fa';
+import { useBackendUrl } from '../utils/env';
 
 // Centralized API base URL
-//const API_BASE_URL = 'http://localhost:4000/api';
-const API_BASE_URL = 'api';
-
 function Login() {
+    const BACKEND_URL = useBackendUrl();
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -22,9 +21,10 @@ function Login() {
 
     // Fetch user info
     useEffect(() => {
+        console.log('API_BASE_URL:', BACKEND_URL);
         setLoading(true);
         setError(null);
-        fetch(`${API_BASE_URL}/info`, { credentials: 'include' })
+        fetch(`${BACKEND_URL}/api/info`, { credentials: 'include' })
             .then(async res => {
                 if (res.status === 401) {
                     // Not logged in, don't treat as error
@@ -68,14 +68,14 @@ function Login() {
     }, [user]);
 
     const handleLogin = () => {
-        window.location.href = `${API_BASE_URL}/discord-login`;
+        window.location.href = `${BACKEND_URL}/api/discord-login`;
     };
 
     const handleLogout = async () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(`${API_BASE_URL}/logout`, { credentials: 'include' });
+            const res = await fetch(`${BACKEND_URL}/api/logout`, { credentials: 'include' });
             if (res.ok) {
                 setUser(null);
                 if (window.location.pathname !== '/login') {

@@ -1,3 +1,8 @@
+// Load .env for local development
+if (!process.env.VERCEL) {
+  require('dotenv').config();
+}
+
 const cookie = require('cookie');
 const redis = require('./redis');
 

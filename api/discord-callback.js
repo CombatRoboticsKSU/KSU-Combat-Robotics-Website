@@ -1,3 +1,8 @@
+// Load .env for local development
+if (!process.env.VERCEL) {
+  require('dotenv').config();
+}
+
 const cookie = require('cookie');
 const crypto = require('crypto');
 const redis = require('./redis');
@@ -6,13 +11,23 @@ const redis = require('./redis');
 
 const clientId = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
-const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord-callback`;
+const redirectUri = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/discord-callback`;
 
 module.exports = async (req, res) => {
   try {
     const code = Array.isArray(req.query.code) ? req.query.code[0] : req.query.code;
     if (!code) {
-      res.status(400).send('Missing code');
+      res.status(400).send(`
+        <html>
+          <head><title>Discord Callback Error</title></head>
+          <body style="font-family:sans-serif;text-align:center;margin-top:80px;">
+            <h2>Discord Login Error</h2>
+            <p>This page is for Discord OAuth callback only.<br>
+            You should not visit this page directly.</p>
+            <p>If you see this, please log in using the Discord button on the website.</p>
+          </body>
+        </html>
+      `);
       return;
     }
 
@@ -90,8 +105,9 @@ module.exports = async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
     }));
 
-    // Redirect to login page
-    res.writeHead(302, { Location: '/login' }).end();
+    // Redirect to frontend after login
+    const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
+    res.writeHead(302, { Location: `${frontendUrl}/login` }).end();
     return;
   } catch (err) {
     console.error('discord-callback error:', err && err.stack ? err.stack : err);

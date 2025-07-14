@@ -1,8 +1,11 @@
-import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
-import type { Options as PresetOptions, ThemeConfig } from '@docusaurus/preset-classic';
+const { themes: prismThemes } = require('prism-react-renderer');
+const dotenv = require('dotenv');
+dotenv.config();
 
-const config: Config = {
+console.log('=== DOCUSAURUS CONFIG IS RUNNING ===');
+console.log('Docusaurus config NEXT_PUBLIC_BACKEND_URL:', process.env.NEXT_PUBLIC_BACKEND_URL);
+
+module.exports = {
   title: 'KSU Combat Robotics',
   tagline: 'KSU Combat Robotics is a student organization at Kent State University that designs, builds, and competes in combat robotics events at a variety of weight classes.',
   favicon: 'img/favicon.ico',
@@ -179,7 +182,20 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
-  } satisfies ThemeConfig,
-};
+  },
 
-export default config;
+  customFields: {
+    backendUrl:
+      process.env.NEXT_PUBLIC_BACKEND_URL
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : '',
+    frontendUrl:
+      process.env.NEXT_PUBLIC_FRONTEND_URL
+        ? process.env.NEXT_PUBLIC_FRONTEND_URL
+        : process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : '',
+  },
+};

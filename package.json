@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "concurrently \"npm run start-main\" \"npm run run-api\"",
     "start-main": "docusaurus start",
-    "run-api": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\"}\" api/dev-server.ts",
+    "start-api": "node src/utils/local-server.js",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

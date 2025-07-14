@@ -24,7 +24,7 @@
   },
   "include": [
     "src"
-, "docusaurus.config.ts"  ],
+, "docusaurus.config.js", "src/utils/sidebars.ts"  ],
   "exclude": [
     "node_modules"
   ]
