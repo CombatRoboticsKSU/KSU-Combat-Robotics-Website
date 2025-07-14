@@ -23,14 +23,10 @@ Note: All contributions to this project must comply with the terms of the GNU Ge
 To set up a local development environment, ensure you have Node.js installed on your machine. Then:
 
 - Install the required dependencies by running `npm install`.
-- Start the application using `npm start`.
+- Start the application using `npm run start-main`.
 - This will launch the website locally at `http://localhost:3000`.
-
-### Working on /login page
-- Go to @src/pages/login.tsx change `API_BASE_URL='/api'`
-- Start the local api with `npm run run-api`
-> [!WARNING]
-> Make sure to undo @src/pages/login.tsx before publishing to github
+- Go to @src/.env and confirm the secrets
+- Start the local api with `npm run start-main`
 
 ## License
 This project is licensed under the GNU General Public License 2.0 (GPLv2).
