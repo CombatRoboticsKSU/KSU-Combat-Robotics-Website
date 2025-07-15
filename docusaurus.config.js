@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 console.log('=== DOCUSAURUS CONFIG IS RUNNING ===');
-console.log('Docusaurus config NEXT_PUBLIC_BACKEND_URL:', process.env.NEXT_PUBLIC_BACKEND_URL);
 
 module.exports = {
   title: 'KSU Combat Robotics',
