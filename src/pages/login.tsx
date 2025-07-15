@@ -21,7 +21,6 @@ function Login() {
 
     // Fetch user info
     useEffect(() => {
-        console.log('API_BASE_URL:', BACKEND_URL);
         setLoading(true);
         setError(null);
         fetch(`${BACKEND_URL}/api/info`, { credentials: 'include' })
@@ -54,6 +53,7 @@ function Login() {
     useEffect(() => {
         if (!user || !user.guilds || !Array.isArray(user.guilds)) {
             setIsWhitelisted(false);
+            setCheckingWhitelist(false);
             return;
         }
         setCheckingWhitelist(true);
@@ -128,13 +128,22 @@ function Login() {
     }
 
     if (!isWhitelisted) {
+        // Check if user is not a member of the guild
+        const isNotMember = user && user.guilds && Array.isArray(user.guilds) && !user.guilds.some((g: any) => g.id === allowedGuildId);
         return (
             <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', textAlign: 'center' }}>
                 <h2>Access Restricted</h2>
-                <p>
-                    Your Discord account is not on the whitelist.<br />
-                    Please contact a member of the club to gain access.
-                </p>
+                {isNotMember ? (
+                    <p>
+                        Your Discord account is not a member of the KSU Combat Robotics Discord server.<br />
+                        To join the server, please attend a club meeting to join!
+                    </p>
+                ) : (
+                    <p>
+                        Your Discord account does not have the required role in the KSU Combat Robotics Discord server.<br />
+                        Please contact a club officer to gain access!
+                    </p>
+                )}
                 <button onClick={handleLogout} style={{ marginTop: 20, fontSize: 16, padding: '8px 24px', borderRadius: 6, background: '#5865F2', color: 'white', border: 'none', cursor: 'pointer' }}>
                     Log Out
                 </button>
@@ -143,16 +152,24 @@ function Login() {
     }
 
     // Authenticated and whitelisted
-    return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ background: '#222', color: 'white', padding: 32, borderRadius: 12, minWidth: 320, boxShadow: '0 2px 16px #0002' }}>
-                <div style={{ marginBottom: 16, fontSize: 22, fontWeight: 700 }}>Welcome!</div>
-                <div style={{ marginBottom: 8 }}>Discord UID: <b>{user.id}</b></div>
-                <div style={{ marginBottom: 8 }}>Discord Username: <b>{user.username || user.displayName || user.full_name || user.name || 'Unknown'}</b></div>
-                <button onClick={handleLogout} style={{ marginTop: 18, fontSize: 16, padding: '8px 24px', borderRadius: 6, background: '#5865F2', color: 'white', border: 'none', cursor: 'pointer' }}>
-                    Log Out
-                </button>
+    if(isWhitelisted) {  
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ background: '#222', color: 'white', padding: 32, borderRadius: 12, minWidth: 320, boxShadow: '0 2px 16px #0002' }}>
+                    <div style={{ marginBottom: 16, fontSize: 22, fontWeight: 700 }}>Welcome!</div>
+                    <div style={{ marginBottom: 8 }}>Discord UID: <b>{user.id}</b></div>
+                    <div style={{ marginBottom: 8 }}>Discord Username: <b>{user.username || user.displayName || user.full_name || user.name || 'Unknown'}</b></div>
+                    <button onClick={handleLogout} style={{ marginTop: 18, fontSize: 16, padding: '8px 24px', borderRadius: 6, background: '#5865F2', color: 'white', border: 'none', cursor: 'pointer' }}>
+                        Log Out
+                    </button>
+                </div>
             </div>
+        );
+    }
+
+    return (
+        <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ fontSize: 18, color: '#888' }}>Unexpected state</div>
         </div>
     );
 }
