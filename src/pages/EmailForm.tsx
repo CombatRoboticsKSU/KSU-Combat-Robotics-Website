@@ -1,29 +1,12 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import emailjs from 'emailjs-com';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
-import './styles.module.css';
+const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID as string;
+const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID as string;
+const USER_ID = process.env.REACT_APP_EMAILJS_USER_ID as string;
 
-const EmailForm: React.FC = () => {
-  const { siteConfig } = useDocusaurusContext();
-  const SERVICE_ID = siteConfig.customFields.EMAILJS_SERVICE_ID;
-  const TEMPLATE_ID = siteConfig.customFields.EMAILJS_TEMPLATE_ID;
-  const USER_ID = siteConfig.customFields.EMAILJS_USER_ID;
-
-  if (!SERVICE_ID || !TEMPLATE_ID || !USER_ID) {
-    console.error('Missing EmailJS environment variables:', {
-      SERVICE_ID,
-      TEMPLATE_ID,
-      USER_ID,
-    });
-  }
-
-  // fallback to empty string to avoid crash
-  const safeServiceId = SERVICE_ID || '';
-  const safeTemplateId = TEMPLATE_ID || '';
-  const safeUserId = USER_ID || '';
-
-  const [form, setForm] = useState({ name: '', email: '', title: '', message: '' });
+export default function EmailForm() {
+  const [form, setForm] = useState({ name: '', title: '', message: '' });
   const [status, setStatus] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -34,30 +17,28 @@ const EmailForm: React.FC = () => {
     e.preventDefault();
     setStatus('Sending...');
     try {
-      const messageWithEmail = `${form.message}\n\nSender Email: ${form.email}`;
       await emailjs.send(
-        safeServiceId,
-        safeTemplateId,
+        SERVICE_ID,
+        TEMPLATE_ID,
         {
           from_name: form.name,
           subject: form.title,
-          message: messageWithEmail,
-          reply_to: form.email, // Pass the email directly as well
+          message: form.message,
         },
-        safeUserId
+        USER_ID
       );
       setStatus('Message sent!');
-      setForm({ name: '', email: '', title: '', message: '' });
+      setForm({ name: '', title: '', message: '' });
     } catch (error) {
       setStatus('Failed to send. Please try again.');
-      console.error('Email send failed:', error);
     }
   };
 
   return (
     <div style={{ width: '100%', height: '100vh' }}>
       <div style={{ textAlign: 'center', padding: '10px'}}>
-        <form onSubmit={handleSubmit} style={{ maxWidth: 900, margin: '0 auto' }}>
+        <p className='hero__title'>Questions? Comments? Want to support us? Let us know!</p>
+        <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto' }}>
           <div>
             <label>Name:</label>
             <input
@@ -69,17 +50,7 @@ const EmailForm: React.FC = () => {
             />
           </div>
           <div>
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Subject:</label>
+            <label>Title:</label>
             <input
               type="text"
               name="title"
@@ -103,6 +74,4 @@ const EmailForm: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default EmailForm;
+}

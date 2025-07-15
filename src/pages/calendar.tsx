@@ -6,6 +6,7 @@ import Heading from '@theme/Heading';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
 
+import GoogleCalendarEmbed from '../components/Calendar/GoogleCalendarEmbed';
 
 import styles from './index.module.css';
 
@@ -15,7 +16,7 @@ function HomepageHeader() {
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <Heading as="h1" className="hero__title">
-            Event & Project Calender
+            Meetings & Competition Dates
           </Heading>
           <p className="hero__subtitle"></p>
           <div className={styles.buttons}>
@@ -34,7 +35,7 @@ export default function Home(): JSX.Element {
         description="Here is a calendar with all of our upcoming events & progress on our projects">
         <HomepageHeader />
         <main>
-          
+          <GoogleCalendarEmbed />
           <Analytics/>
           <SpeedInsights/>
         </main>
