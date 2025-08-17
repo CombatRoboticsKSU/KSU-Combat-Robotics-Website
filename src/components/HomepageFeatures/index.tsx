@@ -36,7 +36,7 @@ const FeatureList: FeatureItem[] = [
         </button>
       </Link>
     ),
-    Img: 'USINGimg/Bigish.JPG', // Assuming the image is in the static folder
+    Img: 'USINGimg/Bigish_new.JPG', // Assuming the image is in the static folder
     description: (
       <>
         It's not HUGE, It's not small, It's BIG-ISH <br />

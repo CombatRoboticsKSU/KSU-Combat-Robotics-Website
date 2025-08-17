@@ -50,6 +50,16 @@ slug: flashbang
 - **KOs:** 0
 - **KO'd:** 3
 
+### NHRL April 3, 2025
+- **Location:** Norwalk, CT
+- **Date:** April 3, 2025
+- **Fights:** 5
+- **Wins:** 3
+- **Losses:** 2
+- **KOs:** 1
+- **KO'd:** 2
+- **Outcome:** Prelim Round 3
+
 ## Gallery
 <!-- A section for images of the bot in action, at rest, or during competitions. -->
 ![frame](img/frame.jpg)
@@ -57,6 +67,13 @@ slug: flashbang
 ![ray](img/rayb.jpg)
 ![hi!](img/hi2.jpg)
 ![Fancy_Ico](../static/USINGimg/FlashBangIcon.png)
+![team 2025](img/flashy/2025_1.jpg)
+![2025 testing](img/flashy/2025_2.JPG)
+
+<video width="740" height="auto" controls poster="img/frame.jpg">
+  <source src="/img/Flashbang_Hero_Shot.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
 
 ## Media Coverage
 <!-- Links to articles, videos, or other media coverage of the bot. -->
@@ -71,6 +88,9 @@ Our local newspaper has covered our bot a few years ago, read about it [here](ht
 - **Bot Champion History:** 
   - Mike U. (2024-Current)
   - Austin T (2022-2024)
+- **Driver:** Austin T.
+- **Driver History:**
+  - Austin T (2022-Current)
 
 ## Additional Information
 <!-- Any other relevant information, anecdotes, or fun facts about the bot -->

@@ -47,7 +47,7 @@ slug: SorApp
 - **Designer:** Originally designed by Maddie Wilson, 2017 Redesign by Mike Nelson
 - **Status:** Retired
 - **Bot Champion History:**
-    - Mike Nelson(2017-2018)
+    - Mike Nelson (2017-2018)
     - Maddie Wilson (2016-2017)
 
 ## Additional Information
