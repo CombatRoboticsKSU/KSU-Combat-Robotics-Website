@@ -1,63 +1,107 @@
-import React, { useState } from 'react';
-import Layout from '@theme/Layout';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import emailjs from 'emailjs-com';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 import './styles.module.css';
 
 const EmailForm: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const { siteConfig } = useDocusaurusContext();
+  const SERVICE_ID = siteConfig.customFields.EMAILJS_SERVICE_ID;
+  const TEMPLATE_ID = siteConfig.customFields.EMAILJS_TEMPLATE_ID;
+  const USER_ID = siteConfig.customFields.EMAILJS_USER_ID;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Implement your form submission logic here
-    console.log({ name, email, message });
-    setSubmitted(true);
+  if (!SERVICE_ID || !TEMPLATE_ID || !USER_ID) {
+    console.error('Missing EmailJS environment variables:', {
+      SERVICE_ID,
+      TEMPLATE_ID,
+      USER_ID,
+    });
+  }
+
+  // fallback to empty string to avoid crash
+  const safeServiceId = SERVICE_ID || '';
+  const safeTemplateId = TEMPLATE_ID || '';
+  const safeUserId = USER_ID || '';
+
+  const [form, setForm] = useState({ name: '', email: '', title: '', message: '' });
+  const [status, setStatus] = useState('');
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-//THIS WILL NOT WORK YET,I NEED TO ADD THE FORM SUBMISSION LOGIC
-//Probably using Formspree or something similar
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('Sending...');
+    try {
+      const messageWithEmail = `${form.message}\n\nSender Email: ${form.email}`;
+      await emailjs.send(
+        safeServiceId,
+        safeTemplateId,
+        {
+          from_name: form.name,
+          subject: form.title,
+          message: messageWithEmail,
+          reply_to: form.email, // Pass the email directly as well
+        },
+        safeUserId
+      );
+      setStatus('Message sent!');
+      setForm({ name: '', email: '', title: '', message: '' });
+    } catch (error) {
+      setStatus('Failed to send. Please try again.');
+      console.error('Email send failed:', error);
+    }
+  };
 
   return (
-      <div style={{ textAlign: 'center', padding: '20px' }}>
-        {submitted ? (
-          <p>Thank you for your message. We will get back to you soon.</p>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="message">Message:</label>
-              <textarea
-                id="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                required
-              ></textarea>
-            </div>
-            <button type="submit">Submit</button>
-          </form>
-        )}
+    <div style={{ width: '100%', height: '100vh' }}>
+      <div style={{ textAlign: 'center', padding: '10px'}}>
+        <form onSubmit={handleSubmit} style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div>
+            <label>Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Subject:</label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Message:</label>
+            <textarea
+              name="message"
+              value={form.message}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <button type="submit">Send</button>
+          <div>{status}</div>
+        </form>
       </div>
+    </div>
   );
 };
 

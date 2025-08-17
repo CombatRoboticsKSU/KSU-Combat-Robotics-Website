@@ -5,7 +5,7 @@ slug: bigish
 ---
 
 # Big-ISH
-![Big-ISH](@site/static/USINGimg/Bigish.JPG)
+![Big-ISH](@site/static/USINGimg/Bigish_new.JPG)
 
 ## Overview
 <!-- A brief description of the bot, its design, and its capabilities.-->
@@ -60,6 +60,16 @@ slug: bigish
 - **KOs:** 1
 - **KO'd:** 1
 
+### NHRL April 3, 2025
+- **Location:** Norwalk, CT
+- **Date:** April 3, 2025
+- **Fights:** 3
+- **Wins:** 1
+- **Losses:** 2
+- **KOs:** 1
+- **KO'd:** 2
+- **Outcome:** Prelim Round 3
+
 ## Gallery
 <!-- A section for images of the bot in action, at rest, or during competitions. -->
 ![old bot config](img/bigish_old.jpg)
@@ -68,6 +78,8 @@ slug: bigish
 ![old weapon](img/b_oldw.jpg)
 ![Johnathon Shlutz](img/johnathons.JPG)
 ![old team photo](img/team_old.jpg)
+![current team photo](img/big/2025_1.jpg)
+![bot testing 2025](img/big/2025_2.jpg)
 
 
 ## Media Coverage
@@ -81,10 +93,16 @@ slug: bigish
 - **Builder:** KSU JV team
 - **Bot Champion** Matt Schutzman
 - **Bot Champion History:**  
-    - Matt Schutzman (2024-Current)
+    - Wyatt Burke (2025-Current)
+    - Matt Schutzman (2024-2025)
     - Austin Sternberg (2023-2024)
     - Austin Theber (2022-2023)
     - Brendan Steele (2020-2022)
+- **Driver:** Ian R.
+- **Driver History:**
+  - Ian R (2023-Current)
+  - Austin T (2022-2023)
+  - Brendan Steele (2020-2022)
 
 ## Additional Information
 <!-- Any other relevant information, anecdotes, or fun facts about the bot-->

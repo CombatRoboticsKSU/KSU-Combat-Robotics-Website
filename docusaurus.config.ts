@@ -90,9 +90,7 @@ const config: Config = {
       },
       items: [
         { to: '/sponsorship', label: 'Sponsors', position: 'left' },
-        /*
-          { to: 'mailto:ksu.fightingrobotics@gmail.com', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
-        */
+        { to: '/contact', label: 'Contact Us', position: 'left' }, //We need to move this to something else, I like EmailJS if we can get that set up
         { to: '/wiki', label: 'KSU BOT Wiki', position: 'left' },
         {
           type: 'dropdown',
@@ -105,6 +103,11 @@ const config: Config = {
         },
         { to: '/leadership', label: 'Leadership', position: 'left' },
         { to: '/projects', label: 'Projects', position: 'left' },
+        { 
+          to: '/calendar',
+          label: 'Calendar',
+          position: 'right',
+        },
         {
           href: 'https://www.instagram.com/ksucombatrobotics/',
           label: 'Instagram Feed', 
@@ -180,6 +183,12 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
   } satisfies ThemeConfig,
+
+  customFields: {
+    EMAILJS_SERVICE_ID: 'service_rzn9nqs',
+    EMAILJS_TEMPLATE_ID: 'template_wf9ri3k',
+    EMAILJS_USER_ID: '3eJOPD6v_R2iDRXy2',
+  },
 };
 
 export default config;

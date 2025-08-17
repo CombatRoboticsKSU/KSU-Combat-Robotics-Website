@@ -3,7 +3,7 @@
     padding: 10px;
     border-radius: 8px;
     text-align: center;
-    max-width: 315px; /* Adjust card width */
+    max-width: 400px; /* Adjust card width */
     flex-grow: 1; /* Allow the card to grow within the container */
   }
   

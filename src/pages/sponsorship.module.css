@@ -1,5 +1,6 @@
 .sponsorshipPage {
     padding: 20px;
+    position: relative; /* Ensure positioning for child elements */
   }
   
 .sponsorshipPage h1 {
@@ -98,4 +99,28 @@
   flex-wrap: wrap; /* Wrap if the screen is too narrow */
   gap: 20px; /* Add space between the cards */
   padding: 20px;
+}
+
+.slider-buttons {
+  position: relative; /* Relative to the slider container */
+  margin-top: 20px; /* Add spacing above the buttons */
+  display: flex;
+  justify-content: space-between; /* Place buttons on each side of the dots */
+  align-items: center;
+}
+
+.slider-buttons button {
+  background: #0078D4; /* Consistent blue color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 10px 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slider-buttons button:hover {
+  background: #005A9E; /* Darker blue on hover */
 }

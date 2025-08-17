@@ -22,6 +22,14 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <br/>
         <div className='row'>
+          <div style={{width: 'auto', margin: 'auto'}}>
+           <div style={{width: 'auto', margin: 'auto'}}>
+            <Link to='/discord'>
+              <button style={{ fontSize: '30px', marginTop: '15px' }}>
+              Join our Discord!
+              </button>
+            </Link>
+            </div>
             {/* <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/X3zqcZmmFKBerqPz5'>
               <button style={{ fontSize: '30px', marginTop: '15px' }}>
@@ -38,12 +46,13 @@ function HomepageHeader() {
             </Link>
           </div> */}
           
-          <div style={{width: 'auto', margin: 'auto'}}>
+          {/*<div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/x3p2VbEp6bgtNYE57'>
               <button style={{ fontSize: '30px', marginTop: '15px' }}>
                 3d Printing Queue
               </button>
             </Link>
+          </div> */}
           </div>
         </div>
 
@@ -69,7 +78,7 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <div style={{ textAlign: 'center', padding: '25px'}}>
-          <img src='/USINGimg/TEAM.png' alt='Team' width="40%" height="auto"></img>
+          <img src='/USINGimg/TEAM25.JPG' alt='Team' width="30%" height="auto"></img>
         </div>
         <div style={{ textAlign: 'center', width: '50%', margin: 'auto'}}>
             <Link to='/history'>
