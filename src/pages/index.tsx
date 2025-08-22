@@ -24,11 +24,11 @@ function HomepageHeader() {
         <div className='row'>
           <div style={{width: 'auto', margin: 'auto'}}>
            <div style={{width: 'auto', margin: 'auto'}}>
-            <Link to='/discord'>
+            {/*<Link to='/discord'>
               <button style={{ fontSize: '30px', marginTop: '15px' }}>
               Join our Discord!
               </button>
-            </Link>
+            </Link>*/}
             </div>
             {/* <div style={{width: 'auto', margin: 'auto'}}>
             <Link to='https://forms.gle/X3zqcZmmFKBerqPz5'>
