@@ -1,37 +1,38 @@
-# KSU Combat Robotics Website
-=========================
+# sv
 
-Welcome to the source code of the official website for Kent State University's Combat Robotics team, proudly powered by Vercel.
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-## About Us
-The Combat Robotics club at Kent State University is dedicated to developing innovative robotics projects, with a focus on combat sports robots designed to compete in various tournaments and events. Our website serves as an online hub for sharing information about our team's activities, achievements, and upcoming events.
+## Creating a project
 
-## Features of the Website
-- Responsive Design: The website features a modern responsive design that adapts seamlessly to different screen sizes, ensuring optimal viewing experiences across desktops, tablets, and mobile devices.
-- Team Information: Learn more about our club's history, leadership team, and members through comprehensive profiles and bios.
+If you're seeing this, you've probably already done this step. Congrats!
 
-## Contributing to this Repository
-If you're interested in contributing code changes or enhancements to this website's source code, please follow these guidelines:
+```sh
+# create a new project in the current directory
+npx sv create
 
-- Fork this repository by clicking on the "Fork" button at the top right corner.
-- Clone your forked repository using git clone command.
-- Create a new branch for any proposed changes and submit them as pull requests.
+# create a new project in my-app
+npx sv create my-app
+```
 
-Note: All contributions to this project must comply with the terms of the GNU General Public License 3.0 (GPLv3). Please ensure that you understand and agree to these licensing terms before submitting your code.
+## Developing
 
-## Getting Started
-To set up a local development environment, ensure you have Node.js installed on your machine. Then:
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-- Install the required dependencies by running `npm install`.
-- Start the application using `npm start`.
-- This will launch the website locally at `http://localhost:3000`.
+```sh
+npm run dev
 
-## License
-This project is licensed under the GNU General Public License 2.0 (GPLv2).
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
 
-## Credits
-This project uses a combination of open-source libraries and templates, including React & Docusaurus.
+## Building
 
-If you have any issues or concerns regarding this repository, please reach out to us via email.
+To create a production version of your app:
 
-Note: The image attached is used as a reference for the front page design.
+```sh
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

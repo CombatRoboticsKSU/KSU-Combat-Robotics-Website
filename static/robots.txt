@@ -1,4 +1,3 @@
+# allow crawling everything by default
 User-agent: *
 Disallow:
-
-Sitemap: https://ksucombat.club/sitemap.xml
