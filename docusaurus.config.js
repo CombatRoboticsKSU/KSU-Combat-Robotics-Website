@@ -27,11 +27,6 @@ module.exports = {
     [
       'classic',
     {
-      blog: {
-        path: './blog',
-        routeBasePath: 'blog',
-        showReadingTime: true,
-      },
       theme: {
         customCss: require.resolve('./src/css/custom.css'),
       },

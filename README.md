@@ -26,7 +26,7 @@ To set up a local development environment, ensure you have Node.js installed on 
 - Start the application using `npm run start-main`.
 - This will launch the website locally at `http://localhost:3000`.
 - Go to @src/.env and confirm the secrets
-- Start the local api with `npm run start-main`
+- Start the local api with `npm run start-api`
 
 ## License
 This project is licensed under the GNU General Public License 2.0 (GPLv2).
