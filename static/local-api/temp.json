@@ -1,0 +1,11 @@
+{
+	"nav": {
+		"Sponsors": "/sponsors",
+		"Contact Us": "/contact",
+		"Bot Wiki": "/wiki",
+		"Updates": "/updates",
+		"Leadership": "/leadership",
+		"Projects": "/projects",
+		"Calendar": "/calendar"
+   }
+}

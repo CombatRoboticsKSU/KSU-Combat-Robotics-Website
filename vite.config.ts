@@ -5,9 +5,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	server: {
-		port: 3000 // Set the development server port
+		port: 3030 // Set the development server port
 	},
 	preview: {
-		port: 4000 // Set the preview server port
+		port: 4040 // Set the preview server port
 	}
 });

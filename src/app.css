@@ -1,3 +1,39 @@
-@import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+/* Small helper to ensure the body uses Tailwind's background utility if needed */
+/* Set a sensible default body background and text color without using @apply
+   to avoid CSS-module/@apply scope issues during build. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Use Tailwind's base layer to apply utilities safely during PostCSS processing */
+@layer base {}
+
+/* Override legacy global nav rules that target <nav> element so our Tailwind nav is clean */
+.site-nav {
+   gap: 1rem;
+   align-items: center;
+}
+
+/* Ensure logo image is constrained even if source is very large */
+.logo-img {
+   max-height: 48px !important;
+   height: auto !important;
+   width: auto !important;
+}
+
+
+/* Fallback responsive rules in case Tailwind utilities aren't processed yet.
+    These mirror Tailwind's `lg` breakpoint behavior (lg -> 1024px) so the
+    desktop nav shows and mobile toggle hides on wide viewports. */
+@media (min-width: 1024px) {
+   .site-nav { display: flex; }
+   .mobile-toggle { display: none; }
+}
+
+@media (max-width: 1023px) {
+   .site-nav { display: none; }
+   .mobile-toggle { display: flex; }
+}
+
+/* end of app.css */
