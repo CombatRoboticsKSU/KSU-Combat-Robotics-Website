@@ -1,20 +1,14 @@
-<script lang="ts">
-	// import favicon from '$lib/assets/icons/favicon.ico';
-	import "$src/app.css";
-</script>
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!-- <link rel="icon" href={favicon} /> -->
 		%sveltekit.head%
 	</head>
 	<body class="main-background" data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
+		<footer>
+			<p>KSU Combat Robotics is a registered organization of Kent State University</p>
+		</footer>
 	</body>
-	<footer>
-		<p>KSU Combat Robotics is a registered organization of Kent State University</p>
-	</footer>
 </html>

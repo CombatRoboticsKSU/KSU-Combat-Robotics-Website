@@ -11,7 +11,9 @@ const config = {
 		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
 		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
-		adapter: adapter(),
+		// Explicitly specify a Vercel runtime so local builds on newer Node versions (e.g. Node 24)
+		// succeed without needing to switch Node. Change to 'nodejs22.x' or remove to use local Node.
+		adapter: adapter({ runtime: 'nodejs22.x' }),
 		// alias: {
 		// 	'$lib': './src/lib'
 		// }

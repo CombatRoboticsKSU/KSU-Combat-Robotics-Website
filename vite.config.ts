@@ -1,9 +1,9 @@
-import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit()],
+	// Use SvelteKit's plugin; Tailwind will be processed via PostCSS (postcss.config.cjs)
+	plugins: [sveltekit()],
 	server: {
 		port: 3030 // Set the development server port
 	},

@@ -1,20 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+  // enable class-based dark mode so we can toggle with the `dark` class on <html>
+  darkMode: 'class',
+  // Include CSS too so @apply references in CSS files are discovered by Tailwind
+  content: ['./src/**/*.{html,js,svelte,ts,css}'],
+  // (No safelist) Component utilities live in `src/app.css` and are referenced
+  // from markup via reusable class names. Keep `content` including CSS so
+  // Tailwind discovers utilities referenced in project files.
   theme: {
     extend: {
+      fontFamily: {
+        // Prefer National as the default, include Soho as an available alternate
+        sans: ['National', 'Soho', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif']
+      },
       colors: {
-        'ksu-blue': '#0A0D6F',
-        'ksu-gold': '#FFAB1B',
-        'white': '#fefefe',
-        'black': '#231f20',
-
-        'main-dark-text-color': '#333333',
-        'main-light-text-color': '#fefefe',
-        'main-dark-background': '#6a4c93',
-        'main-light-background': '#6a4c93',
-        'main-dark-footer': '#333333',
-        'main-light-footer': '#333333'
+        // Brand palette grouped for nicer Tailwind utility names
+        ksu: {
+          blue: '#003976', // use as bg-ksu-blue
+          gold: '#FFAB1B'  // use as bg-ksu-gold
+        }
       }
     },
   },

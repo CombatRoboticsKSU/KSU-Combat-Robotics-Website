@@ -1,39 +1,433 @@
-/* Small helper to ensure the body uses Tailwind's background utility if needed */
-/* Set a sensible default body background and text color without using @apply
-   to avoid CSS-module/@apply scope issues during build. */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+   /* Minimal Tailwind entrypoint for the app.
+   Keep this file small — prefer Tailwind utility classes in markup.
+   Add focused, small overrides here only when strictly necessary.
+   */
+
+   /* Bring Tailwind's theme/utilities into scope for @apply in this file */
+   @config "../tailwind.config.cjs";
+   @reference "tailwindcss";
+
+   @tailwind utilities;
+
+   @layer base {
+      /* remove the browser default body margin when using the main background utility */
+      body.main-background {
+         margin: 0;
+      }
+
+      /* Use Tailwind's font-sans (configured in tailwind.config) as the site default.
+         This makes the custom font (Inter) the default across the site. */
+      html, body {
+         @apply font-sans;
+      }
+   }
+
+   /* Load local 'National' font family from static folder. We define several
+       weights so Tailwind/font-weight utilities map correctly. Files are served
+       from /fonts/National/... in the static directory. */
+   @font-face {
+      font-family: 'National';
+      src: url('/fonts/National/National-Thin.otf') format('opentype');
+      font-weight: 100;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'National';
+      src: url('/fonts/National/National-Light.otf') format('opentype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'National';
+      src: url('/fonts/National/National-Book.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'National';
+      src: url('/fonts/National/National-Medium.otf') format('opentype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'National';
+      src: url('/fonts/National/National-Semibold.otf') format('opentype');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'National';
+      src: url('/fonts/National/National-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'National';
+      src: url('/fonts/National/National-Extrabold.otf') format('opentype');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'National';
+      src: url('/fonts/National/National-Black.otf') format('opentype');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+   }
+
+   /* Soho family (local) - provide as an alternate option */
+   @font-face {
+      font-family: 'Soho';
+      src: url('/fonts/Soho/SohoStd-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'Soho';
+      src: url('/fonts/Soho/SohoStd-Medium.otf') format('opentype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+   }
+   @font-face {
+      font-family: 'Soho';
+      src: url('/fonts/Soho/SohoStd-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+   }
+
+   /* small helper class to explicitly use Soho when needed */
+   .font-soho { font-family: 'Soho', var(--tw-font-sans); }
 
 
-/* Use Tailwind's base layer to apply utilities safely during PostCSS processing */
-@layer base {}
+   @layer components {
+   /* Header and layout */
+   .site-header {
+      @apply bg-ksu-blue text-white shadow-sm;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+   }
 
-/* Override legacy global nav rules that target <nav> element so our Tailwind nav is clean */
-.site-nav {
-   gap: 1rem;
-   align-items: center;
+   /* Make the header use a full-bleed container so left/right groups can
+      hug the viewport walls. We keep the page content using the regular
+      centered `.container` elsewhere. */
+   .site-header > .container {
+      /* Force full-bleed header container. The general `.container` rule
+         is declared later and would otherwise reset max-width — use a
+         strong override so the header always spans the viewport. */
+      @apply px-0 max-w-none;
+      /* Fallback explicit rules to make sure browsers pick the full-bleed
+         width even if Tailwind order changes. */
+      max-width: none !important;
+      width: 100% !important;
+   }
+
+   .container {
+      @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+   }
+
+   .header-inner {
+      /* Use a fixed horizontal padding (px-6) so the left/right groups sit a
+         consistent distance from the page edge at all screen sizes. We keep
+         a slightly larger wall on very large screens by leaving lg:justify-between
+         to control layout but the padding will remain static. */
+      @apply flex h-16 items-center px-6 lg:justify-between;
+   }
+
+   .logo-gap {
+      /* remove extra margins so the logo is the closest element to the left wall
+         (header-inner's padding defines the offset from the viewport). */
+      @apply flex items-center shrink-0 ml-0 mr-0;
+   }
+
+   .logo-img {
+      @apply h-8 w-auto;
+   }
+
+   /* make the logo larger when shown inside the mobile menu panel */
+   #mobile-menu .logo-img {
+      @apply h-10;
+   }
+
+   /* Center nav (if used) — keep hidden on mobile. In the new layout the nav
+      boxes live in left/right groups so this is reserved for any future
+      center-only content. */
+   .primary-nav {
+      @apply hidden lg:flex lg:flex-1 lg:items-stretch lg:gap-x-0;
+   }
+
+   /* Left / right group wrappers that hug the edges */
+   /* Keep groups tight; header-inner padding controls wall offset. */
+   .left-group { @apply flex items-center gap-2 ml-0; }
+   .right-group { @apply flex items-center gap-2 mr-0; }
+
+   /* Left and right nav boxes */
+   .nav-box-left {
+      /* show only on large screens; left group handles logo + left nav
+         Remove internal horizontal padding so items hug the left offset. */
+      @apply hidden lg:flex items-center gap-2 rounded-none px-0 py-0 ml-0;
+   }
+
+   .nav-box-right {
+      /* show only on large screens; right group handles right nav + actions
+         Remove internal horizontal padding so items hug the right offset. */
+      @apply hidden lg:flex items-center gap-3 rounded-none px-0 py-0;
+   }
+
+   .header-actions {
+      @apply flex items-center space-x-4;
+   }
+
+   .header-links {
+      @apply hidden lg:flex lg:items-center lg:space-x-4;
+   }
+
+   .header-link {
+         /* match nav link typography (size and weight) so left/right look consistent */
+      @apply text-white hover:text-ksu-gold text-sm font-medium whitespace-nowrap;
+   }
+
+   /* Navigation items */
+   .nav-item {
+      height: theme('spacing.16');
+      width: 100%;
+      /* Use smaller horizontal padding on mobile to avoid wrapping; restore on lg screens. Keep text on one line. */
+      @apply flex items-center justify-center gap-2 text-white px-3 lg:px-6 text-sm font-medium whitespace-nowrap bg-transparent border-0 appearance-none focus:outline-none transform transition duration-150 ease-out hover:text-ksu-gold;
+   }
+
+   .nav-link {
+      height: theme('spacing.16');
+      width: 100%;
+      /* Reduce padding on small screens and prevent wrapping so link text stays on one line. */
+      @apply flex items-center justify-center text-center text-white px-3 lg:px-6 text-sm font-medium whitespace-nowrap transform transition duration-150 ease-out hover:text-ksu-gold;
+   }
+
+   .nav-dropdown {
+      @apply absolute left-1/2 top-full mt-1 w-56 bg-white text-gray-800 rounded-md shadow-lg transform transition-all origin-top ring-1 ring-black/5 z-50;
+      /* hidden by default */
+      opacity: 0;
+      transform: translateX(-50%) scale(.95);
+      visibility: hidden;
+      pointer-events: none;
+   }
+
+   /* show dropdown only when its parent group is hovered or focused-in.
+      Support both the Tailwind `group` utility and the semantic `.nav-group`
+      wrapper used in markup so the hover/focus behavior is robust. */
+   .group:hover > .nav-dropdown,
+   .group:focus-within > .nav-dropdown,
+   .nav-group:hover > .nav-dropdown,
+   .nav-group:focus-within > .nav-dropdown {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+      visibility: visible;
+      pointer-events: auto;
+   }
+
+   /* Semantic wrapper for nav items that needs group/focus behavior. Use
+      this in markup instead of the raw utility classes `group relative flex`. */
+   /* `.group` is a Tailwind marker (no concrete styles) and cannot be used
+      with `@apply`. Provide the necessary layout styles here instead. */
+   .nav-group { @apply relative flex; }
+
+   /* Hover 'buffer' area: create an invisible extension below the nav
+      button so moving the mouse down toward the dropdown (across the
+      accent stripe) doesn't immediately close the menu. This pseudo
+      element is part of the `.nav-group` so it counts as hover/focus.
+      The dropdown itself is rendered above this pseudo-element (higher
+      z-index) so it's clickable as usual. */
+   .nav-group::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      /* 1rem buffer is a good default (16px) — covers the thin accent
+         stripe and a small gap. Adjust if you need a larger/smaller
+         tolerance. */
+      height: 1rem;
+      background: transparent;
+      z-index: 0; /* dropdown uses z-50 so it remains on top */
+      pointer-events: auto; /* keep hover state active when mouse is over it */
+   }
+
+   .mobile-menu-panel {
+      @apply lg:hidden fixed inset-0 z-50 bg-white;
+   }
+
+   .mobile-toggle {
+      @apply -mr-2 flex lg:hidden items-center;
+   }
+
+   .mobile-toggle-btn {
+      @apply inline-flex items-center justify-center rounded-md p-2 text-white hover:text-ksu-gold focus:outline-none;
+   }
+
+   .accent-stripe {
+      @apply h-2 bg-ksu-gold;
+   }
+
+   .mobile-panel-header {
+      @apply flex items-center justify-between;
+   }
+
+   .mobile-close-btn {
+      @apply inline-flex items-center justify-center rounded-md p-2 text-gray-700;
+   }
+
+   .mobile-list {
+      @apply mt-6 space-y-1;
+   }
+
+   .mobile-item-toggle {
+      @apply w-full flex items-center justify-between px-3 py-2 text-left text-gray-700 hover:bg-gray-100 rounded-md;
+   }
+
+   .mobile-item-link {
+      @apply block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100;
+   }
+
+   .dropdown-link {
+      @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100;
+   }
+
+   .icon-sm { @apply h-4 w-4; }
+   .icon-md { @apply h-6 w-6; }
+   .icon-lg { @apply h-5 w-5; }
+
+   .page-main {
+      @apply flex-1 px-4 py-8;
+      position: relative;
+      z-index: 2;
+   }
+
+   /* Animated sun<->moon toggle */
+   .theme-toggle {
+      /* slightly larger and compact */
+      @apply inline-flex items-center justify-center rounded-full w-10 h-6 p-1 cursor-pointer;
+      position: relative;
+      /* keep the container borderless so moving the oval doesn't create visual artifacts */
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      color: inherit; /* ensure svg uses current text color */
+      /* allow the control to move without clipping the icon */
+      overflow: visible;
+   }
+
+   /* oval background is an absolutely-positioned pseudo-element. Moving this
+      element on hover will not affect the child SVG's transform. */
+   .theme-toggle::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      /* filled oval and border live on the pseudo-element so the icon doesn't shift */
+      background-color: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform .12s ease, box-shadow .12s ease, background-color .18s ease;
+      transform: translateY(0);
+      z-index: 0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+   }
+
+   .theme-toggle svg { width: 1.15rem; height: 1.15rem; display: block; position: relative; z-index: 1; }
+
+   /* Keep the icon inside a small filled circle so sun and moon read the same */
+   .theme-toggle svg { @apply inline-block p-1 rounded-full; fill: currentColor; stroke: currentColor; }
+
+   /* Bounce animation for icons when they become visible on toggle */
+   @keyframes toggle-bounce {
+      0% { transform: translateY(0) scale(0.95); }
+      40% { transform: translateY(-2px) scale(1.01); }
+      70% { transform: translateY(-1px) scale(0.99); }
+      100% { transform: translateY(0) scale(1); }
+   }
+
+   /* Apply bounce when the icon switches visible state (on toggle) */
+   .theme-toggle[aria-pressed="true"] .moon {
+      animation: toggle-bounce .58s cubic-bezier(.22,.9,.32,1);
+   }
+
+   .theme-toggle[aria-pressed="false"] .sun {
+      animation: toggle-bounce .58s cubic-bezier(.22,.9,.32,1);
+   }
+
+   /* Hover/active states: move the whole control (oval + icon) together so the
+      SVG translates with the oval. Keep movement small to avoid clipping. */
+   .theme-toggle {
+      transition: transform .12s ease, box-shadow .12s ease;
+   }
+
+   .theme-toggle:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+   }
+
+   .theme-toggle:active {
+      transform: translateY(-1px) scale(.999);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+   }
+
+   /* Default: show sun */
+   .theme-toggle .sun { opacity: 1; transform: scale(1) rotate(0deg); }
+   .theme-toggle .moon { opacity: 0; transform: scale(.6) rotate(-20deg); }
+
+   /* Pressed (dark) state: show moon */
+   .theme-toggle[aria-pressed="true"] .sun { opacity: 0; transform: scale(.6) rotate(20deg); }
+   .theme-toggle[aria-pressed="true"] .moon { opacity: 1; transform: scale(1) rotate(0deg); }
+
+   /* Unified nav typography — apply the same font family, size and weight
+      to all nav items (desktop, dropdowns and mobile). Target the actual
+      classes used in markup so the rules apply regardless of wrapper names. */
+   .nav-item,
+   .nav-link,
+   .header-link,
+   .dropdown-link,
+   .mobile-item-link,
+   .mobile-item-toggle {
+      /* Use the site's sans stack and keep links compact — text-sm for
+         consistent sizing and font-medium for visual weight. */
+      @apply font-sans text-base font-medium no-underline whitespace-nowrap;
+      line-height: 1.25;
+   }
+
+   /* Make the caret/chevron color change when the nav group is hovered or focused
+      so we don't rely on the Tailwind `group` utility in markup. */
+   .nav-group:hover .icon-sm,
+   .nav-group:focus-within .icon-sm,
+   .nav-group:hover svg,
+   .nav-group:focus-within svg {
+      @apply text-ksu-gold;
+   }
+
+   /* Ensure desktop nav elements are explicitly hidden on small screens.
+      This provides a robust fallback in case utility @apply order changes
+      or if the Tailwind-generated classes are not present in markup. */
+   .primary-nav,
+   .nav-box-left,
+   .nav-box-right,
+   .header-links {
+      display: none;
+   }
+
+   /* At large breakpoints (lg = 1024px) show the desktop nav elements. */
+   @media (min-width: 1024px) {
+      .primary-nav { display: flex; flex: 1 1 auto; align-items: stretch; }
+      .nav-box-left,
+      .nav-box-right,
+      .header-links { display: flex; align-items: center; }
+   }
+
 }
 
-/* Ensure logo image is constrained even if source is very large */
-.logo-img {
-   max-height: 48px !important;
-   height: auto !important;
-   width: auto !important;
-}
-
-
-/* Fallback responsive rules in case Tailwind utilities aren't processed yet.
-    These mirror Tailwind's `lg` breakpoint behavior (lg -> 1024px) so the
-    desktop nav shows and mobile toggle hides on wide viewports. */
-@media (min-width: 1024px) {
-   .site-nav { display: flex; }
-   .mobile-toggle { display: none; }
-}
-
-@media (max-width: 1023px) {
-   .site-nav { display: none; }
-   .mobile-toggle { display: flex; }
-}
-
-/* end of app.css */

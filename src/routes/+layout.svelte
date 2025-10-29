@@ -1,31 +1,35 @@
 <script lang="ts">
-	import "/src/app.css";
-	import favicon from '/icons/favicon.ico';
-	import logo from '/icons/logo.svg';
+	import '/src/app.css';
+	const favicon = '/icons/favicon.ico';
+	const logo = '/icons/logo.svg';
 	import { onMount } from 'svelte';
 
-	const navItems = [
-		{ name: 'Sponsors', path: '/sponsors' },
+	interface NavItem {
+		name: string;
+		path?: string;
+		children?: {name: string; path: string}[];
+	}
+
+	const leftNav: NavItem[] = [
+		{ name: 'Sponsors', path: '/sponsorship' },
 		{ name: 'Contact Us', path: '/contact' },
-		{ name: 'Bot Wiki', path: '/wiki' },
-		{
-			name: 'Projects',
-			children: [
-				{ name: 'Current', path: '/projects/current' },
-				{ name: 'Archive', path: '/projects/archive' },
-				{ name: 'Submit a Project', path: '/projects/submit' }
-			]
-		},
-		{
-			name: 'Updates',
-			children: [
-				{ name: 'News', path: '/updates/news' },
-				{ name: 'Events', path: '/updates/events' }
-			]
-		},
+		{ name: 'KSU BOT Wiki', path: '/wiki' },
+		{ name: 'Updates', children: [
+			{ name: 'Team Updates', path: '/blog' },
+			{ name: 'Project Status', path: '/projects' } ]},
 		{ name: 'Leadership', path: '/leadership' },
-		{ name: 'Calendar', path: '/calendar' }
+		{ name: 'Projects', children: [
+			{ name: 'Current', path: '/projects/current' },
+			{ name: 'Archive', path: '/projects/archive' } ]}
 	];
+
+	const rightNav: NavItem[] = [
+		{ name: 'Calendar', path: '/calendar' },
+		{ name: 'Instagram Feed', path: '/instagram' },
+		{ name: 'KSU Engage', path: '/ksu-engage' }
+	];
+
+	// (mobile menu will render leftNav + rightNav together)
 
 	// Mobile nav open/close state
 	let mobileNavOpen = $state(false);
@@ -38,104 +42,264 @@
 	import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';
 	const queryClient = new QueryClient();
 
-	// onMount(() => { });
+	// Theme (dark/light) state
+	let darkMode = $state(true);
+
+	function applyTheme(value: boolean) {
+		if (typeof document === 'undefined') return;
+		darkMode = value;
+		if (darkMode) document.documentElement.classList.add('dark');
+		else document.documentElement.classList.remove('dark');
+		try {
+			localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+		} catch (e) {}
+	}
+
+	onMount(() => {
+		try {
+			const saved = localStorage.getItem('theme');
+			if (saved === 'dark' || saved === 'light') {
+				applyTheme(saved === 'dark');
+			} else if (window.matchMedia) {
+				applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+			}
+		} catch (e) {
+			// ignore (SSR or localStorage blocked)
+		}
+	});
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<header class="bg-gray-900 text-white">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex h-16 items-center justify-between">
-			<div class="flex items-center">
-				<a href="/" class="flex-shrink-0">
-					<img src={logo} alt="KSU Combat Robotics" class="h-10 w-auto logo-img" />
-				</a>
+<header class="site-header">
+	<div class="container">
+		<div class="header-inner">
+			<!-- Left group: logo + left nav (edge-hugging) -->
+			<div class="left-group">
+				<div class="logo-gap">
+					<a href="/" class="inline-flex items-center">
+						<img src={logo} alt="KSU Combat Robotics" class="logo-img" />
+					</a>
+				</div>
 
-				<!-- Desktop nav (visible on lg+) -->
-				<nav class="site-nav hidden lg:ml-8 lg:flex lg:items-center lg:space-x-6" aria-label="Primary">
-					{#each navItems as item}
+				<div class="nav-box-left">
+					{#each leftNav as item}
 						{#if item.children}
-							<div class="relative group">
-								<button class="inline-flex items-center gap-2 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-haspopup="true">
+							<div class="nav-group">
+								<button class="nav-item" aria-haspopup="true">
 									<span>{item.name}</span>
-									<svg class="h-4 w-4 text-gray-300 group-hover:text-white" viewBox="0 0 20 20" fill="none" stroke="currentColor"><path d="M6 8l4 4 4-4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+									<svg
+										class="icon-sm text-white group-hover:text-ksu-gold"
+										viewBox="0 0 20 20"
+										fill="none"
+										stroke="currentColor"
+									>
+										<path
+											d="M6 8l4 4 4-4"
+											stroke-width="1.5"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/>
+									</svg>
 								</button>
-								<!-- Stacked flyout -->
-								<div class="absolute left-0 mt-2 w-56 bg-white text-gray-800 rounded-md shadow-lg opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 group-focus-within:opacity-100 group-focus-within:scale-100 transform transition-all origin-top">
+								<div class="nav-dropdown">
 									<div class="py-2">
 										{#each item.children as child}
-											<a href={child.path} class="block px-4 py-2 text-sm hover:bg-gray-100">{child.name}</a>
+											<a href={child.path} class="dropdown-link">{child.name}</a>
 										{/each}
 									</div>
 								</div>
 							</div>
 						{:else}
-							<a href={item.path} class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{item.name}</a>
+							<a href={item.path} class="nav-link">{item.name}</a>
 						{/if}
 					{/each}
-				</nav>
+				</div>
+			</div>
 
-			 <!-- Mobile menu button (visible below lg) -->
-			 <!-- added .mobile-toggle so we can provide a CSS fallback when Tailwind classes
-				 aren't available (ensures correct show/hide behavior across viewports) -->
-			 <div class="-mr-2 flex lg:hidden mobile-toggle">
+			<!-- flexible spacer between left and right groups -->
+			<div class="flex-1" />
+
+			<!-- Right group: right nav + header actions (edge-hugging) -->
+			<div class="right-group">
+				<div class="nav-box-right">
+					{#each rightNav as item}
+						{#if item.children}
+							<div class="nav-group">
+								<button class="nav-item" aria-haspopup="true">
+									<span>{item.name}</span>
+									<svg
+										class="icon-sm text-white group-hover:text-ksu-gold"
+										viewBox="0 0 20 20"
+										fill="none"
+										stroke="currentColor"
+									>
+										<path
+											d="M6 8l4 4 4-4"
+											stroke-width="1.5"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/>
+									</svg>
+								</button>
+								<div class="nav-dropdown">
+									<div class="py-2">
+										{#each item.children as child}
+											<a href={child.path} class="dropdown-link">{child.name}</a>
+										{/each}
+									</div>
+								</div>
+							</div>
+						{:else}
+							<a href={item.path} class="header-link">{item.name}</a>
+						{/if}
+					{/each}
+				</div>
+				<!-- Theme toggle on right (animated sun/moon SVG) -->
+				<div class="header-actions">
 					<button
 						type="button"
-						class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
+						class="theme-toggle"
+						aria-pressed={darkMode}
+						onclick={() => applyTheme(!darkMode)}
+						aria-label="Toggle dark mode"
+					>
+						<span class="sr-only">Toggle dark mode</span>
+						<svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+							<g class="sun" stroke="currentColor" stroke-width="1.5" fill="currentColor">
+								<circle cx="12" cy="12" r="4" />
+								<path d="M12 2v2" />
+								<path d="M12 20v2" />
+								<path d="M2 12h2" />
+								<path d="M20 12h2" />
+								<path d="M4.93 4.93l1.41 1.41" />
+								<path d="M17.66 17.66l1.41 1.41" />
+								<path d="M4.93 19.07l1.41-1.41" />
+								<path d="M17.66 6.34l1.41-1.41" />
+							</g>
+							<g class="moon" fill="currentColor">
+								<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+							</g>
+						</svg>
+					</button>
+				</div>
+
+				<!-- Mobile menu button -->
+				<div class="mobile-toggle">
+					<button
+						type="button"
+						class="mobile-toggle-btn"
 						aria-controls="mobile-menu"
 						aria-expanded={mobileNavOpen}
 						onclick={() => (mobileNavOpen = !mobileNavOpen)}
 					>
 						<span class="sr-only">Open main menu</span>
 						{#if !mobileNavOpen}
-							<!-- Menu icon -->
-							<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-								<path d="M4 6h16M4 12h16M4 18h16" />
-							</svg>
+							<svg
+								class="icon-md"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg
+							>
 						{:else}
-							<!-- Close icon -->
-							<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-								<path d="M6 18L18 6M6 6l12 12" />
-							</svg>
+							<svg
+								class="icon-md"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								aria-hidden="true"><path d="M6 18L18 6M6 6l12 12" /></svg
+							>
 						{/if}
 					</button>
 				</div>
 			</div>
+			<!-- header-actions -->
 		</div>
+		<!-- header-inner -->
 	</div>
+	<!-- container -->
 
-	<!-- Mobile menu, show/hide based on menu state. -->
+	<!-- Thin gold accent stripe (inside header) -->
+	<div class="accent-stripe"></div>
+	<!-- Mobile menu, full-screen panel -->
 	{#if mobileNavOpen}
-		<div id="mobile-menu" class="lg:hidden bg-gray-800">
-			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-				{#each navItems as item, idx}
-					{#if item.children}
-						<div class="">
-							<button class="w-full flex items-center justify-between px-3 py-2 text-left text-gray-300 hover:text-white hover:bg-gray-700 rounded-md" onclick={() => (mobileOpenIndex = mobileOpenIndex === idx ? -1 : idx)} aria-expanded={mobileOpenIndex === idx}>
-								<span class="font-medium">{item.name}</span>
-								<svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor"><path d="M6 8l4 4 4-4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-							</button>
-							{#if mobileOpenIndex === idx}
-								<div class="pl-4 mt-1 space-y-1">
-									{#each item.children as child}
-										<a href={child.path} class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">{child.name}</a>
-									{/each}
-								</div>
-							{/if}
-						</div>
-					{:else}
-						<a href={item.path} class="block px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">{item.name}</a>
-					{/if}
-				{/each}
+		<div id="mobile-menu" class="mobile-menu-panel">
+			<div class="mobile-panel-inner">
+				<div class="mobile-panel-header">
+					<a href="/" class="inline-flex shrink-0 items-center">
+						<img src={logo} alt="KSU Combat Robotics" class="logo-img" />
+					</a>
+					<button
+						type="button"
+						class="mobile-close-btn"
+						aria-label="Close menu"
+						onclick={() => (mobileNavOpen = false)}
+					>
+						<svg
+							class="icon-md"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"><path d="M6 18L18 6M6 6l12 12" /></svg
+						>
+					</button>
+				</div>
+
+				<div class="mobile-list">
+					{#each leftNav.concat(rightNav) as item, idx}
+						{#if item.children}
+							<div>
+								<button
+									class="mobile-item-toggle"
+									onclick={() => (mobileOpenIndex = mobileOpenIndex === idx ? -1 : idx)}
+									aria-expanded={mobileOpenIndex === idx}
+								>
+									<span class="font-medium">{item.name}</span>
+									<svg
+										class="icon-sm text-gray-400"
+										viewBox="0 0 20 20"
+										fill="none"
+										stroke="currentColor"
+										><path
+											d="M6 8l4 4 4-4"
+											stroke-width="1.5"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/></svg
+									>
+								</button>
+								{#if mobileOpenIndex === idx}
+									<div class="mt-1 space-y-1 pl-4">
+										{#each item.children as child}
+											<a href={child.path} class="mobile-item-link">{child.name}</a>
+										{/each}
+									</div>
+								{/if}
+							</div>
+						{:else}
+							<a href={item.path} class="mobile-item-link">{item.name}</a>
+						{/if}
+					{/each}
+				</div>
 			</div>
 		</div>
 	{/if}
 </header>
 
 <QueryClientProvider client={queryClient}>
-   <main style="flex: 1; padding: 2rem 1rem; position: relative; z-index: 2;">
-	   {@render children?.()}
-   </main>
+	<main class="page-main">
+		{@render children?.()}
+	</main>
 </QueryClientProvider>

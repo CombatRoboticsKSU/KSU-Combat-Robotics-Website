@@ -1,5 +1,6 @@
 module.exports = {
-  // Use the Tailwind PostCSS plugin package which is now separate from core
+  // Use the standard tailwindcss PostCSS plugin. This is compatible with the
+  // installed `tailwindcss` package and ensures @tailwind directives are processed.
   plugins: [
     require('@tailwindcss/postcss'),
     require('autoprefixer'),
