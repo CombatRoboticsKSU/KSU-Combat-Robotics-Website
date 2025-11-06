@@ -1,4 +1,4 @@
-   /* Minimal Tailwind entrypoint for the app.
+/* Minimal Tailwind entrypoint for the app.
    Keep this file small — prefer Tailwind utility classes in markup.
    Add focused, small overrides here only when strictly necessary.
    */
@@ -202,23 +202,33 @@
       height: theme('spacing.16');
       width: 100%;
       /* Use smaller horizontal padding on mobile to avoid wrapping; restore on lg screens. Keep text on one line. */
-      @apply flex items-center justify-center gap-2 text-white px-3 lg:px-6 text-sm font-medium whitespace-nowrap bg-transparent border-0 appearance-none focus:outline-none transform transition duration-150 ease-out hover:text-ksu-gold;
+      @apply flex items-center justify-center gap-2 text-white px-3 lg:px-6 text-sm font-medium whitespace-nowrap bg-transparent border-0 appearance-none focus:outline-none transform transition ease-out hover:text-ksu-gold;
    }
 
    .nav-link {
       height: theme('spacing.16');
       width: 100%;
       /* Reduce padding on small screens and prevent wrapping so link text stays on one line. */
-      @apply flex items-center justify-center text-center text-white px-3 lg:px-6 text-sm font-medium whitespace-nowrap transform transition duration-150 ease-out hover:text-ksu-gold;
+      @apply flex items-center justify-center text-center text-white px-3 lg:px-6 text-sm font-medium whitespace-nowrap transform transition ease-out hover:text-ksu-gold;
    }
 
    .nav-dropdown {
-      @apply absolute left-1/2 top-full mt-1 w-56 bg-white text-gray-800 rounded-md shadow-lg transform transition-all origin-top ring-1 ring-black/5 z-50;
+      @apply absolute left-1/2 top-full mt-1 w-56 rounded-md shadow-lg transform transition-all origin-top ring-1 z-50;
       /* hidden by default */
       opacity: 0;
       transform: translateX(-50%) scale(.95);
       visibility: hidden;
       pointer-events: none;
+   }
+
+   /* Light theme dropdown */
+   .light .nav-dropdown {
+      @apply bg-main-white text-text-black ring-black/5;
+   }
+
+   /* Dark theme dropdown */
+   .dark .nav-dropdown {
+      @apply bg-main-black text-text-white ring-white/10;
    }
 
    /* show dropdown only when its parent group is hovered or focused-in.
@@ -261,8 +271,56 @@
       pointer-events: auto; /* keep hover state active when mouse is over it */
    }
 
+   /* Mobile menu panel: render under the header and visually match the
+      site header (blue background, white links). Use an entry animation
+      so the menu "flies down" beneath the current nav. The panel is
+      positioned absolute inside the header (which is sticky) so it will
+      appear attached to the nav area. */
    .mobile-menu-panel {
-      @apply lg:hidden fixed inset-0 z-50 bg-white;
+      @apply absolute left-0 right-0 top-full z-40 bg-transparent text-white shadow-lg overflow-hidden;
+      @apply opacity-0 transform -translate-y-2 scale-y-95 hidden pointer-events-none;
+      @apply will-change-[opacity,transform];
+      backface-visibility: hidden; /* Use raw CSS for unsupported utility */
+      top: calc(100% - 4px); /* Ensure no gap remains */
+      @apply bg-ksu-blue/93; /* Make the panel semi-transparent with KSU blue */
+   }
+
+   /* Inner container to align with the page content width */
+   .mobile-panel-inner {
+      @apply max-w-7xl mx-auto px-4 sm:px-6 py-4;
+   }
+
+   /* Slide-down keyframes for mobile panel mount */
+   @keyframes mobile-slide-down {
+      from { opacity: 0; transform: translateY(-0.5rem) scaleY(.98); }
+      to   { opacity: 1; transform: translateY(0) scaleY(1); }
+   }
+
+   /* Slide-up keyframes for closing */
+   @keyframes mobile-slide-up {
+      from { opacity: 1; transform: translateY(0) scaleY(1); }
+      to   { opacity: 0; transform: translateY(-0.5rem) scaleY(.98); }
+   }
+
+   /* Animation classes: apply only when state changes so we can control
+      the timing from script (open vs closing). */
+   .mobile-menu-panel.mobile-open {
+      animation: mobile-slide-down .26s cubic-bezier(.2,.9,.25,1) both;
+      pointer-events: auto;
+      visibility: visible;
+      @apply block opacity-100 transform-none pointer-events-auto;
+   }
+
+   .mobile-menu-panel.mobile-closing {
+      animation: mobile-slide-up .22s cubic-bezier(.4,.0,.2,1) both;
+      pointer-events: auto;
+      visibility: visible;
+      @apply block opacity-0 transform -translate-y-2 scale-y-95 pointer-events-none;
+   }
+
+   /* Ensure the mobile panel is never shown at large breakpoints */
+   @media (min-width: 1024px) {
+      .mobile-menu-panel { display: none !important; }
    }
 
    .mobile-toggle {
@@ -270,7 +328,37 @@
    }
 
    .mobile-toggle-btn {
-      @apply inline-flex items-center justify-center rounded-md p-2 text-white hover:text-ksu-gold focus:outline-none;
+      @apply inline-flex items-center justify-center rounded-md w-10 h-10 p-1 cursor-pointer;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.06);
+      background-color: rgba(255,255,255,0.06);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      color: inherit;
+      overflow: visible;
+      transition: transform .12s ease, box-shadow .12s ease, background-color .18s ease;
+   }
+
+   .mobile-toggle-btn:hover {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+   }
+
+   .mobile-toggle-btn:active {
+      transform: translateY(-1px) scale(1);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+   }
+
+   .mobile-toggle-btn svg {
+      transition: transform .12s ease, opacity .12s ease; /* Match the mode toggle behavior */
+   }
+
+   .mobile-toggle-btn:active svg {
+      transform: scale(0.98); /* Pressed state */
+      animation: none; /* Prevent bounce during press */
+   }
+
+   .mobile-toggle-btn svg.released {
+      animation: toggle-bounce .58s cubic-bezier(.22,.9,.32,1); /* Bounce on release */
    }
 
    .accent-stripe {
@@ -282,23 +370,53 @@
    }
 
    .mobile-close-btn {
-      @apply inline-flex items-center justify-center rounded-md p-2 text-gray-700;
+      @apply inline-flex items-center justify-center rounded-md p-2 text-white;
+      background: rgba(255,255,255,0.06);
    }
 
    .mobile-list {
-      @apply mt-6 space-y-1;
+      @apply mt-2 space-y-1;
    }
 
+   /* Mobile list items: white text to match header; gold highlight on hover */
    .mobile-item-toggle {
-      @apply w-full flex items-center justify-between px-3 py-2 text-left text-gray-700 hover:bg-gray-100 rounded-md;
+      @apply w-full flex items-center justify-between px-3 py-2 text-left text-white hover:text-ksu-gold rounded-md;
+      background: transparent;
+      border: none; /* Remove borders */
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25); /* Add separator line under toggle items */
+   }
+
+   .mobile-item-toggle svg {
+      @apply h-6 w-6; /* Make chevron bigger */
+      transition: transform 0.3s ease; /* Add rotation animation */
+   }
+
+   .mobile-item-toggle[aria-expanded="true"] svg {
+      transform: rotate(180deg); /* Rotate chevron when open */
    }
 
    .mobile-item-link {
-      @apply block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100;
+      @apply block px-3 py-2 text-white hover:text-ksu-gold;
+      background: transparent;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25); /* Add separator line under all items */
+   }
+
+   .mobile-item-no-border {
+      border-bottom: none !important;
    }
 
    .dropdown-link {
-      @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100;
+      @apply block px-4 py-2 text-sm;
+   }
+
+   /* Light theme dropdown link */
+   .light .dropdown-link {
+      @apply text-text-black hover:bg-gray-100;
+   }
+
+   /* Dark theme dropdown link */
+   .dark .dropdown-link {
+      @apply text-text-white hover:bg-gray-700;
    }
 
    .icon-sm { @apply h-4 w-4; }

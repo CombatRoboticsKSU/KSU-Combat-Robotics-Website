@@ -18,6 +18,14 @@ module.exports = {
         ksu: {
           blue: '#003976', // use as bg-ksu-blue
           gold: '#FFAB1B'  // use as bg-ksu-gold
+        },
+        main: {
+          black: '#242526',
+          white: '#f9f9f9'
+        },
+        text: {
+          black: '#232323',
+          white: '#ffffff'
         }
       }
     },

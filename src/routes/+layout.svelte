@@ -2,7 +2,7 @@
 	import '/src/app.css';
 	const favicon = '/icons/favicon.ico';
 	const logo = '/icons/logo.svg';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	interface NavItem {
 		name: string;
@@ -33,8 +33,13 @@
 
 	// Mobile nav open/close state
 	let mobileNavOpen = $state(false);
-	// mobile submenu open index (-1 = none)
-	let mobileOpenIndex = $state(-1);
+	// Controls whether the mobile panel is mounted in the DOM. We mount the
+	// panel first (mobilePanelVisible = true) then set `mobileNavOpen = true`
+	// to play the opening animation. On close we reverse that sequence so the
+	// closing animation can play before unmounting.
+	let mobilePanelVisible = $state(false);
+	// mobile submenu open indices (Set to allow multiple open)
+	let mobileOpenIndices = $state(new Set<number>());
 
 	let { children } = $props();
 
@@ -43,30 +48,107 @@
 	const queryClient = new QueryClient();
 
 	// Theme (dark/light) state
-	let darkMode = $state(true);
+	let theme = $state('system');
 
-	function applyTheme(value: boolean) {
-		if (typeof document === 'undefined') return;
-		darkMode = value;
-		if (darkMode) document.documentElement.classList.add('dark');
-		else document.documentElement.classList.remove('dark');
-		try {
-			localStorage.setItem('theme', darkMode ? 'dark' : 'light');
-		} catch (e) {}
+	// Mobile panel control helpers
+	async function openMobile() {
+		mobilePanelVisible = true;
+		// wait for DOM to update so the element is mounted, then ensure the
+		// next frame applies the open class. Using tick() avoids layout flashes
+		// caused by setting both mount and open in the same frame.
+		await tick();
+		// Use requestAnimationFrame to ensure the browser has applied initial
+		// styles before we toggle the `mobileNavOpen` flag that starts the
+		// animation.
+		requestAnimationFrame(() => (mobileNavOpen = true));
 	}
 
-	onMount(() => {
-		try {
-			const saved = localStorage.getItem('theme');
-			if (saved === 'dark' || saved === 'light') {
-				applyTheme(saved === 'dark');
-			} else if (window.matchMedia) {
-				applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
-			}
-		} catch (e) {
-			// ignore (SSR or localStorage blocked)
+	function closeMobile() {
+		// trigger closing animation
+		mobileNavOpen = false;
+		// wait for the animation to finish before unmounting.
+		// Use an animationend listener on the panel element for robust timing
+		const el = document.getElementById('mobile-menu');
+		if (!el) {
+			// fallback: unmount after a delay
+			setTimeout(() => (mobilePanelVisible = false), 300);
+			return;
 		}
-	});
+		function onAnimEnd(e: Event) {
+			// only react to the animation on the panel itself
+			if (e.target !== el) return;
+			if (el) el.removeEventListener('animationend', onAnimEnd);
+			mobilePanelVisible = false;
+		}
+		el.addEventListener('animationend', onAnimEnd);
+	}
+
+	function toggleMobile() {
+		if (!mobilePanelVisible) openMobile();
+		else closeMobile();
+	}
+
+   function applyTheme(value: 'dark' | 'light' | 'system') {
+      theme = value;
+
+      const root = document.documentElement;
+      const body = document.body;
+
+      if (theme === 'dark') {
+         root.classList.add('dark');
+         root.classList.remove('light');
+         body.classList.add('bg-main-black', 'text-text-white');
+         body.classList.remove('bg-main-white', 'text-text-black');
+      } else if (theme === 'light') {
+         root.classList.add('light');
+         root.classList.remove('dark');
+         body.classList.add('bg-main-white', 'text-text-black');
+         body.classList.remove('bg-main-black', 'text-text-white');
+      } else {
+         root.classList.remove('dark');
+         root.classList.remove('light');
+
+         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            root.classList.add('dark');
+            body.classList.add('bg-main-black', 'text-text-white');
+            body.classList.remove('bg-main-white', 'text-text-black');
+         } else {
+            root.classList.add('light');
+            body.classList.add('bg-main-white', 'text-text-black');
+            body.classList.remove('bg-main-black', 'text-text-white');
+         }
+      }
+
+      try {
+         localStorage.setItem('theme', theme);
+      } catch (e) {
+         console.error('Failed to save theme preference:', e);
+      }
+   }
+
+   function toggleTheme() {
+      if (theme === 'dark') {
+         applyTheme('light');
+      } else {
+         applyTheme('dark');
+      }
+   }
+
+   onMount(() => {
+      try {
+         const savedTheme = localStorage.getItem('theme');
+         if (savedTheme === 'dark' || savedTheme === 'light') {
+            applyTheme(savedTheme);
+         } else {
+            applyTheme('system');
+         }
+      } catch (e) {
+         console.error('Failed to load theme preference:', e);
+         applyTheme('system');
+      }
+   });
+
+	let darkMode = $state(theme === 'dark');
 </script>
 
 <svelte:head>
@@ -120,7 +202,7 @@
 			</div>
 
 			<!-- flexible spacer between left and right groups -->
-			<div class="flex-1" />
+			<div class="flex-1"></div>
 
 			<!-- Right group: right nav + header actions (edge-hugging) -->
 			<div class="right-group">
@@ -132,7 +214,7 @@
 									<span>{item.name}</span>
 									<svg
 										class="icon-sm text-white group-hover:text-ksu-gold"
-										viewBox="0 0 20 20"
+									viewBox="0 0 20 20"
 										fill="none"
 										stroke="currentColor"
 									>
@@ -162,27 +244,32 @@
 					<button
 						type="button"
 						class="theme-toggle"
-						aria-pressed={darkMode}
-						onclick={() => applyTheme(!darkMode)}
+						aria-pressed={theme === 'dark'}
+						onclick={() => toggleTheme()}
 						aria-label="Toggle dark mode"
 					>
 						<span class="sr-only">Toggle dark mode</span>
-						<svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
-							<g class="sun" stroke="currentColor" stroke-width="1.5" fill="currentColor">
-								<circle cx="12" cy="12" r="4" />
-								<path d="M12 2v2" />
-								<path d="M12 20v2" />
-								<path d="M2 12h2" />
-								<path d="M20 12h2" />
-								<path d="M4.93 4.93l1.41 1.41" />
-								<path d="M17.66 17.66l1.41 1.41" />
-								<path d="M4.93 19.07l1.41-1.41" />
-								<path d="M17.66 6.34l1.41-1.41" />
-							</g>
-							<g class="moon" fill="currentColor">
-								<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-							</g>
-						</svg>
+						{#if theme === 'dark'}
+							<svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+								<g class="moon" fill="currentColor">
+									<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+								</g>
+							</svg>
+						{:else}
+							<svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+								<g class="sun" stroke="currentColor" stroke-width="1.5" fill="currentColor">
+									<circle cx="12" cy="12" r="4" />
+									<path d="M12 2v2" />
+									<path d="M12 20v2" />
+									<path d="M2 12h2" />
+									<path d="M20 12h2" />
+									<path d="M4.93 4.93l1.41 1.41" />
+									<path d="M17.66 17.66l1.41 1.41" />
+									<path d="M4.93 19.07l1.41-1.41" />
+									<path d="M17.66 6.34l1.41-1.41" />
+								</g>
+							</svg>
+						{/if}
 					</button>
 				</div>
 
@@ -193,7 +280,7 @@
 						class="mobile-toggle-btn"
 						aria-controls="mobile-menu"
 						aria-expanded={mobileNavOpen}
-						onclick={() => (mobileNavOpen = !mobileNavOpen)}
+						onclick={() => toggleMobile()}
 					>
 						<span class="sr-only">Open main menu</span>
 						{#if !mobileNavOpen}
@@ -231,56 +318,42 @@
 	<!-- Thin gold accent stripe (inside header) -->
 	<div class="accent-stripe"></div>
 	<!-- Mobile menu, full-screen panel -->
-	{#if mobileNavOpen}
-		<div id="mobile-menu" class="mobile-menu-panel">
-			<div class="mobile-panel-inner">
-				<div class="mobile-panel-header">
-					<a href="/" class="inline-flex shrink-0 items-center">
-						<img src={logo} alt="KSU Combat Robotics" class="logo-img" />
-					</a>
-					<button
-						type="button"
-						class="mobile-close-btn"
-						aria-label="Close menu"
-						onclick={() => (mobileNavOpen = false)}
-					>
-						<svg
-							class="icon-md"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							aria-hidden="true"><path d="M6 18L18 6M6 6l12 12" /></svg
-						>
-					</button>
-				</div>
-
-				<div class="mobile-list">
+	{#if mobilePanelVisible}
+			<div id="mobile-menu" class="mobile-menu-panel" class:mobile-open={mobileNavOpen} class:mobile-closing={!mobileNavOpen}>
+				<div class="mobile-panel-inner">
+					<div class="mobile-list">
 					{#each leftNav.concat(rightNav) as item, idx}
 						{#if item.children}
 							<div>
 								<button
-									class="mobile-item-toggle"
-									onclick={() => (mobileOpenIndex = mobileOpenIndex === idx ? -1 : idx)}
-									aria-expanded={mobileOpenIndex === idx}
+									class="mobile-item-toggle {idx === leftNav.concat(rightNav).length - 1 ? 'mobile-item-no-border' : ''}"
+									onclick={() => {
+										const newSet = new Set(mobileOpenIndices);
+										if (newSet.has(idx)) {
+											newSet.delete(idx);
+										} else {
+											newSet.add(idx);
+										}
+										mobileOpenIndices = newSet;
+									}}
+									aria-expanded={mobileOpenIndices.has(idx)}
 								>
 									<span class="font-medium">{item.name}</span>
 									<svg
-										class="icon-sm text-gray-400"
+										class="icon-md text-gray-400"
 										viewBox="0 0 20 20"
 										fill="none"
 										stroke="currentColor"
-										><path
+									>
+										<path
 											d="M6 8l4 4 4-4"
 											stroke-width="1.5"
 											stroke-linecap="round"
 											stroke-linejoin="round"
-										/></svg
-									>
+										/>
+									</svg>
 								</button>
-								{#if mobileOpenIndex === idx}
+								{#if mobileOpenIndices.has(idx)}
 									<div class="mt-1 space-y-1 pl-4">
 										{#each item.children as child}
 											<a href={child.path} class="mobile-item-link">{child.name}</a>
@@ -289,7 +362,7 @@
 								{/if}
 							</div>
 						{:else}
-							<a href={item.path} class="mobile-item-link">{item.name}</a>
+							<a href={item.path} class="mobile-item-link {idx === leftNav.concat(rightNav).length - 1 ? 'mobile-item-no-border' : ''}">{item.name}</a>
 						{/if}
 					{/each}
 				</div>
