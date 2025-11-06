@@ -375,4 +375,52 @@
 	<main class="page-main">
 		{@render children?.()}
 	</main>
+
+	<footer class="site-footer">
+		<div class="footer-top">
+			<div class="footer-container">
+				<div class="footer-grid">
+					<!-- About Section -->
+					<div class="footer-section">
+						<h3 class="footer-heading">About</h3>
+						<ul class="footer-links">
+							<li><a href="/blog" class="footer-link">Team Updates</a></li>
+							<li><a href="/leadership" class="footer-link">Leadership</a></li>
+							<li><a href="/history" class="footer-link">History</a></li>
+							<li><a href="/projects" class="footer-link">Project Status</a></li>
+							<li><a href="/bots/personal" class="footer-link">Personal Bots</a></li>
+							<li><a href="/bots/club" class="footer-link">Club Owned Bots</a></li>
+						</ul>
+					</div>
+
+					<!-- Connect & Sponsorship Section -->
+					<div class="footer-section">
+						<h3 class="footer-heading">Connect & Sponsorship</h3>
+						<ul class="footer-links">
+							<li><a href="/instagram" class="footer-link">Instagram</a></li>
+							<li><a href="/contact" class="footer-link">Email</a></li>
+							<li><a href="/sponsorship" class="footer-link">Sponsors</a></li>
+						</ul>
+					</div>
+
+					<!-- Legal Section -->
+					<div class="footer-section">
+						<h3 class="footer-heading">Legal</h3>
+						<ul class="footer-links">
+							<li><a href="https://www.kent.edu/csi" target="_blank" rel="noopener noreferrer" class="footer-link">Kent State CSI</a></li>
+							<li><a href="https://www.kent.edu/antihazing" target="_blank" rel="noopener noreferrer" class="footer-link">Anti-Hazing Policy</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer-bottom">
+			<div class="footer-container">
+				<p class="footer-copyright">
+					KSU Combat Robotics is a registered organization of Kent State University
+				</p>
+			</div>
+		</div>
+	</footer>
 </QueryClientProvider>

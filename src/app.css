@@ -547,5 +547,61 @@
       .header-links { display: flex; align-items: center; }
    }
 
+   /* Footer styles */
+   .site-footer {
+      @apply mt-auto;
+      width: 100%;
+   }
+
+   .footer-top {
+      @apply bg-ksu-blue text-white py-12;
+   }
+
+   .footer-container {
+      @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+   }
+
+   .footer-grid {
+      @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto;
+   }
+
+   .footer-section {
+      @apply flex flex-col;
+   }
+
+   .footer-heading {
+      @apply text-ksu-gold font-bold text-lg mb-4 uppercase tracking-wide;
+   }
+
+   .footer-links {
+      @apply list-none space-y-2 p-0 m-0;
+   }
+
+   .footer-links li {
+      @apply m-0;
+   }
+
+   .footer-link {
+      @apply text-white hover:text-ksu-gold transition-colors duration-200 text-sm no-underline;
+   }
+
+   .footer-bottom {
+      @apply bg-ksu-blue border-t border-ksu-gold py-6;
+   }
+
+   .footer-copyright {
+      @apply text-white text-center text-sm m-0;
+   }
+
+   /* Ensure the page layout uses flexbox to push footer to bottom */
+   body {
+      @apply flex flex-col min-h-screen;
+   }
+
+   body > div {
+      @apply flex flex-col flex-1;
+   }
+
 }
+
 
