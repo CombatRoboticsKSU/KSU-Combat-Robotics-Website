@@ -169,7 +169,7 @@
    /* Left / right group wrappers that hug the edges */
    /* Keep groups tight; header-inner padding controls wall offset. */
    .left-group { @apply flex items-center gap-2 ml-0; }
-   .right-group { @apply flex items-center gap-2 mr-0; }
+   .right-group { @apply flex items-center gap-6 mr-0; }
 
    /* Left and right nav boxes */
    .nav-box-left {
@@ -181,7 +181,7 @@
    .nav-box-right {
       /* show only on large screens; right group handles right nav + actions
          Remove internal horizontal padding so items hug the right offset. */
-      @apply hidden lg:flex items-center gap-3 rounded-none px-0 py-0;
+      @apply hidden lg:flex items-center gap-5 rounded-none px-0 py-0;
    }
 
    .header-actions {

@@ -12,21 +12,19 @@
 
 	const leftNav: NavItem[] = [
 		{ name: 'Sponsors', path: '/sponsorship' },
-		{ name: 'Contact Us', path: '/contact' },
+		{ name: 'Contact Us', path: '/contact-us' },
+		{ name: 'About Us', path: '/about-us' },
 		{ name: 'KSU BOT Wiki', path: '/wiki' },
 		{ name: 'Updates', children: [
 			{ name: 'Team Updates', path: '/blog' },
-			{ name: 'Project Status', path: '/projects' } ]},
-		{ name: 'Leadership', path: '/leadership' },
-		{ name: 'Projects', children: [
-			{ name: 'Current', path: '/projects/current' },
-			{ name: 'Archive', path: '/projects/archive' } ]}
+			{ name: 'Project Status', path: 'https://sharing.clickup.com/9011781189/b/h/4-90112834328-2/597252a6b651153' } ]},
+		{ name: 'Leadership', path: '/leadership' }
 	];
 
 	const rightNav: NavItem[] = [
 		{ name: 'Calendar', path: '/calendar' },
-		{ name: 'Instagram Feed', path: '/instagram' },
-		{ name: 'KSU Engage', path: '/ksu-engage' }
+		{ name: 'Instagram Feed', path: 'https://www.instagram.com/ksucombatrobotics/' },
+		{ name: 'KSU Engage', path: 'https://kent.campuslabs.com/engage/organization/combatrobotics' }
 	];
 
 	// (mobile menu will render leftNav + rightNav together)
@@ -189,7 +187,11 @@
 								<div class="nav-dropdown">
 									<div class="py-2">
 										{#each item.children as child}
-											<a href={child.path} class="dropdown-link">{child.name}</a>
+											{#if child.path.startsWith('http')}
+												<a href={child.path} target="_blank" rel="noopener noreferrer" class="dropdown-link">{child.name}</a>
+											{:else}
+												<a href={child.path} class="dropdown-link">{child.name}</a>
+											{/if}
 										{/each}
 									</div>
 								</div>
@@ -229,13 +231,21 @@
 								<div class="nav-dropdown">
 									<div class="py-2">
 										{#each item.children as child}
-											<a href={child.path} class="dropdown-link">{child.name}</a>
+											{#if child.path.startsWith('http')}
+												<a href={child.path} target="_blank" rel="noopener noreferrer" class="dropdown-link">{child.name}</a>
+											{:else}
+												<a href={child.path} class="dropdown-link">{child.name}</a>
+											{/if}
 										{/each}
 									</div>
 								</div>
 							</div>
 						{:else}
-							<a href={item.path} class="header-link">{item.name}</a>
+							{#if item.path && item.path.startsWith('http')}
+								<a href={item.path} target="_blank" rel="noopener noreferrer" class="header-link">{item.name}</a>
+							{:else}
+								<a href={item.path} class="header-link">{item.name}</a>
+							{/if}
 						{/if}
 					{/each}
 				</div>
@@ -356,13 +366,21 @@
 								{#if mobileOpenIndices.has(idx)}
 									<div class="mt-1 space-y-1 pl-4">
 										{#each item.children as child}
-											<a href={child.path} class="mobile-item-link">{child.name}</a>
+											{#if child.path.startsWith('http')}
+												<a href={child.path} target="_blank" rel="noopener noreferrer" class="mobile-item-link">{child.name}</a>
+											{:else}
+												<a href={child.path} class="mobile-item-link">{child.name}</a>
+											{/if}
 										{/each}
 									</div>
 								{/if}
 							</div>
 						{:else}
-							<a href={item.path} class="mobile-item-link {idx === leftNav.concat(rightNav).length - 1 ? 'mobile-item-no-border' : ''}">{item.name}</a>
+							{#if item.path && item.path.startsWith('http')}
+								<a href={item.path} target="_blank" rel="noopener noreferrer" class="mobile-item-link {idx === leftNav.concat(rightNav).length - 1 ? 'mobile-item-no-border' : ''}">{item.name}</a>
+							{:else}
+								<a href={item.path} class="mobile-item-link {idx === leftNav.concat(rightNav).length - 1 ? 'mobile-item-no-border' : ''}">{item.name}</a>
+							{/if}
 						{/if}
 					{/each}
 				</div>
@@ -387,7 +405,7 @@
 							<li><a href="/blog" class="footer-link">Team Updates</a></li>
 							<li><a href="/leadership" class="footer-link">Leadership</a></li>
 							<li><a href="/history" class="footer-link">History</a></li>
-							<li><a href="/projects" class="footer-link">Project Status</a></li>
+							<li><a href="https://sharing.clickup.com/9011781189/b/h/4-90112834328-2/597252a6b651153" target="_blank" rel="noopener noreferrer" class="footer-link">Project Status</a></li>
 							<li><a href="/bots/personal" class="footer-link">Personal Bots</a></li>
 							<li><a href="/bots/club" class="footer-link">Club Owned Bots</a></li>
 						</ul>
@@ -397,7 +415,7 @@
 					<div class="footer-section">
 						<h3 class="footer-heading">Connect & Sponsorship</h3>
 						<ul class="footer-links">
-							<li><a href="/instagram" class="footer-link">Instagram</a></li>
+							<li><a href="https://www.instagram.com/ksucombatrobotics/" target="_blank" rel="noopener noreferrer" class="footer-link">Instagram</a></li>
 							<li><a href="/contact" class="footer-link">Email</a></li>
 							<li><a href="/sponsorship" class="footer-link">Sponsors</a></li>
 						</ul>
