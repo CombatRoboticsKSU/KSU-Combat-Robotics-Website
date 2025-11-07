@@ -17,22 +17,68 @@
         <div style="max-width: 1500px">
             <h4>Questions? Comments? Want to support us? Let us know!</h4>
 
+            <script>
+                let name = '';
+                let email = '';
+                let title = '';
+                let msg = '';
+
+                const sendEmail = async () => {
+                    try {
+                        const messageWithEmail = `${form.message}\n\nSender Email: ${form.email}`;
+
+                        /*
+                        await emailjs.send(
+                            safeServiceId,
+                            safeTemplateId,
+                            {
+                            from_name: form.name,
+                            subject: form.title,
+                            message: messageWithEmail,
+                            reply_to: form.email, // Pass the email directly as well
+                            },
+                            safeUserId
+                        );
+                        */
+                    } catch (error) {
+                        console.error('Email send failed:', error);
+                    }
+                }
+            </script>
+
             <form class="contact-form">
                 <div>
-                    <label for="name">Name</label>
-                    <input id="name" type="text" name="name" required />
+                    <label>Name:</label>
+                    <input
+                    type="text"
+                    name="name"
+                    required
+                    />
                 </div>
-
                 <div>
-                    <label for="title">Title</label>
-                    <input id="title" type="text" name="title" required />
+                    <label>Email:</label>
+                    <input
+                    type="email"
+                    name="email"
+                    required
+                    />
                 </div>
-
                 <div>
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" required></textarea>
+                    <label>Subject:</label>
+                    <input
+                    type="text"
+                    name="title"
+                    required
+                    />
                 </div>
-
+                <div>
+                    <label>Message:</label>
+                    <input
+                    type="text"
+                    name="message"
+                    required
+                    />
+                </div>
                 <button type="submit">Send</button>
             </form>
         </div>
