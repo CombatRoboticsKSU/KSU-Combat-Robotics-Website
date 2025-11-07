@@ -1,194 +1,107 @@
+<script lang="ts">
+  let name: string = '';
+  let email: string = '';
+  let title: string = '';
+  let msg: string = '';
+
+  const sendEmail = async () => {
+    try {
+      const messageWithEmail = `${msg}\n\nSender Email: ${email}`;
+
+      /*
+      await emailjs.send(
+        safeServiceId,
+        safeTemplateId,
+        {
+          from_name: name,
+          subject: title,
+          message: messageWithEmail,
+          reply_to: email
+        },
+        safeUserId
+      );
+      */
+
+      alert('Email sent successfully!');
+      name = '';
+      email = '';
+      title = '';
+      msg = '';
+    } catch (error) {
+      console.error('Email send failed:', error);
+    }
+  };
+</script>
+
 <svelte:head>
   <title>Contact KSU Combat Robotics</title>
   <meta name="description" content="Linear series of events and milestones of our club" />
 </svelte:head>
 
-<header class="hero hero--primary heroBanner">
-  <div class="container">
-    <h1 class="hero__title">Contact Us</h1>
-    <p class="hero__subtitle">Have questions or comments? Want to support us? Let us know!</p>
+<header class="w-screen bg-black/10 text-white text-center py-16">
+  <div class="container mx-auto">
+    <h1 class="text-4xl font-bold mb-2">Contact Us</h1>
+    <p class="text-lg opacity-90">
+      Have questions or comments? Want to support us? Let us know!
+    </p>
   </div>
 </header>
 
-<main>
-    <div
-        style="width: 100%; padding: 40px; display: flex; justify-content: center; align-items: center;"
+<main class="flex justify-center items-center px-6 py-12">
+  <div class="max-w-3xl w-full">
+    <h4 class="text-xl font-semibold mb-6 text-center">
+      Questions? Comments? Want to support us? Let us know!
+    </h4>
+
+    <form
+      class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md flex flex-col gap-5"
+      on:submit|preventDefault={sendEmail}
     >
-        <div style="max-width: 1500px">
-            <h4>Questions? Comments? Want to support us? Let us know!</h4>
+      <div>
+        <label class="block font-semibold mb-1 text-gray-700">Name:</label>
+        <input
+          type="text"
+          bind:value={name}
+          required
+          class="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none"
+        />
+      </div>
 
-            <script>
-                let name = '';
-                let email = '';
-                let title = '';
-                let msg = '';
+      <div>
+        <label class="block font-semibold mb-1 text-gray-700">Email:</label>
+        <input
+          type="email"
+          bind:value={email}
+          required
+          class="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none"
+        />
+      </div>
 
-                const sendEmail = async () => {
-                    try {
-                        const messageWithEmail = `${form.message}\n\nSender Email: ${form.email}`;
+      <div>
+        <label class="block font-semibold mb-1 text-gray-700">Subject:</label>
+        <input
+          type="text"
+          bind:value={title}
+          required
+          class="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none"
+        />
+      </div>
 
-                        /*
-                        await emailjs.send(
-                            safeServiceId,
-                            safeTemplateId,
-                            {
-                            from_name: form.name,
-                            subject: form.title,
-                            message: messageWithEmail,
-                            reply_to: form.email, // Pass the email directly as well
-                            },
-                            safeUserId
-                        );
-                        */
-                    } catch (error) {
-                        console.error('Email send failed:', error);
-                    }
-                }
-            </script>
+      <div>
+        <label class="block font-semibold mb-1 text-gray-700">Message:</label>
+        <textarea
+          bind:value={msg}
+          required
+          class="w-full p-3 border border-gray-300 rounded-md min-h-[100px] resize-y focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none"
+        ></textarea>
+      </div>
 
-            <form class="contact-form">
-                <div>
-                    <label>Name:</label>
-                    <input
-                    type="text"
-                    name="name"
-                    required
-                    />
-                </div>
-                <div>
-                    <label>Email:</label>
-                    <input
-                    type="email"
-                    name="email"
-                    required
-                    />
-                </div>
-                <div>
-                    <label>Subject:</label>
-                    <input
-                    type="text"
-                    name="title"
-                    required
-                    />
-                </div>
-                <div>
-                    <label>Message:</label>
-                    <input
-                    type="text"
-                    name="message"
-                    required
-                    />
-                </div>
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    </div>
+      <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md py-3 transition transform active:scale-95"
+      >
+        Send
+      </button>
+    </form>
+  </div>
 </main>
-
-<style>
-  .hero {
-    width: 100vw;        /* full viewport width */
-    margin-left: calc(50% - 50vw); /* escape parent padding/margin */
-
-    background: #0000001d;
-    color: white;
-    text-align: center;
-    padding: 4rem 0;
-  }
-
-  .hero__title {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .hero__subtitle {
-    font-size: 1.2rem;
-  }
-
-  a {
-    color: #ebab21;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  h1,h2,h3,p {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-
-  .contact-form {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 2rem;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-
-  .contact-form label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-    color: #333;
-    text-align: left;
-  }
-
-  .contact-form input,
-  .contact-form textarea {
-    width: 90%;
-    padding: 0.7rem 0.9rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .contact-form input:focus,
-  .contact-form textarea:focus {
-    border-color: #4466ee;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(68, 102, 238, 0.2);
-  }
-
-  .contact-form textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-
-  .contact-form button {
-    background-color: #4466ee;
-    color: white;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    padding: 0.8rem;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-  }
-
-  .contact-form button:hover {
-    background-color: #3454d1;
-  }
-
-  .contact-form button:active {
-    transform: scale(0.98);
-  }
-
-  @media (max-width: 768px) {
-    section {
-      flex-direction: column;
-    }
-
-    section img {
-      margin-bottom: 20px;
-      margin-right: 0;
-      width: 100%;
-      max-width: 400px;
-    }
-  }
-</style>
