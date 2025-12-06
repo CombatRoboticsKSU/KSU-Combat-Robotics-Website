@@ -33,7 +33,7 @@
     >
       <div class="flex justify-center my-8">
         <iframe
-          src="https://calendar.google.com/calendar/embed?src=c_17f0fd8b65f2f6389fc72f9a7a34ccc5cd4b6ff26a37a429e3c5c4530abad9ae%40group.calendar.google.com&ctz=America%2FNew_York"
+          src="https://calendar.google.com/calendar/embed?src=ksu.fightingrobotics%40gmail.com&ctz=America%2FNew_York"
           class="border-0 w-[90vw] max-w-[2200px] h-[800px] sm:h-[600px] md:h-[700px]"
           frameborder="0"
           scrolling="no"
