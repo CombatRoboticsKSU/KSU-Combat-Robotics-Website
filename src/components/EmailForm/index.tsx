@@ -55,6 +55,19 @@ const EmailForm: React.FC = () => {
   };
 
   return (
+    <div style={{ width: '100%', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ textAlign: 'center', padding: '24px', maxWidth: 600 }}>
+        <h2 style={{ marginBottom: '16px' }}>Contact Form Temporarily Unavailable</h2>
+        <p style={{ fontSize: '16px', color: '#666' }}>
+          The contact form is currently disabled. Please check back later or reach out to us through our other channels.
+        </p>
+      </div>
+    </div>
+  );
+
+  // Commented out form - to re-enable, uncomment this section and comment out the above return
+  /*
+  return (
     <div style={{ width: '100%', height: '100vh' }}>
       <div style={{ textAlign: 'center', padding: '10px'}}>
         <form onSubmit={handleSubmit} style={{ maxWidth: 900, margin: '0 auto' }}>
@@ -103,6 +116,7 @@ const EmailForm: React.FC = () => {
       </div>
     </div>
   );
+  */
 };
 
 export default EmailForm;
