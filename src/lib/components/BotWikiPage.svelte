@@ -33,6 +33,37 @@
 
 	let { bot }: { bot: BotData } = $props();
 
+	let lightboxSrc = $state('');
+	let lightboxAlt = $state('');
+	let lightboxOpen = $state(false);
+	let lightboxVisible = $state(false);
+
+	function openLightbox(src: string, alt: string) {
+		lightboxSrc = src;
+		lightboxAlt = alt;
+		lightboxOpen = true;
+		// Trigger the visible state on next frame for the CSS transition
+		requestAnimationFrame(() => {
+			lightboxVisible = true;
+		});
+	}
+
+	function closeLightbox() {
+		lightboxVisible = false;
+		// Wait for the fade-out transition to finish before removing from DOM
+		setTimeout(() => {
+			lightboxOpen = false;
+			lightboxSrc = '';
+			lightboxAlt = '';
+		}, 300);
+	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && lightboxOpen) {
+			closeLightbox();
+		}
+	}
+
 	function totalRecord(competitions: Competition[]) {
 		const wins = competitions.reduce((sum, c) => sum + c.wins, 0);
 		const losses = competitions.reduce((sum, c) => sum + c.losses, 0);
@@ -50,7 +81,9 @@
 	<div class="container">
 		<div class="bot-header">
 			<div class="bot-main-image">
-				<img src={bot.image} alt={bot.name} />
+				<button class="lightbox-trigger" onclick={() => openLightbox(bot.image, bot.name)}>
+					<img src={bot.image} alt={bot.name} />
+				</button>
 			</div>
 			<div class="bot-specs-panel">
 				<div class="overall-record">
@@ -114,7 +147,9 @@
 				<div class="gallery-grid">
 					{#each bot.galleryImages as img}
 						<div class="gallery-item">
-							<img src={img} alt="{bot.name} gallery" />
+							<button class="lightbox-trigger" onclick={() => openLightbox(img, `${bot.name} gallery`)}>
+								<img src={img} alt="{bot.name} gallery" />
+							</button>
 						</div>
 					{/each}
 				</div>
@@ -166,9 +201,37 @@
 					</div>
 				{/each}
 			</div>
+		<div class="back-link">
+			<a href="/wiki" class="btn btn-secondary">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 12l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				Back to Wiki
+			</a>
 		</div>
 	</div>
 </section>
+
+<svelte:window onkeydown={handleKeydown} />
+
+{#if lightboxOpen}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="lightbox-overlay"
+		class:lightbox-visible={lightboxVisible}
+		onclick={closeLightbox}
+		onkeydown={handleKeydown}
+	>
+		<button class="lightbox-close" onclick={closeLightbox} aria-label="Close lightbox">&times;</button>
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+		<img
+			class="lightbox-image"
+			class:lightbox-visible={lightboxVisible}
+			src={lightboxSrc}
+			alt={lightboxAlt}
+			onclick={(e) => e.stopPropagation()}
+			onkeydown={(e) => e.stopPropagation()}
+		/>
+	</div>
+{/if}
 
 <style>
 	.bot-header {
@@ -367,7 +430,7 @@
 
 	.team-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: 1rem;
 	}
 
@@ -398,6 +461,82 @@
 		font-size: 0.75rem;
 		color: var(--text-muted);
 		margin-bottom: 0.125rem;
+	}
+
+	.back-link {
+		text-align: center;
+		margin-top: 2rem;
+	}
+
+	/* Lightbox trigger button — invisible wrapper */
+	.lightbox-trigger {
+		all: unset;
+		display: block;
+		width: 100%;
+		height: 100%;
+		cursor: zoom-in;
+	}
+
+	.lightbox-trigger img {
+		width: 100%;
+		height: 100%;
+		display: block;
+		object-fit: cover;
+	}
+
+	/* Lightbox overlay */
+	.lightbox-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 9999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0);
+		backdrop-filter: blur(0px);
+		transition: background 0.3s ease, backdrop-filter 0.3s ease;
+		cursor: zoom-out;
+	}
+
+	.lightbox-overlay.lightbox-visible {
+		background: rgba(0, 0, 0, 0.85);
+		backdrop-filter: blur(8px);
+	}
+
+	.lightbox-image {
+		max-width: 90vw;
+		max-height: 85vh;
+		border-radius: var(--radius-lg);
+		box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+		cursor: default;
+		transform: scale(0.8);
+		opacity: 0;
+		transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+	}
+
+	.lightbox-image.lightbox-visible {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	.lightbox-close {
+		position: absolute;
+		top: 1.5rem;
+		right: 1.5rem;
+		background: none;
+		border: none;
+		color: white;
+		font-size: 2.5rem;
+		cursor: pointer;
+		line-height: 1;
+		opacity: 0.7;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+		z-index: 10000;
+	}
+
+	.lightbox-close:hover {
+		opacity: 1;
+		transform: scale(1.15);
 	}
 
 	@media (max-width: 768px) {

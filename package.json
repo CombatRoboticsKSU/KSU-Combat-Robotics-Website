@@ -21,6 +21,7 @@
 		"vite": "^7.3.1"
 	},
 	"dependencies": {
+		"@emailjs/browser": "^4.4.1",
 		"@sveltejs/adapter-vercel": "^6.3.3",
 		"mdsvex": "^0.12.7"
 	}

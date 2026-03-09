@@ -15,6 +15,14 @@
 			weight: '12lb',
 			weapon: 'Vertical Spinner',
 			status: 'Active'
+		},
+		{
+			name: 'Sorcerer & Apprentice',
+			slug: 'SorApp',
+			image: '/wiki/img/twins/sorapp.JPG',
+			weight: '7.5lb',
+			weapon: 'Wedge',
+			status: 'Retired'
 		}
 	];
 </script>
@@ -44,7 +52,7 @@
 						<div class="wiki-meta">
 							<span class="meta-tag">{bot.weight}</span>
 							<span class="meta-tag">{bot.weapon}</span>
-							<span class="meta-tag status">{bot.status}</span>
+							<span class="meta-tag {bot.status.toLowerCase()}">{bot.status}</span>
 						</div>
 					</div>
 				</a>
@@ -56,9 +64,9 @@
 <style>
 	.wiki-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 		gap: 2rem;
-		max-width: 800px;
+		max-width: 1000px;
 		margin: 0 auto;
 	}
 
@@ -128,13 +136,19 @@
 		color: var(--text-secondary);
 	}
 
-	.meta-tag.status {
+	.meta-tag.active {
 		background: rgba(34, 197, 94, 0.1);
 		border-color: rgba(34, 197, 94, 0.2);
 		color: #22c55e;
 	}
 
-	@media (max-width: 640px) {
+	.meta-tag.retired {
+		background: rgba(156, 163, 175, 0.1);
+		border-color: rgba(156, 163, 175, 0.2);
+		color: #9ca3af;
+	}
+
+	@media (max-width: 768px) {
 		.wiki-grid {
 			grid-template-columns: 1fr;
 		}

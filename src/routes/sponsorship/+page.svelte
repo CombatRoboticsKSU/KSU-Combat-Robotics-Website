@@ -1,7 +1,4 @@
 <script lang="ts">
-	let currentSlide = $state(0);
-	let autoplayTimer: ReturnType<typeof setInterval>;
-
 	const sponsors = [
 		{ link: 'https://www.wardjet.com', src: '/USINGimg/WARDjet.jpg', alt: 'WARDjet' },
 		{ link: 'https://itgresa.com', src: '/USINGimg/ITGresa.jpg', alt: 'IT Gresa' },
@@ -13,23 +10,6 @@
 	];
 
 	const donors = ['Brendan Steele', 'Sternberg Family'];
-
-	function next() {
-		currentSlide = (currentSlide + 1) % sponsors.length;
-	}
-
-	function prev() {
-		currentSlide = (currentSlide - 1 + sponsors.length) % sponsors.length;
-	}
-
-	function goTo(index: number) {
-		currentSlide = index;
-	}
-
-	$effect(() => {
-		autoplayTimer = setInterval(next, 4000);
-		return () => clearInterval(autoplayTimer);
-	});
 </script>
 
 <svelte:head>
@@ -45,35 +25,6 @@
 	<div class="container">
 		<h2 class="section-title">Current <span>Sponsors</span></h2>
 
-		<!-- Carousel -->
-		<div class="carousel">
-			<button class="carousel-btn prev" onclick={prev} aria-label="Previous sponsor">
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-			</button>
-
-			<div class="carousel-track">
-				<a href={sponsors[currentSlide].link} target="_blank" rel="noopener noreferrer" class="carousel-slide">
-					<img src={sponsors[currentSlide].src} alt={sponsors[currentSlide].alt} />
-				</a>
-			</div>
-
-			<button class="carousel-btn next" onclick={next} aria-label="Next sponsor">
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-			</button>
-		</div>
-
-		<div class="carousel-dots">
-			{#each sponsors as _, i}
-				<button
-					class="dot"
-					class:active={i === currentSlide}
-					onclick={() => goTo(i)}
-					aria-label="Go to slide {i + 1}"
-				></button>
-			{/each}
-		</div>
-
-		<!-- Sponsor Logo Grid -->
 		<div class="sponsors-grid">
 			{#each sponsors as sponsor}
 				<a href={sponsor.link} target="_blank" rel="noopener noreferrer" class="sponsor-logo-card">
@@ -109,75 +60,6 @@
 </section>
 
 <style>
-	.carousel {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		max-width: 600px;
-		margin: 0 auto 1.5rem;
-	}
-
-	.carousel-track {
-		flex: 1;
-		display: flex;
-		justify-content: center;
-	}
-
-	.carousel-slide {
-		display: block;
-	}
-
-	.carousel-slide img {
-		max-width: 400px;
-		width: 100%;
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-md);
-	}
-
-	.carousel-btn {
-		background: var(--bg-card);
-		border: 1px solid var(--border-color);
-		color: var(--text-primary);
-		width: 48px;
-		height: 48px;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: all var(--transition);
-		flex-shrink: 0;
-	}
-
-	.carousel-btn:hover {
-		border-color: var(--gold);
-		color: var(--gold);
-		background: var(--bg-card-hover);
-	}
-
-	.carousel-dots {
-		display: flex;
-		justify-content: center;
-		gap: 0.5rem;
-		margin-bottom: 3rem;
-	}
-
-	.dot {
-		width: 10px;
-		height: 10px;
-		border-radius: 50%;
-		border: none;
-		background: var(--text-muted);
-		cursor: pointer;
-		transition: all var(--transition);
-		padding: 0;
-	}
-
-	.dot.active {
-		background: var(--gold);
-		transform: scale(1.3);
-	}
-
 	.sponsors-grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
@@ -226,11 +108,6 @@
 	@media (max-width: 768px) {
 		.sponsors-grid {
 			grid-template-columns: repeat(2, 1fr);
-		}
-
-		.carousel-btn {
-			width: 40px;
-			height: 40px;
 		}
 	}
 

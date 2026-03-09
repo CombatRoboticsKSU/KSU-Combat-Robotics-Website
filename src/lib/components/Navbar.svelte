@@ -15,6 +15,7 @@
 	const updatesLinks = [
 		{ href: '/blog', label: 'Team Updates' },
 		{ href: '/publicity', label: 'Media Coverage' },
+		{ href: '/projects', label: 'Projects' },
 	];
 
 	const rightLinks = [
@@ -62,7 +63,7 @@
 				<button
 					class="nav-link dropdown-toggle"
 					onclick={() => updatesOpen = !updatesOpen}
-					class:active={isActive('/blog') || isActive('/publicity')}
+					class:active={isActive('/blog') || isActive('/publicity') || isActive('/projects')}
 				>
 					Updates
 					<svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="chevron" class:rotated={updatesOpen}>

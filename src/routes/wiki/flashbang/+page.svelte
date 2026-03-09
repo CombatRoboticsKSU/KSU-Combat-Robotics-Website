@@ -26,7 +26,7 @@
 			'/USINGimg/FlashBangIcon.png'
 		],
 		videoSrc: '/img/Flashbang_Hero_Shot.mp4',
-		videoPoster: '/wiki/img/frame.jpg',
+		videoPoster: '/USINGimg/FlashBang.jpg',
 		youtubeEmbed: 'https://www.youtube.com/embed/SXWNAOSV5uQ?si=6WTQPxattuutYVdX',
 		mediaCoverageText: 'Our local newspaper has covered our bot a few years ago.',
 		mediaCoverageLink: 'https://kentwired.com/95378/latest-updates/combat-robotics-team-continues-to-find-success/',
