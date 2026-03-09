@@ -1,0 +1,412 @@
+<script lang="ts">
+	interface Competition {
+		name: string;
+		location: string;
+		date: string;
+		fights: number;
+		wins: number;
+		losses: number;
+		kos: number;
+		kod: number;
+		outcome?: string;
+	}
+
+	interface TeamMember {
+		role: string;
+		name: string;
+		history?: string[];
+	}
+
+	interface BotData {
+		name: string;
+		image: string;
+		specs: Record<string, string>;
+		competitions: Competition[];
+		team: TeamMember[];
+		galleryImages?: string[];
+		videoSrc?: string;
+		videoPoster?: string;
+		youtubeEmbed?: string;
+		mediaCoverageText?: string;
+		mediaCoverageLink?: string;
+	}
+
+	let { bot }: { bot: BotData } = $props();
+
+	function totalRecord(competitions: Competition[]) {
+		const wins = competitions.reduce((sum, c) => sum + c.wins, 0);
+		const losses = competitions.reduce((sum, c) => sum + c.losses, 0);
+		return { wins, losses };
+	}
+
+	const record = $derived(totalRecord(bot.competitions));
+</script>
+
+<section class="hero">
+	<h1>{bot.name}</h1>
+</section>
+
+<section class="section">
+	<div class="container">
+		<div class="bot-header">
+			<div class="bot-main-image">
+				<img src={bot.image} alt={bot.name} />
+			</div>
+			<div class="bot-specs-panel">
+				<div class="overall-record">
+					<span class="record-wins">{record.wins}W</span>
+					<span class="record-sep">-</span>
+					<span class="record-losses">{record.losses}L</span>
+				</div>
+				<h3>Specifications</h3>
+				<dl class="specs-list">
+					{#each Object.entries(bot.specs) as [key, value]}
+						<div class="spec-row">
+							<dt>{key}</dt>
+							<dd>{value}</dd>
+						</div>
+					{/each}
+				</dl>
+			</div>
+		</div>
+
+		<!-- Competition Record -->
+		<div class="comp-section">
+			<h2 class="section-title">Competition <span>Record</span></h2>
+			<div class="comp-grid">
+				{#each bot.competitions as comp}
+					<div class="comp-card card">
+						<div class="comp-header">
+							<h4>{comp.name}</h4>
+							<span class="comp-date">{comp.date}</span>
+						</div>
+						<div class="comp-location">{comp.location}</div>
+						<div class="comp-stats">
+							<div class="comp-stat">
+								<span class="stat-value">{comp.wins}</span>
+								<span class="stat-label">Wins</span>
+							</div>
+							<div class="comp-stat">
+								<span class="stat-value">{comp.losses}</span>
+								<span class="stat-label">Losses</span>
+							</div>
+							<div class="comp-stat">
+								<span class="stat-value">{comp.kos}</span>
+								<span class="stat-label">KOs</span>
+							</div>
+							<div class="comp-stat">
+								<span class="stat-value">{comp.kod}</span>
+								<span class="stat-label">KO'd</span>
+							</div>
+						</div>
+						{#if comp.outcome}
+							<div class="comp-outcome">{comp.outcome}</div>
+						{/if}
+					</div>
+				{/each}
+			</div>
+		</div>
+
+		<!-- Gallery -->
+		{#if bot.galleryImages && bot.galleryImages.length > 0}
+			<div class="gallery-section">
+				<h2 class="section-title"><span>Gallery</span></h2>
+				<div class="gallery-grid">
+					{#each bot.galleryImages as img}
+						<div class="gallery-item">
+							<img src={img} alt="{bot.name} gallery" />
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
+
+		<!-- Video -->
+		{#if bot.videoSrc}
+			<div class="video-section">
+				<video controls poster={bot.videoPoster} preload="metadata">
+					<source src={bot.videoSrc} type="video/mp4" />
+					<track kind="captions" />
+				</video>
+			</div>
+		{/if}
+
+		{#if bot.youtubeEmbed}
+			<div class="video-section">
+				<div class="youtube-wrapper">
+					<iframe
+						src={bot.youtubeEmbed}
+						title="{bot.name} video"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						referrerpolicy="strict-origin-when-cross-origin"
+						allowfullscreen
+					></iframe>
+				</div>
+			</div>
+		{/if}
+
+		<!-- Team -->
+		<div class="team-section">
+			<h2 class="section-title">Team <span>Members</span></h2>
+			<div class="team-grid">
+				{#each bot.team as member}
+					<div class="team-member card">
+						<div class="team-member-inner">
+							<strong>{member.role}</strong>
+							<span>{member.name}</span>
+							{#if member.history}
+								<ul class="history-list">
+									{#each member.history as entry}
+										<li>{entry}</li>
+									{/each}
+								</ul>
+							{/if}
+						</div>
+					</div>
+				{/each}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.bot-header {
+		display: grid;
+		grid-template-columns: 1.2fr 1fr;
+		gap: 2rem;
+		margin-bottom: 4rem;
+		align-items: start;
+	}
+
+	.bot-main-image {
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		box-shadow: var(--shadow-lg);
+	}
+
+	.bot-main-image img {
+		width: 100%;
+		display: block;
+	}
+
+	.bot-specs-panel {
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-lg);
+		padding: 2rem;
+	}
+
+	.overall-record {
+		text-align: center;
+		font-size: 2rem;
+		font-weight: 800;
+		margin-bottom: 1.5rem;
+		padding-bottom: 1.5rem;
+		border-bottom: 1px solid var(--border-color);
+	}
+
+	.record-wins { color: #22c55e; }
+	.record-sep { color: var(--text-muted); margin: 0 0.5rem; }
+	.record-losses { color: #ef4444; }
+
+	.bot-specs-panel h3 {
+		font-size: 1rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--gold);
+		margin-bottom: 1rem;
+	}
+
+	.specs-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.spec-row {
+		display: flex;
+		justify-content: space-between;
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--border-color);
+		gap: 1rem;
+	}
+
+	.spec-row:last-child {
+		border-bottom: none;
+	}
+
+	.spec-row dt {
+		color: var(--text-secondary);
+		font-size: 0.8125rem;
+		font-weight: 500;
+	}
+
+	.spec-row dd {
+		color: var(--text-primary);
+		font-size: 0.8125rem;
+		text-align: right;
+	}
+
+	.comp-section, .gallery-section, .team-section {
+		margin-bottom: 4rem;
+	}
+
+	.comp-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	.comp-card {
+		padding: 1.25rem;
+	}
+
+	.comp-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 0.25rem;
+	}
+
+	.comp-header h4 {
+		font-size: 0.9375rem;
+	}
+
+	.comp-date {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		white-space: nowrap;
+	}
+
+	.comp-location {
+		font-size: 0.8125rem;
+		color: var(--text-secondary);
+		margin-bottom: 1rem;
+	}
+
+	.comp-stats {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 0.5rem;
+		text-align: center;
+		margin-bottom: 0.75rem;
+	}
+
+	.stat-value {
+		display: block;
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--gold);
+	}
+
+	.stat-label {
+		font-size: 0.6875rem;
+		color: var(--text-muted);
+		text-transform: uppercase;
+	}
+
+	.comp-outcome {
+		font-size: 0.8125rem;
+		color: var(--text-secondary);
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--border-color);
+		text-align: center;
+	}
+
+	.gallery-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+
+	.gallery-item {
+		border-radius: var(--radius-md);
+		overflow: hidden;
+		aspect-ratio: 4/3;
+	}
+
+	.gallery-item img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.gallery-item:hover img {
+		transform: scale(1.05);
+	}
+
+	.video-section {
+		margin-bottom: 3rem;
+		display: flex;
+		justify-content: center;
+	}
+
+	.video-section video {
+		max-width: 740px;
+		width: 100%;
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-lg);
+	}
+
+	.youtube-wrapper {
+		position: relative;
+		width: 100%;
+		max-width: 640px;
+		aspect-ratio: 16/9;
+	}
+
+	.youtube-wrapper iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: var(--radius-lg);
+	}
+
+	.team-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+
+	.team-member {
+		padding: 1.25rem;
+	}
+
+	.team-member-inner strong {
+		display: block;
+		font-size: 0.8125rem;
+		color: var(--gold);
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		margin-bottom: 0.25rem;
+	}
+
+	.team-member-inner span {
+		font-size: 0.9375rem;
+	}
+
+	.history-list {
+		margin-top: 0.5rem;
+		padding-left: 1rem;
+		list-style: disc;
+	}
+
+	.history-list li {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		margin-bottom: 0.125rem;
+	}
+
+	@media (max-width: 768px) {
+		.bot-header {
+			grid-template-columns: 1fr;
+		}
+
+		.comp-grid, .gallery-grid, .team-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
