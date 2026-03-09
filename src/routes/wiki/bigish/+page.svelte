@@ -30,7 +30,7 @@
 		],
 		youtubeEmbed: 'https://www.youtube.com/embed/NR8GN3DTjRM?si=LLEA8lUsGi5CwimO',
 		team: [
-			{ role: 'Designer', name: 'Brendan Steele (original), Matt Schutzman (2024 redesign)' },
+			{ role: 'Designer', name: 'Matt Schutzman', history: ['Matt Schutzman (2024 redesign)', 'Brendan Steele (original)'] },
 			{ role: 'Builder', name: 'KSU JV Team' },
 			{ role: 'Bot Champion', name: 'Wyatt Burke', history: ['Wyatt Burke (2025-Current)', 'Matt Schutzman (2024-2025)', 'Austin Sternberg (2023-2024)', 'Austin Thebner (2022-2023)', 'Brendan Steele (2020-2022)'] },
 			{ role: 'Driver', name: 'Ian R.', history: ['Ian R (2023-Current)', 'Austin T (2022-2023)', 'Brendan Steele (2020-2022)'] }
