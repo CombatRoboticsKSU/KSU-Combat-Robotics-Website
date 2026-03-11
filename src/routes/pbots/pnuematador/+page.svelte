@@ -13,6 +13,9 @@
 			{ name: 'NHRL January 2024', location: 'Norwalk, CT', date: 'Jan 20, 2024', fights: 4, wins: 2, losses: 2, kos: 0, kod: 1, outcome: 'Qualifiers' },
 			{ name: 'NHRL June 2024', location: 'Norwalk, CT', date: 'Jun 22, 2024', fights: 3, wins: 1, losses: 2, kos: 0, kod: 0, outcome: 'Qualifiers' }
 		],
+		galleryImages: [
+			'/pbots/PNUEMATADOR/PnuemyandMini.jpg'
+		],
 		team: [
 			{ role: 'Builder / Driver', name: 'Austin Thebner' }
 		]

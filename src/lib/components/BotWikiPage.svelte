@@ -27,6 +27,7 @@
 		videoSrc?: string;
 		videoPoster?: string;
 		youtubeEmbed?: string;
+		youtubePlaylist?: string;
 		mediaCoverageText?: string;
 		mediaCoverageLink?: string;
 	}
@@ -172,6 +173,21 @@
 					<iframe
 						src={bot.youtubeEmbed}
 						title="{bot.name} video"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						referrerpolicy="strict-origin-when-cross-origin"
+						allowfullscreen
+					></iframe>
+				</div>
+			</div>
+		{/if}
+
+		{#if bot.youtubePlaylist}
+			<div class="video-section">
+				<div class="youtube-wrapper">
+					<iframe
+						src={bot.youtubePlaylist}
+						title="{bot.name} playlist"
 						frameborder="0"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 						referrerpolicy="strict-origin-when-cross-origin"

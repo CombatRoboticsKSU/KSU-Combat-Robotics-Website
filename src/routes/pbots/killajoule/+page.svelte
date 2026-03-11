@@ -25,6 +25,9 @@
 			{ name: 'NHRL September 2024', location: 'Norwalk, CT', date: 'Sep 14, 2024', fights: 3, wins: 1, losses: 2, kos: 1, kod: 2, outcome: 'Qualifiers Rd. 3 - 3rd' },
 			{ name: 'NHRL May 2025', location: 'Norwalk, CT', date: 'May 3, 2025', fights: 3, wins: 1, losses: 2, kos: 0, kod: 0, outcome: 'Prelim Rd. 3 - 3rd' }
 		],
+		galleryImages: [
+			'/pbots/Killajoule/KillajouleandMini.jpg'
+		],
 		team: [
 			{ role: 'Builder / Driver', name: 'David Dreyer' }
 		]

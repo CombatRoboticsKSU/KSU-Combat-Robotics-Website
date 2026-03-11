@@ -19,6 +19,9 @@
 			{ name: 'NHRL July 2022 (Full Combat)', location: 'Norwalk, CT', date: 'Jul 16, 2022', fights: 6, wins: 4, losses: 2, kos: 1, kod: 0, outcome: 'Elimination Final - 3rd' },
 			{ name: 'NHRL December 2022 (Full Combat)', location: 'Norwalk, CT', date: 'Dec 17, 2022', fights: 8, wins: 6, losses: 2, kos: 1, kod: 2, outcome: 'Elimination Final - 3rd' }
 		],
+		galleryImages: [
+			'/pbots/Ram Plan/planwHat.jpg'
+		],
 		team: [
 			{ role: 'Builder / Driver', name: 'Brendan Steele' }
 		]

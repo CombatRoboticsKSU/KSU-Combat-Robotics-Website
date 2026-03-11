@@ -15,6 +15,9 @@
 			{ name: 'NHRL February 2025', location: 'Norwalk, CT', date: 'Feb 1, 2025', fights: 4, wins: 2, losses: 2, kos: 2, kod: 1, outcome: 'Opening Round' },
 			{ name: 'NHRL April 2025', location: 'Norwalk, CT', date: 'Apr 3, 2025', fights: 4, wins: 2, losses: 2, kos: 2, kod: 1, outcome: 'Opening Round' }
 		],
+		galleryImages: [
+			'/pbots/Katana/nhrlKatana.jpg'
+		],
 		team: [
 			{ role: 'Builder / Driver', name: 'David Dreyer' }
 		]

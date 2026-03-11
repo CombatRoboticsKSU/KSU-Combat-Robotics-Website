@@ -17,6 +17,13 @@
 			{ name: 'NHRL October 2025', location: 'Norwalk, CT', date: 'Oct 4, 2025', fights: 6, wins: 5, losses: 1, kos: 4, kod: 1, outcome: '2nd Place' },
 			{ name: 'NHRL December 2025', location: 'Norwalk, CT', date: 'Dec 6, 2025', fights: 6, wins: 4, losses: 2, kos: 3, kod: 0, outcome: '2nd Place' }
 		],
+		galleryImages: [
+			'/pbots/Slam Plan/SlamPanVictoryOctober.jpg',
+			'/pbots/Slam Plan/SlamPlanChamp.jpg',
+			'/pbots/Slam Plan/blades.jpg'
+		],
+		youtubeEmbed: 'https://www.youtube.com/embed/OVJlvXKD6ME',
+		youtubePlaylist: 'https://www.youtube.com/embed/videoseries?list=PLpdDIreEOr1pi86DuYkSwfoxQqMYeKNWz',
 		team: [
 			{ role: 'Builder / Driver', name: 'Brendan Steele' }
 		]
