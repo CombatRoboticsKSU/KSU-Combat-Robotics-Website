@@ -9,6 +9,8 @@
 		bio: string;
 	}
 
+	let { data } = $props();
+
 	let expandedCurrent: string | null = $state(null);
 	let expandedFormer: string | null = $state(null);
 
@@ -24,7 +26,8 @@
 		return board.find(m => m.name === name);
 	}
 
-	const currentBoard: BoardMember[] = [
+	// Fallback hardcoded data if DB is empty
+	const fallbackCurrent: BoardMember[] = [
 		{
 			name: 'Austin Sternberg',
 			image: '/USINGimg/BOARD25/austin.JPG',
@@ -62,7 +65,7 @@
 		}
 	];
 
-	const formerBoard: BoardMember[] = [
+	const fallbackFormer: BoardMember[] = [
 		{
 			name: 'Austin Thebner',
 			image: '/USINGimg/austint.jpg',
@@ -78,6 +81,9 @@
 			bio: 'David was the clubs President to start the current age. He now currently works for NASA Glenn',
 		},
 	];
+
+	const currentBoard: BoardMember[] = data.currentBoard.length > 0 ? data.currentBoard : fallbackCurrent;
+	const formerBoard: BoardMember[] = data.formerBoard.length > 0 ? data.formerBoard : fallbackFormer;
 </script>
 
 <svelte:head>

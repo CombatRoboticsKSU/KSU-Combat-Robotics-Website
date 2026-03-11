@@ -1,54 +1,60 @@
 <script lang="ts">
-	const personalBots = [
+	let { data } = $props();
+
+	const fallbackBots = [
 		{
 			name: 'Katana',
 			owner: 'David Dreyer',
 			image: '/pbots/Katana/Katana.png',
 			weight: '3lb',
-			type: 'Vertical Spinner',
-			link: '/pbots/katana'
+			weapon: 'Vertical Spinner',
+			slug: 'katana'
 		},
 		{
 			name: 'Killajoule',
 			owner: 'David Dreyer',
 			image: '/pbots/Killajoule/KillaJoule.jpg',
 			weight: '12lb',
-			type: 'Undercutter Horizontal Spinner',
-			link: '/pbots/killajoule'
+			weapon: 'Undercutter Horizontal Spinner',
+			slug: 'killajoule'
 		},
 		{
 			name: 'Xenomorph',
 			owner: 'David Dreyer',
 			image: '/pbots/Xenomorph/Xenomorph.jpg',
 			weight: '12lb',
-			type: 'Vertical Spinner',
-			link: '/pbots/xenomorph'
+			weapon: 'Vertical Spinner',
+			slug: 'xenomorph'
 		},
 		{
 			name: 'PNUEMATADOR',
 			owner: 'Austin Thebner',
 			image: '/pbots/PNUEMATADOR/PNUEMATADOR.png',
 			weight: '12lb',
-			type: 'Pneumatic Flipper',
-			link: '/pbots/pnuematador'
+			weapon: 'Pneumatic Flipper',
+			slug: 'pnuematador'
 		},
 		{
 			name: 'RAM PLAN',
 			owner: 'Brendan Steele',
 			image: '/pbots/Ram Plan/RamPlan.jpg',
 			weight: '12lb',
-			type: 'Rotary Lifter',
-			link: '/pbots/ramplan'
+			weapon: 'Rotary Lifter',
+			slug: 'ramplan'
 		},
 		{
 			name: 'SLAM PLAN',
 			owner: 'Brendan Steele',
 			image: '/pbots/Slam Plan/SlamPlan.png',
 			weight: '12lb',
-			type: 'Vertical Spinner',
-			link: '/pbots/slamplan'
+			weapon: 'Vertical Spinner',
+			slug: 'slamplan'
 		}
 	];
+
+	const personalBots = data.bots.length > 0
+		? data.bots.map(b => ({ ...b, link: `/pbots/${b.slug}`, type: b.weapon }))
+		: fallbackBots.map(b => ({ ...b, link: `/pbots/${b.slug}`, type: b.weapon }));
 </script>
 
 <svelte:head>
