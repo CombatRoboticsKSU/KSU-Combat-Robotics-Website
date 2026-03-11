@@ -1,5 +1,7 @@
 <script lang="ts">
-	const bots = [
+	let { data } = $props();
+
+	const fallbackBots = [
 		{
 			name: 'Flash-BANG',
 			slug: 'flashbang',
@@ -25,6 +27,8 @@
 			status: 'Retired'
 		}
 	];
+
+	const bots = data.bots.length > 0 ? data.bots : fallbackBots;
 </script>
 
 <svelte:head>

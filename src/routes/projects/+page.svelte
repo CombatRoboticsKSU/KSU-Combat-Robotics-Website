@@ -1,3 +1,32 @@
+<script lang="ts">
+	const projects = [
+		{
+			name: 'Club Printer',
+			slug: 'printer',
+			icon: '🖨️',
+			description: 'Custom Voron 3D Printer designed for use during competitions'
+		},
+		{
+			name: 'Test Cage / Mini Arena',
+			slug: 'test-cage',
+			icon: '🏟️',
+			description: 'Our testing and competition arena'
+		},
+		{
+			name: 'Event Countdown Clock',
+			slug: 'countdown-clock',
+			icon: '⏱️',
+			description: 'Custom Countdown Timer for Competitions'
+		},
+		{
+			name: '3lb Event',
+			slug: '3lb-event',
+			icon: '🤖',
+			description: 'Our hosted 3lb plastic competition'
+		}
+	];
+</script>
+
 <svelte:head>
 	<title>Projects | KSU Combat Robotics</title>
 </svelte:head>
@@ -25,6 +54,21 @@
 	</div>
 </section>
 
+<section class="section" style="background: var(--bg-secondary);">
+	<div class="container">
+		<h2 class="section-title">Club <span>Projects</span></h2>
+		<div class="projects-grid">
+			{#each projects as project}
+				<a href="/projects/{project.slug}" class="project-card card">
+					<span class="project-icon">{project.icon}</span>
+					<h3>{project.name}</h3>
+					<p>{project.description}</p>
+				</a>
+			{/each}
+		</div>
+	</div>
+</section>
+
 <style>
 	.board-wrapper {
 		border-radius: var(--radius-lg);
@@ -43,5 +87,61 @@
 	.board-link {
 		text-align: center;
 		margin-top: 1.5rem;
+	}
+
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1.5rem;
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+	.project-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		padding: 2rem 1.25rem;
+		text-decoration: none;
+		color: inherit;
+		transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+		border: 2px solid transparent;
+	}
+
+	.project-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+		border-color: var(--gold);
+		color: inherit;
+	}
+
+	.project-icon {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.project-card h3 {
+		font-size: 1.125rem;
+		margin-bottom: 0.5rem;
+		color: var(--gold);
+	}
+
+	.project-card p {
+		font-size: 0.8125rem;
+		color: var(--text-muted);
+		line-height: 1.5;
+	}
+
+	@media (max-width: 768px) {
+		.projects-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 400px) {
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

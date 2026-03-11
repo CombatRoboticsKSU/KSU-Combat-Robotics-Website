@@ -24,6 +24,10 @@
 		competitions: Competition[];
 		team: TeamMember[];
 		galleryImages?: string[];
+		videos?: { src: string; poster?: string }[];
+		youtubeLinks?: { url: string; label?: string }[];
+		mediaCoverage?: { text: string; link: string }[];
+		// Legacy single-value fields (for hardcoded pages)
 		videoSrc?: string;
 		videoPoster?: string;
 		youtubeEmbed?: string;
@@ -33,6 +37,26 @@
 	}
 
 	let { bot, backLink = '/wiki', backLabel = 'Back to Wiki' }: { bot: BotData; backLink?: string; backLabel?: string } = $props();
+
+	// Normalize legacy single fields into arrays
+	const allVideos = $derived(
+		bot.videos?.length ? bot.videos :
+		bot.videoSrc ? [{ src: bot.videoSrc, poster: bot.videoPoster }] : []
+	);
+
+	const allYoutubeLinks = $derived(
+		bot.youtubeLinks?.length ? bot.youtubeLinks :
+		[
+			...(bot.youtubeEmbed ? [{ url: bot.youtubeEmbed, label: 'Video' }] : []),
+			...(bot.youtubePlaylist ? [{ url: bot.youtubePlaylist, label: 'Playlist' }] : [])
+		]
+	);
+
+	const allMediaCoverage = $derived(
+		bot.mediaCoverage?.length ? bot.mediaCoverage :
+		(bot.mediaCoverageText && bot.mediaCoverageLink)
+			? [{ text: bot.mediaCoverageText, link: bot.mediaCoverageLink }] : []
+	);
 
 	let lightboxSrc = $state('');
 	let lightboxAlt = $state('');
@@ -157,22 +181,22 @@
 			</div>
 		{/if}
 
-		<!-- Video -->
-		{#if bot.videoSrc}
+		<!-- Videos -->
+		{#each allVideos as video}
 			<div class="video-section">
-				<video controls poster={bot.videoPoster} preload="metadata">
-					<source src={bot.videoSrc} type="video/mp4" />
+				<video controls poster={video.poster} preload="metadata">
+					<source src={video.src} type="video/mp4" />
 					<track kind="captions" />
 				</video>
 			</div>
-		{/if}
+		{/each}
 
-		{#if bot.youtubeEmbed}
+		{#each allYoutubeLinks as yt}
 			<div class="video-section">
 				<div class="youtube-wrapper">
 					<iframe
-						src={bot.youtubeEmbed}
-						title="{bot.name} video"
+						src={yt.url}
+						title="{bot.name} — {yt.label || 'Video'}"
 						frameborder="0"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 						referrerpolicy="strict-origin-when-cross-origin"
@@ -180,20 +204,19 @@
 					></iframe>
 				</div>
 			</div>
-		{/if}
+		{/each}
 
-		{#if bot.youtubePlaylist}
-			<div class="video-section">
-				<div class="youtube-wrapper">
-					<iframe
-						src={bot.youtubePlaylist}
-						title="{bot.name} playlist"
-						frameborder="0"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-						referrerpolicy="strict-origin-when-cross-origin"
-						allowfullscreen
-					></iframe>
-				</div>
+		<!-- Media Coverage -->
+		{#if allMediaCoverage.length > 0}
+			<div class="media-section">
+				<h2 class="section-title">Media <span>Coverage</span></h2>
+				<ul class="media-list">
+					{#each allMediaCoverage as item}
+						<li>
+							<a href={item.link} target="_blank" rel="noopener noreferrer">{item.text}</a>
+						</li>
+					{/each}
+				</ul>
 			</div>
 		{/if}
 
@@ -327,8 +350,27 @@
 		text-align: right;
 	}
 
-	.comp-section, .gallery-section, .team-section {
+	.comp-section, .gallery-section, .team-section, .media-section {
 		margin-bottom: 4rem;
+	}
+
+	.media-list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.media-list li {
+		padding: 0.75rem 1rem;
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-md);
+	}
+
+	.media-list a {
+		color: var(--gold);
+		font-weight: 500;
 	}
 
 	.comp-grid {

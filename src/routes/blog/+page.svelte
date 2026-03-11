@@ -1,5 +1,7 @@
 <script lang="ts">
-	const posts = [
+	let { data } = $props();
+
+	const fallbackPosts = [
 		{
 			slug: 'brendansteele',
 			title: "A Gift Back To Where It All Started",
@@ -25,6 +27,8 @@
 			image: '/blog/img/babycosmo.jpg'
 		}
 	];
+
+	const posts = data.posts.length > 0 ? data.posts : fallbackPosts;
 </script>
 
 <svelte:head>
