@@ -2,7 +2,7 @@
 	const bots = [
 		{
 			name: 'Flash-BANG',
-			image: '/USINGimg/FlashBang.jpg',
+			image: '/USINGimg/FlashBang25.png',
 			href: '/wiki/flashbang',
 			tagline: 'Hit them Hard, Hit them Fast',
 			description: "Flash-BANG is named after our school's mascot, a golden eagle named Flash. It takes significant inspiration from Battlebots like Minotaur & Copperhead."

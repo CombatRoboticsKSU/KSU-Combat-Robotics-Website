@@ -3,30 +3,50 @@
 		{
 			name: 'Katana',
 			owner: 'David Dreyer',
-			image: '/USINGimg/Katana.png',
+			image: '/pbots/Katana/Katana.png',
 			weight: '3lb',
-			type: 'Vertical Spinner'
-		},
-		{
-			name: 'Flash Storm',
-			owner: 'Club Member',
-			image: '/USINGimg/FlashBang.jpg',
-			weight: '1.5lb',
-			type: 'Plastic Bot'
+			type: 'Vertical Spinner',
+			link: '/pbots/katana'
 		},
 		{
 			name: 'Killajoule',
-			owner: 'Club Member',
-			image: '/USINGimg/FlashBang.jpg',
-			weight: '3lb',
-			type: 'Combat Bot'
+			owner: 'David Dreyer',
+			image: '/pbots/Killajoule/KillaJoule.jpg',
+			weight: '12lb',
+			type: 'Undercutter Horizontal Spinner',
+			link: '/pbots/killajoule'
+		},
+		{
+			name: 'Xenomorph',
+			owner: 'David Dreyer',
+			image: '/pbots/Xenomorph/Xenomorph.jpg',
+			weight: '12lb',
+			type: 'Vertical Spinner',
+			link: '/pbots/xenomorph'
 		},
 		{
 			name: 'PNUEMATADOR',
 			owner: 'Austin Thebner',
-			image: '/USINGimg/austint.jpg',
+			image: '/pbots/PNUEMATADOR/PNUEMATADOR.png',
 			weight: '12lb',
-			type: 'Pneumatic Flipper'
+			type: 'Pneumatic Flipper',
+			link: '/pbots/pnuematador'
+		},
+		{
+			name: 'RAM PLAN',
+			owner: 'Brendan Steele',
+			image: '/pbots/Ram Plan/RamPlan.jpg',
+			weight: '12lb',
+			type: 'Rotary Lifter',
+			link: '/pbots/ramplan'
+		},
+		{
+			name: 'SLAM PLAN',
+			owner: 'Brendan Steele',
+			image: '/pbots/Slam Plan/SlamPlan.png',
+			weight: '12lb',
+			type: 'Vertical Spinner',
+			link: '/pbots/slamplan'
 		}
 	];
 </script>
@@ -42,58 +62,91 @@
 
 <section class="section">
 	<div class="container">
-		<div class="bots-grid">
+		<div class="wiki-grid">
 			{#each personalBots as bot}
-				<div class="bot-card card">
-					<div class="bot-image">
+				<a href={bot.link} class="wiki-card card">
+					<div class="wiki-image">
 						<img src={bot.image} alt={bot.name} />
+						<div class="wiki-overlay">
+							<span class="btn btn-primary">View Details</span>
+						</div>
 					</div>
-					<div class="bot-info">
+					<div class="wiki-info">
 						<h3>{bot.name}</h3>
 						<p class="bot-owner">by {bot.owner}</p>
-						<div class="bot-meta">
+						<div class="wiki-meta">
 							<span class="meta-tag">{bot.weight}</span>
 							<span class="meta-tag">{bot.type}</span>
 						</div>
 					</div>
-				</div>
+				</a>
 			{/each}
+		</div>
+		<div class="cross-link">
+			<p>Interested in seeing our club bots?</p>
+			<a href="/wiki" class="btn btn-secondary">View Club Bot Wiki</a>
 		</div>
 	</div>
 </section>
 
 <style>
-	.bots-grid {
+	.wiki-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 		gap: 2rem;
-		max-width: 800px;
+		max-width: 1000px;
 		margin: 0 auto;
 	}
 
-	.bot-card {
-		overflow: hidden;
+	.wiki-card {
+		text-decoration: none;
+		color: inherit;
 	}
 
-	.bot-image {
+	.wiki-card:hover {
+		color: inherit;
+	}
+
+	.wiki-image {
+		position: relative;
 		aspect-ratio: 4/3;
 		overflow: hidden;
 	}
 
-	.bot-image img {
+	.wiki-image img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		transition: transform 0.4s ease;
 	}
 
-	.bot-info {
+	.wiki-card:hover .wiki-image img {
+		transform: scale(1.05);
+	}
+
+	.wiki-overlay {
+		position: absolute;
+		inset: 0;
+		background: rgba(0,0,0,0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.wiki-card:hover .wiki-overlay {
+		opacity: 1;
+	}
+
+	.wiki-info {
 		padding: 1.25rem;
 	}
 
-	.bot-info h3 {
-		font-size: 1.25rem;
-		color: var(--gold);
+	.wiki-info h3 {
+		font-size: 1.375rem;
 		margin-bottom: 0.25rem;
+		color: var(--gold);
 	}
 
 	.bot-owner {
@@ -102,22 +155,36 @@
 		margin-bottom: 0.75rem;
 	}
 
-	.bot-meta {
+	.wiki-meta {
 		display: flex;
 		gap: 0.5rem;
+		flex-wrap: wrap;
 	}
 
 	.meta-tag {
 		font-size: 0.75rem;
-		padding: 0.2rem 0.6rem;
+		padding: 0.25rem 0.625rem;
 		background: var(--bg-secondary);
 		border: 1px solid var(--border-color);
 		border-radius: 100px;
 		color: var(--text-secondary);
 	}
 
-	@media (max-width: 640px) {
-		.bots-grid {
+	.cross-link {
+		text-align: center;
+		margin-top: 3rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--border-color);
+	}
+
+	.cross-link p {
+		color: var(--text-secondary);
+		margin-bottom: 1rem;
+		font-size: 1.0625rem;
+	}
+
+	@media (max-width: 768px) {
+		.wiki-grid {
 			grid-template-columns: 1fr;
 		}
 	}

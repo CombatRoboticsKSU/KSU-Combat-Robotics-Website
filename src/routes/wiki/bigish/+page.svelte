@@ -21,6 +21,8 @@
 			{ name: 'NHRL April 2025', location: 'Norwalk, CT', date: 'Apr 3, 2025', fights: 3, wins: 1, losses: 2, kos: 1, kod: 2, outcome: 'Prelim Round 3' }
 		],
 		galleryImages: [
+			'/wiki/img/big/2025_1.jpg',
+			'/wiki/img/big/2025_2.jpg',
 			'/wiki/img/bigish_old.jpg',
 			'/wiki/img/B_action.jpg',
 			'/wiki/img/b_action2.jpg',
@@ -28,6 +30,7 @@
 			'/wiki/img/johnathons.JPG',
 			'/wiki/img/team_old.jpg'
 		],
+		videoSrc: '/wiki/img/big/rumble.mp4',
 		youtubeEmbed: 'https://www.youtube.com/embed/NR8GN3DTjRM?si=LLEA8lUsGi5CwimO',
 		team: [
 			{ role: 'Designer', name: 'Matt Schutzman', history: ['Matt Schutzman (2024 redesign)', 'Brendan Steele (original)'] },
