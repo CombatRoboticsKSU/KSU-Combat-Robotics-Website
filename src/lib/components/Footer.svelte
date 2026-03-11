@@ -12,8 +12,8 @@
 		{
 			title: 'Our Bots',
 			links: [
-				{ label: 'Personal Bots', href: '/pbots' },
 				{ label: 'Club Owned Bots', href: '/wiki' },
+				{ label: 'Personal Bots', href: '/pbots' },
 			]
 		},
 		{
@@ -27,7 +27,7 @@
 			title: 'Sponsorship & Contact',
 			links: [
 				{ label: 'Sponsors', href: '/sponsorship' },
-				{ label: 'Email Us', href: 'mailto:ksu.fightingrobotics@gmail.com' },
+				{ label: 'Email Us', href: '/contact' },
 			]
 		},
 		{

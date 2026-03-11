@@ -3,12 +3,12 @@
 
 	const bot = {
 		name: 'Flash-BANG',
-		image: '/USINGimg/FlashBang.jpg',
+		image: '/USINGimg/FlashBang25.png',
 		specs: {
 			'Weight Class': '12lb',
 			'Body Material': 'Welded 6061 Aluminum, TPU Armor',
 			'Weapon': '3 Tooth Welded Stack Drum',
-			'Weapon Drive': 'BA 2826 x2',
+			'Weapon Drive': 'BA 2826',
 			'Drive': 'Brushless Longbox',
 			'Power': '6S Lipo'
 		},
@@ -23,10 +23,11 @@
 			'/wiki/img/work_in_p.jpg',
 			'/wiki/img/rayb.jpg',
 			'/wiki/img/hi2.jpg',
-			'/USINGimg/FlashBangIcon.png'
+			'/USINGimg/FlashBangIcon.png',
+			'/USINGimg/FlashBang.jpg'
 		],
 		videoSrc: '/img/Flashbang_Hero_Shot.mp4',
-		videoPoster: '/USINGimg/FlashBang.jpg',
+		videoPoster: '/USINGimg/FlashBang25.png',
 		youtubeEmbed: 'https://www.youtube.com/embed/SXWNAOSV5uQ?si=6WTQPxattuutYVdX',
 		mediaCoverageText: 'Our local newspaper has covered our bot a few years ago.',
 		mediaCoverageLink: 'https://kentwired.com/95378/latest-updates/combat-robotics-team-continues-to-find-success/',

@@ -3,7 +3,7 @@
 		{
 			name: 'Flash-BANG',
 			slug: 'flashbang',
-			image: '/USINGimg/FlashBang.jpg',
+			image: '/USINGimg/FlashBang25.png',
 			weight: '12lb',
 			weapon: 'Drum Spinner',
 			status: 'Active'
@@ -57,6 +57,10 @@
 					</div>
 				</a>
 			{/each}
+		</div>
+		<div class="cross-link">
+			<p>Interested in seeing our members' bots?</p>
+			<a href="/pbots" class="btn btn-secondary">View Personal Bots</a>
 		</div>
 	</div>
 </section>
@@ -146,6 +150,19 @@
 		background: rgba(156, 163, 175, 0.1);
 		border-color: rgba(156, 163, 175, 0.2);
 		color: #9ca3af;
+	}
+
+	.cross-link {
+		text-align: center;
+		margin-top: 3rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--border-color);
+	}
+
+	.cross-link p {
+		color: var(--text-secondary);
+		margin-bottom: 1rem;
+		font-size: 1.0625rem;
 	}
 
 	@media (max-width: 768px) {

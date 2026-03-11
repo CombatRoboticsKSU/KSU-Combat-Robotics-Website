@@ -31,7 +31,7 @@
 		mediaCoverageLink?: string;
 	}
 
-	let { bot }: { bot: BotData } = $props();
+	let { bot, backLink = '/wiki', backLabel = 'Back to Wiki' }: { bot: BotData; backLink?: string; backLabel?: string } = $props();
 
 	let lightboxSrc = $state('');
 	let lightboxAlt = $state('');
@@ -202,9 +202,9 @@
 				{/each}
 			</div>
 		<div class="back-link">
-			<a href="/wiki" class="btn btn-secondary">
+			<a href={backLink} class="btn btn-secondary">
 				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 12l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-				Back to Wiki
+				{backLabel}
 			</a>
 		</div>
 	</div>
