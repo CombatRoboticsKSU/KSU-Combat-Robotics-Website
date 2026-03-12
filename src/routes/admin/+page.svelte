@@ -1,5 +1,6 @@
 <script lang="ts">
 	let { data } = $props();
+	const c = $derived(data.counts);
 </script>
 
 <svelte:head>
@@ -14,27 +15,49 @@
 
 	<div class="stats-grid">
 		<a href="/admin/leadership" class="stat-card">
-			<span class="stat-icon">👥</span>
+			<div class="stat-top">
+				<span class="stat-icon">👥</span>
+				<span class="stat-number">{c.leadership}</span>
+			</div>
 			<h3>Leadership</h3>
-			<p>Manage board members</p>
+			<p>Board members</p>
 		</a>
 		<a href="/admin/bots" class="stat-card">
-			<span class="stat-icon">🤖</span>
+			<div class="stat-top">
+				<span class="stat-icon">🤖</span>
+				<span class="stat-number">{c.bots}</span>
+			</div>
 			<h3>Bots</h3>
 			<p>Club & personal bots</p>
 		</a>
 		<a href="/admin/projects" class="stat-card">
-			<span class="stat-icon">🔧</span>
+			<div class="stat-top">
+				<span class="stat-icon">🔧</span>
+				<span class="stat-number">{c.projects}</span>
+			</div>
 			<h3>Projects</h3>
 			<p>Club projects</p>
 		</a>
 		<a href="/admin/posts" class="stat-card">
-			<span class="stat-icon">📝</span>
+			<div class="stat-top">
+				<span class="stat-icon">📝</span>
+				<span class="stat-number">{c.posts}</span>
+			</div>
 			<h3>Posts</h3>
-			<p>Team updates & blog</p>
+			<p>{c.published} published</p>
+		</a>
+		<a href="/admin/publicity" class="stat-card">
+			<div class="stat-top">
+				<span class="stat-icon">📰</span>
+				<span class="stat-number">{c.publicity}</span>
+			</div>
+			<h3>Publicity</h3>
+			<p>News & media coverage</p>
 		</a>
 		<a href="/admin/users" class="stat-card">
-			<span class="stat-icon">🔑</span>
+			<div class="stat-top">
+				<span class="stat-icon">🔑</span>
+			</div>
 			<h3>Users</h3>
 			<p>Manage roles & access</p>
 		</a>
@@ -42,7 +65,7 @@
 </div>
 
 <style>
-	.admin-page { max-width: 900px; }
+	.admin-page { }
 
 	.page-header {
 		display: flex;
@@ -60,7 +83,7 @@
 
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		grid-template-columns: repeat(3, 1fr);
 		gap: 1.25rem;
 	}
 
@@ -80,10 +103,21 @@
 		color: inherit;
 	}
 
+	.stat-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 0.75rem;
+	}
+
 	.stat-icon {
 		font-size: 2rem;
-		display: block;
-		margin-bottom: 0.75rem;
+	}
+
+	.stat-number {
+		font-size: 1.75rem;
+		font-weight: 700;
+		color: var(--gold);
 	}
 
 	.stat-card h3 {
@@ -94,5 +128,17 @@
 	.stat-card p {
 		font-size: 0.8125rem;
 		color: var(--text-muted);
+	}
+
+	@media (max-width: 700px) {
+		.stats-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 440px) {
+		.stats-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

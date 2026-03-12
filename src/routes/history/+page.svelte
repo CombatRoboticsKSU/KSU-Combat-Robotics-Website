@@ -15,7 +15,7 @@
 				<div class="timeline-marker"></div>
 				<div class="timeline-content">
 					<div class="timeline-image">
-						<img src="/USINGimg/team_w.JPG" alt="Early team photo" />
+						<img src="/USINGimg/team_w.JPG" alt="Early team" />
 					</div>
 					<div class="timeline-text">
 						<span class="timeline-era">2016 - 2018</span>

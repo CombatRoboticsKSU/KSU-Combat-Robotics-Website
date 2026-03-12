@@ -18,6 +18,15 @@
 		</button>
 	</div>
 
+	<!-- Group Photo Setting -->
+	<div class="form-card" style="margin-bottom: 1.5rem;">
+		<h2>Group Photo</h2>
+		<form method="POST" action="?/updateGroupPhoto" use:enhance>
+			<label>Image Path <input type="text" name="groupPhoto" value={data.groupPhoto} /></label>
+			<button type="submit" class="btn-admin primary" style="margin-top: 0.5rem;">Update Group Photo</button>
+		</form>
+	</div>
+
 	{#if form?.error}
 		<div class="alert error">{form.error}</div>
 	{/if}
@@ -90,8 +99,6 @@
 </div>
 
 <style>
-	.admin-page { max-width: 900px; }
-
 	.page-header {
 		display: flex;
 		align-items: center;

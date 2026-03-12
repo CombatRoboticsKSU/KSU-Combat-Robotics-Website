@@ -28,7 +28,7 @@
 		}
 	];
 
-	const posts = data.posts.length > 0 ? data.posts : fallbackPosts;
+	const posts = $derived.by(() => data.posts.length > 0 ? data.posts : fallbackPosts);
 </script>
 
 <svelte:head>

@@ -54,7 +54,7 @@
 </div>
 
 <style>
-	.admin-page { max-width: 900px; }
+	.admin-page { }
 
 	.page-header {
 		display: flex;

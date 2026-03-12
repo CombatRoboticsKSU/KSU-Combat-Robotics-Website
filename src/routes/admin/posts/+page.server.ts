@@ -13,6 +13,11 @@ function parseTags(raw: string): string[] {
 	return raw.split(',').map(t => t.trim()).filter(Boolean);
 }
 
+function parseJson<T>(raw: string, fallback: T): T {
+	if (!raw) return fallback;
+	try { return JSON.parse(raw); } catch { return fallback; }
+}
+
 export const actions: Actions = {
 	create: async ({ request }) => {
 		const form = await request.formData();
@@ -28,6 +33,10 @@ export const actions: Actions = {
 			excerpt: form.get('excerpt') as string || '',
 			image: form.get('image') as string || '',
 			content: form.get('content') as string || '',
+			galleryImages: parseJson(form.get('galleryImages') as string, []),
+			videos: parseJson(form.get('videos') as string, []),
+			youtubeLinks: parseJson(form.get('youtubeLinks') as string, []),
+			mediaCoverage: parseJson(form.get('mediaCoverage') as string, []),
 			published: form.get('published') === 'true'
 		});
 		return { success: true };
@@ -48,6 +57,10 @@ export const actions: Actions = {
 			excerpt: form.get('excerpt') as string || '',
 			image: form.get('image') as string || '',
 			content: form.get('content') as string || '',
+			galleryImages: parseJson(form.get('galleryImages') as string, []),
+			videos: parseJson(form.get('videos') as string, []),
+			youtubeLinks: parseJson(form.get('youtubeLinks') as string, []),
+			mediaCoverage: parseJson(form.get('mediaCoverage') as string, []),
 			published: form.get('published') === 'true',
 			updatedAt: new Date()
 		}).where(eq(posts.id, id));

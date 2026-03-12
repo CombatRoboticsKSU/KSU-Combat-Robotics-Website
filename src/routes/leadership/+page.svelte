@@ -82,8 +82,8 @@
 		},
 	];
 
-	const currentBoard: BoardMember[] = data.currentBoard.length > 0 ? data.currentBoard : fallbackCurrent;
-	const formerBoard: BoardMember[] = data.formerBoard.length > 0 ? data.formerBoard : fallbackFormer;
+	const currentBoard: BoardMember[] = $derived.by(() => data.currentBoard.length > 0 ? data.currentBoard : fallbackCurrent);
+	const formerBoard: BoardMember[] = $derived.by(() => data.formerBoard.length > 0 ? data.formerBoard : fallbackFormer);
 </script>
 
 <svelte:head>
@@ -97,7 +97,7 @@
 
 <section class="section">
 	<div class="container">
-		<img src='/USINGimg/BOARD25/group.JPG' alt="Current Leadership" class="leadership-group-photo" />
+		<img src={data.groupPhoto || '/USINGimg/BOARD25/group.JPG'} alt="Current Leadership" class="leadership-group-photo" />
 	</div>
 	<br />
 	<div class="container">

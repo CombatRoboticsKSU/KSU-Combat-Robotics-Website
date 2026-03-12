@@ -28,7 +28,7 @@
 		}
 	];
 
-	const bots = data.bots.length > 0 ? data.bots : fallbackBots;
+	const bots = $derived.by(() => data.bots.length > 0 ? data.bots : fallbackBots);
 </script>
 
 <svelte:head>

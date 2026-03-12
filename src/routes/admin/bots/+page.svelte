@@ -166,6 +166,19 @@
 				</div>
 				<label>Image Path <input type="text" name="image" placeholder="/USINGimg/placeholder.png" /></label>
 
+				<!-- Description / About -->
+				<button type="button" class="section-toggle" onclick={() => toggle('new-desc')}>
+					<span class="toggle-arrow" class:open={isOpen('new-desc')}>&#9654;</span>
+					Description / About
+				</button>
+				{#if isOpen('new-desc')}
+					<div class="section-body" transition:slide={{ duration: 200 }}>
+						<label>Overview (separate paragraphs with a blank line)
+							<textarea name="description" rows="5" placeholder="Description paragraphs about this bot..."></textarea>
+						</label>
+					</div>
+				{/if}
+
 				<!-- Specs -->
 				<button type="button" class="section-toggle" onclick={() => toggle('new-specs')}>
 					<span class="toggle-arrow" class:open={isOpen('new-specs')}>&#9654;</span>
@@ -380,6 +393,21 @@
 				</div>
 				<label>Image Path <input type="text" name="image" value={bot.image} /></label>
 
+				<!-- Description / About -->
+				<button type="button" class="section-toggle" onclick={() => toggle(`edit-desc-${bot.id}`)}>
+					<span class="toggle-arrow" class:open={isOpen(`edit-desc-${bot.id}`)}>&#9654;</span>
+					Description / About
+				</button>
+				{#if isOpen(`edit-desc-${bot.id}`)}
+					<div class="section-body" transition:slide={{ duration: 200 }}>
+						<label>Overview (separate paragraphs with a blank line)
+							<textarea name="description" rows="5">{bot.description ?? ''}</textarea>
+						</label>
+					</div>
+				{:else}
+					<input type="hidden" name="description" value={bot.description ?? ''} />
+				{/if}
+
 				<!-- Specs -->
 				<button type="button" class="section-toggle" onclick={() => toggle(`edit-specs-${bot.id}`)}>
 					<span class="toggle-arrow" class:open={isOpen(`edit-specs-${bot.id}`)}>&#9654;</span>
@@ -565,7 +593,7 @@
 {/snippet}
 
 <style>
-	.admin-page { max-width: 900px; }
+	.admin-page { }
 
 	.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
 	.page-header h1 { font-size: 1.5rem; }

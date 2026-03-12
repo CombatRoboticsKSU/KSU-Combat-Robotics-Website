@@ -20,6 +20,7 @@
 	interface BotData {
 		name: string;
 		image: string;
+		description?: string | null;
 		specs: Record<string, string>;
 		competitions: Competition[];
 		team: TeamMember[];
@@ -111,11 +112,13 @@
 				</button>
 			</div>
 			<div class="bot-specs-panel">
-				<div class="overall-record">
-					<span class="record-wins">{record.wins}W</span>
-					<span class="record-sep">-</span>
-					<span class="record-losses">{record.losses}L</span>
-				</div>
+				{#if bot.competitions.length > 0}
+					<div class="overall-record">
+						<span class="record-wins">{record.wins}W</span>
+						<span class="record-sep">-</span>
+						<span class="record-losses">{record.losses}L</span>
+					</div>
+				{/if}
 				<h3>Specifications</h3>
 				<dl class="specs-list">
 					{#each Object.entries(bot.specs) as [key, value]}
@@ -128,42 +131,60 @@
 			</div>
 		</div>
 
-		<!-- Competition Record -->
-		<div class="comp-section">
-			<h2 class="section-title">Competition <span>Record</span></h2>
-			<div class="comp-grid">
-				{#each bot.competitions as comp}
-					<div class="comp-card card">
-						<div class="comp-header">
-							<h4>{comp.name}</h4>
-							<span class="comp-date">{comp.date}</span>
-						</div>
-						<div class="comp-location">{comp.location}</div>
-						<div class="comp-stats">
-							<div class="comp-stat">
-								<span class="stat-value">{comp.wins}</span>
-								<span class="stat-label">Wins</span>
-							</div>
-							<div class="comp-stat">
-								<span class="stat-value">{comp.losses}</span>
-								<span class="stat-label">Losses</span>
-							</div>
-							<div class="comp-stat">
-								<span class="stat-value">{comp.kos}</span>
-								<span class="stat-label">KOs</span>
-							</div>
-							<div class="comp-stat">
-								<span class="stat-value">{comp.kod}</span>
-								<span class="stat-label">KO'd</span>
-							</div>
-						</div>
-						{#if comp.outcome}
-							<div class="comp-outcome">{comp.outcome}</div>
-						{/if}
-					</div>
-				{/each}
+		<!-- Description / About -->
+		{#if bot.description}
+			<div class="about-section">
+				<h2 class="section-title">About</h2>
+				<div class="about-content">
+					{#if bot.description.includes('<p>')}
+						{@html bot.description}
+					{:else}
+						{#each bot.description.split(/\n\s*\n/).filter(p => p.trim()) as paragraph}
+							<p>{paragraph.trim()}</p>
+						{/each}
+					{/if}
+				</div>
 			</div>
-		</div>
+		{/if}
+
+		<!-- Competition Record -->
+		{#if bot.competitions.length > 0}
+			<div class="comp-section">
+				<h2 class="section-title">Competition <span>Record</span></h2>
+				<div class="comp-grid">
+					{#each bot.competitions as comp}
+						<div class="comp-card card">
+							<div class="comp-header">
+								<h4>{comp.name}</h4>
+								<span class="comp-date">{comp.date}</span>
+							</div>
+							<div class="comp-location">{comp.location}</div>
+							<div class="comp-stats">
+								<div class="comp-stat">
+									<span class="stat-value">{comp.wins}</span>
+									<span class="stat-label">Wins</span>
+								</div>
+								<div class="comp-stat">
+									<span class="stat-value">{comp.losses}</span>
+									<span class="stat-label">Losses</span>
+								</div>
+								<div class="comp-stat">
+									<span class="stat-value">{comp.kos}</span>
+									<span class="stat-label">KOs</span>
+								</div>
+								<div class="comp-stat">
+									<span class="stat-value">{comp.kod}</span>
+									<span class="stat-label">KO'd</span>
+								</div>
+							</div>
+							{#if comp.outcome}
+								<div class="comp-outcome">{comp.outcome}</div>
+							{/if}
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
 
 		<!-- Gallery -->
 		{#if bot.galleryImages && bot.galleryImages.length > 0}
@@ -221,25 +242,28 @@
 		{/if}
 
 		<!-- Team -->
-		<div class="team-section">
-			<h2 class="section-title">Team <span>Members</span></h2>
-			<div class="team-grid">
-				{#each bot.team as member}
-					<div class="team-member card">
-						<div class="team-member-inner">
-							<strong>{member.role}</strong>
-							<span>{member.name}</span>
-							{#if member.history}
-								<ul class="history-list">
-									{#each member.history as entry}
-										<li>{entry}</li>
-									{/each}
-								</ul>
-							{/if}
+		{#if bot.team.length > 0}
+			<div class="team-section">
+				<h2 class="section-title">Team <span>Members</span></h2>
+				<div class="team-grid">
+					{#each bot.team as member}
+						<div class="team-member card">
+							<div class="team-member-inner">
+								<strong>{member.role}</strong>
+								<span>{member.name}</span>
+								{#if member.history}
+									<ul class="history-list">
+										{#each member.history as entry}
+											<li>{entry}</li>
+										{/each}
+									</ul>
+								{/if}
+							</div>
 						</div>
-					</div>
-				{/each}
+					{/each}
+				</div>
 			</div>
+		{/if}
 		<div class="back-link">
 			<a href={backLink} class="btn btn-secondary">
 				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 12l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -348,6 +372,22 @@
 		color: var(--text-primary);
 		font-size: 0.8125rem;
 		text-align: right;
+	}
+
+	.about-section {
+		margin-bottom: 4rem;
+	}
+
+	.about-content {
+		color: var(--text-secondary);
+		line-height: 1.7;
+		max-width: 800px;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	.about-content :global(p) {
+		margin-bottom: 1rem;
 	}
 
 	.comp-section, .gallery-section, .team-section, .media-section {
