@@ -76,6 +76,7 @@ export const bots = pgTable('bots', {
 	status: text('status').notNull().default('Active'),
 	type: text('type').notNull().default('club'), // 'club' or 'personal'
 	owner: text('owner'), // for personal bots
+	description: text('description').default(''), // overview / about text (HTML)
 	specs: json('specs').$type<Record<string, string>>().default({}),
 	competitions: json('competitions').$type<{
 		name: string;
@@ -111,8 +112,19 @@ export const projects = pgTable('projects', {
 	name: text('name').notNull(),
 	slug: text('slug').notNull().unique(),
 	icon: text('icon').notNull().default(''),
+	image: text('image').notNull().default('/USINGimg/placeholder.png'),
 	description: text('description').notNull().default(''),
-	content: text('content').notNull().default(''), // markdown/html for the detail page
+	about: text('about').notNull().default(''), // rich text / HTML for the about section
+	specs: json('specs').$type<Record<string, string>>().default({}),
+	team: json('team').$type<{
+		role: string;
+		name: string;
+		history?: string[];
+	}[]>().default([]),
+	galleryImages: json('gallery_images').$type<string[]>().default([]),
+	videos: json('videos').$type<{ src: string; poster?: string }[]>().default([]),
+	youtubeLinks: json('youtube_links').$type<{ url: string; label?: string }[]>().default([]),
+	mediaCoverage: json('media_coverage').$type<{ text: string; link: string }[]>().default([]),
 	sortOrder: integer('sort_order').notNull().default(0),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow()

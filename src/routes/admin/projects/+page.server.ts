@@ -9,6 +9,11 @@ export const load: PageServerLoad = async () => {
 	return { projects: allProjects };
 };
 
+function parseJson<T>(raw: string, fallback: T): T {
+	if (!raw) return fallback;
+	try { return JSON.parse(raw); } catch { return fallback; }
+}
+
 export const actions: Actions = {
 	create: async ({ request }) => {
 		const form = await request.formData();
@@ -20,8 +25,15 @@ export const actions: Actions = {
 			name,
 			slug,
 			icon: form.get('icon') as string || '',
+			image: form.get('image') as string || '/USINGimg/placeholder.png',
 			description: form.get('description') as string || '',
-			content: form.get('content') as string || '',
+			about: form.get('about') as string || '',
+			specs: parseJson(form.get('specs') as string, {}),
+			team: parseJson(form.get('team') as string, []),
+			galleryImages: parseJson(form.get('galleryImages') as string, []),
+			videos: parseJson(form.get('videos') as string, []),
+			youtubeLinks: parseJson(form.get('youtubeLinks') as string, []),
+			mediaCoverage: parseJson(form.get('mediaCoverage') as string, []),
 			sortOrder: parseInt(form.get('sortOrder') as string) || 0
 		});
 		return { success: true };
@@ -38,8 +50,15 @@ export const actions: Actions = {
 			name,
 			slug,
 			icon: form.get('icon') as string || '',
+			image: form.get('image') as string || '/USINGimg/placeholder.png',
 			description: form.get('description') as string || '',
-			content: form.get('content') as string || '',
+			about: form.get('about') as string || '',
+			specs: parseJson(form.get('specs') as string, {}),
+			team: parseJson(form.get('team') as string, []),
+			galleryImages: parseJson(form.get('galleryImages') as string, []),
+			videos: parseJson(form.get('videos') as string, []),
+			youtubeLinks: parseJson(form.get('youtubeLinks') as string, []),
+			mediaCoverage: parseJson(form.get('mediaCoverage') as string, []),
 			sortOrder: parseInt(form.get('sortOrder') as string) || 0,
 			updatedAt: new Date()
 		}).where(eq(projects.id, id));
