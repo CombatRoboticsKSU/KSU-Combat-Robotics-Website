@@ -36,8 +36,9 @@
 				</div>
 				<label>Image Path <input type="text" name="image" placeholder="/blog/img/photo.jpg" /></label>
 				<label>Excerpt <textarea name="excerpt" rows="2" placeholder="Short summary shown in the post list..."></textarea></label>
-				<label>Full Content (HTML)
-					<textarea name="content" rows="10" placeholder="Full post body..."></textarea>
+				<label>Full Content
+					<textarea name="content" rows="12" placeholder="## Section Heading&#10;&#10;Write paragraphs separated by blank lines.&#10;&#10;![Photo description](/blog/img/photo.jpg)&#10;&#10;- List item one&#10;- List item two&#10;&#10;Use **bold text** and [link text](https://example.com) inline."></textarea>
+					<span class="format-hint">Blank lines = new paragraph · ## Heading · ![alt](url) = image · [text](url) = link · - list item · **bold**</span>
 				</label>
 				<label class="checkbox-label">
 					<input type="checkbox" name="published" value="true" />
@@ -64,7 +65,10 @@
 						</div>
 						<label>Image Path <input type="text" name="image" value={post.image} /></label>
 						<label>Excerpt <textarea name="excerpt" rows="2">{post.excerpt}</textarea></label>
-						<label>Full Content <textarea name="content" rows="10">{post.content}</textarea></label>
+						<label>Full Content
+						<textarea name="content" rows="12">{post.content}</textarea>
+						<span class="format-hint">Blank lines = new paragraph · ## Heading · ![alt](url) = image · [text](url) = link · - list item · **bold**</span>
+					</label>
 						<label class="checkbox-label">
 							<input type="checkbox" name="published" value="true" checked={post.published} />
 							Published
@@ -127,4 +131,5 @@
 	.item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
 	.edit-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
 	.empty-state { text-align: center; color: var(--text-muted); padding: 2rem 0; }
+	.format-hint { font-size: 0.6875rem; color: var(--text-muted); font-weight: 400; margin-top: 0.25rem; }
 </style>
