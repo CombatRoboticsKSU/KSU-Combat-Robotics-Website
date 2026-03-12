@@ -52,9 +52,9 @@
 		}
 	];
 
-	const personalBots = data.bots.length > 0
+	const personalBots = $derived.by(() => data.bots.length > 0
 		? data.bots.map(b => ({ ...b, link: `/pbots/${b.slug}`, type: b.weapon }))
-		: fallbackBots.map(b => ({ ...b, link: `/pbots/${b.slug}`, type: b.weapon }));
+		: fallbackBots.map(b => ({ ...b, link: `/pbots/${b.slug}`, type: b.weapon })));
 </script>
 
 <svelte:head>
