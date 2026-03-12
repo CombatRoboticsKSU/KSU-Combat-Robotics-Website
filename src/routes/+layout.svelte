@@ -1,9 +1,12 @@
 <script lang="ts">
 	import '../app.css';
+	import { page } from '$app/stores';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
+
+	let isAdmin = $derived($page.url.pathname.startsWith('/admin') && $page.url.pathname !== '/admin/login');
 </script>
 
 <svelte:head>
@@ -11,13 +14,17 @@
 	<meta name="description" content="KSU Combat Robotics is a student organization at Kent State University that designs, builds, and competes in combat robotics events." />
 </svelte:head>
 
-<div class="app">
-	<Navbar />
-	<main>
-		{@render children()}
-	</main>
-	<Footer />
-</div>
+{#if isAdmin}
+	{@render children()}
+{:else}
+	<div class="app">
+		<Navbar />
+		<main>
+			{@render children()}
+		</main>
+		<Footer />
+	</div>
+{/if}
 
 <style>
 	.app {

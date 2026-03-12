@@ -31,7 +31,7 @@
 	<div class="admin-shell">
 		<aside class="admin-sidebar">
 			<div class="sidebar-header">
-				<a href="/" class="sidebar-logo">KSU CR Admin</a>
+				<a href="/admin" class="sidebar-logo">KSU CR Admin</a>
 			</div>
 			<nav class="sidebar-nav">
 				{#each navItems as item}
@@ -93,6 +93,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.25rem;
+		overflow-y: auto;
+		min-height: 0;
 	}
 
 	.nav-item {
@@ -138,6 +140,11 @@
 
 	.sign-out {
 		color: var(--text-muted);
+	}
+
+	.sign-out:hover {
+		color: #ef4444;
+		background: rgba(239, 68, 68, 0.08);
 	}
 
 	.admin-main {

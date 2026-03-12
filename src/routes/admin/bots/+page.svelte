@@ -593,7 +593,7 @@
 {/snippet}
 
 <style>
-	.admin-page { max-width: 900px; }
+	.admin-page { }
 
 	.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
 	.page-header h1 { font-size: 1.5rem; }

@@ -1,9 +1,19 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { authClient } from '$lib/auth-client';
 
 	let mobileOpen = $state(false);
 	let updatesOpen = $state(false);
 	let scrolled = $state(false);
+
+	const sessionStore = authClient.useSession();
+	let loggedIn = $state(false);
+
+	$effect(() => {
+		return sessionStore.subscribe((val) => {
+			loggedIn = !!val.data;
+		});
+	});
 
 	const navLinks = [
 		{ href: '/sponsorship', label: 'Sponsors' },
@@ -100,6 +110,17 @@
 					{/if}
 				</a>
 			{/each}
+
+			{#if loggedIn}
+				<a
+					href="/admin"
+					class="nav-link admin-link"
+					class:active={page.url?.pathname.startsWith('/admin')}
+					onclick={closeMobile}
+				>
+					Admin
+				</a>
+			{/if}
 		</div>
 
 		<button class="mobile-toggle" onclick={() => mobileOpen = !mobileOpen} aria-label="Toggle menu">
@@ -210,6 +231,15 @@
 
 	.chevron.rotated {
 		transform: rotate(180deg);
+	}
+
+	.admin-link {
+		color: var(--gold);
+		opacity: 0.8;
+	}
+
+	.admin-link:hover {
+		opacity: 1;
 	}
 
 	.nav-spacer {
