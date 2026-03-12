@@ -38,7 +38,7 @@
 				<label>Excerpt <textarea name="excerpt" rows="2" placeholder="Short summary shown in the post list..."></textarea></label>
 				<label>Full Content
 					<textarea name="content" rows="12" placeholder="## Section Heading&#10;&#10;Write paragraphs separated by blank lines.&#10;&#10;![Photo description](/blog/img/photo.jpg)&#10;&#10;- List item one&#10;- List item two&#10;&#10;Use **bold text** and [link text](https://example.com) inline."></textarea>
-					<span class="format-hint">Blank lines = new paragraph · ## Heading · ![alt](url) = image · [text](url) = link · - list item · **bold**</span>
+					<span class="format-hint">Blank lines = new paragraph · ## Heading · ![alt](url) = image · [text](url) = link (use https:// for external) · - list item · **bold**</span>
 				</label>
 				<label class="checkbox-label">
 					<input type="checkbox" name="published" value="true" />
@@ -67,7 +67,7 @@
 						<label>Excerpt <textarea name="excerpt" rows="2">{post.excerpt}</textarea></label>
 						<label>Full Content
 						<textarea name="content" rows="12">{post.content}</textarea>
-						<span class="format-hint">Blank lines = new paragraph · ## Heading · ![alt](url) = image · [text](url) = link · - list item · **bold**</span>
+						<span class="format-hint">Blank lines = new paragraph · ## Heading · ![alt](url) = image · [text](url) = link (use https:// for external) · - list item · **bold**</span>
 					</label>
 						<label class="checkbox-label">
 							<input type="checkbox" name="published" value="true" checked={post.published} />

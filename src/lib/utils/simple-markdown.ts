@@ -89,10 +89,19 @@ export function simpleMarkdownToHtml(text: string): string {
 	return blocks.join('\n');
 }
 
+function isExternal(url: string): boolean {
+	return /^https?:\/\//.test(url) || url.startsWith('//');
+}
+
 function inlineFormat(text: string): string {
 	return text
 		// Bold: **text**
 		.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-		// Links: [text](url)
-		.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+		// Links: [text](url) — external get target="_blank", internal stay in-page
+		.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, linkText, url) => {
+			if (isExternal(url)) {
+				return `<a href="${url}" target="_blank" rel="noopener noreferrer">${linkText}</a>`;
+			}
+			return `<a href="${url}">${linkText}</a>`;
+		});
 }
