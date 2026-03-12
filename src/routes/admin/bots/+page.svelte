@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { slide } from 'svelte/transition';
+	import ImageUpload from '$lib/components/ImageUpload.svelte';
+	import GalleryUpload from '$lib/components/GalleryUpload.svelte';
 
 	let { data, form } = $props();
 	let editing: number | null = $state(null);
@@ -15,6 +17,7 @@
 	let newSpecs = $state<{ key: string; value: string }[]>([{ key: '', value: '' }]);
 	let newComps = $state<{ name: string; location: string; date: string; fights: number; wins: number; losses: number; kos: number; kod: number; outcome: string }[]>([]);
 	let newTeam = $state<{ role: string; name: string; history: string }[]>([{ role: '', name: '', history: '' }]);
+	let newImage = $state('');
 	let newGallery = $state('');
 	let newVideos = $state<{ src: string; poster: string }[]>([]);
 	let newYoutubeLinks = $state<{ url: string; label: string }[]>([]);
@@ -24,6 +27,7 @@
 	let editSpecs = $state<{ key: string; value: string }[]>([]);
 	let editComps = $state<{ name: string; location: string; date: string; fights: number; wins: number; losses: number; kos: number; kod: number; outcome: string }[]>([]);
 	let editTeam = $state<{ role: string; name: string; history: string }[]>([]);
+	let editImage = $state('');
 	let editGallery = $state('');
 	let editVideos = $state<{ src: string; poster: string }[]>([]);
 	let editYoutubeLinks = $state<{ url: string; label: string }[]>([]);
@@ -33,6 +37,8 @@
 		editing = bot.id;
 		showNew = false;
 		openSections = {};
+
+		editImage = bot.image ?? '';
 
 		const specs = bot.specs as Record<string, string> | null;
 		editSpecs = specs && Object.keys(specs).length ? Object.entries(specs).map(([key, value]) => ({ key, value })) : [{ key: '', value: '' }];
@@ -67,6 +73,7 @@
 		showNew = !showNew;
 		editing = null;
 		openSections = {};
+		newImage = '';
 		newSpecs = [{ key: '', value: '' }];
 		newComps = [];
 		newTeam = [{ role: '', name: '', history: '' }];
@@ -164,7 +171,7 @@
 					<label>Weapon <input type="text" name="weapon" /></label>
 					<label>Owner (personal bots) <input type="text" name="owner" /></label>
 				</div>
-				<label>Image Path <input type="text" name="image" placeholder="/USINGimg/placeholder.png" /></label>
+				<ImageUpload bind:value={newImage} name="image" folder="bots" label="Image" />
 
 				<!-- Description / About -->
 				<button type="button" class="section-toggle" onclick={() => toggle('new-desc')}>
@@ -264,9 +271,7 @@
 				</button>
 				{#if isOpen('new-gallery')}
 					<div class="section-body" transition:slide={{ duration: 200 }}>
-						<label>One image path per line
-							<textarea rows="3" bind:value={newGallery} placeholder="/wiki/img/photo1.jpg&#10;/wiki/img/photo2.jpg"></textarea>
-						</label>
+						<GalleryUpload bind:value={newGallery} folder="bots/gallery" />
 					</div>
 				{/if}
 				<input type="hidden" name="galleryImages" value={serializeGallery(newGallery)} />
@@ -391,7 +396,7 @@
 					<label>Weapon <input type="text" name="weapon" value={bot.weapon} /></label>
 					<label>Owner <input type="text" name="owner" value={bot.owner ?? ''} /></label>
 				</div>
-				<label>Image Path <input type="text" name="image" value={bot.image} /></label>
+				<ImageUpload bind:value={editImage} name="image" folder="bots" label="Image" />
 
 				<!-- Description / About -->
 				<button type="button" class="section-toggle" onclick={() => toggle(`edit-desc-${bot.id}`)}>
@@ -493,9 +498,7 @@
 				</button>
 				{#if isOpen(`edit-gallery-${bot.id}`)}
 					<div class="section-body" transition:slide={{ duration: 200 }}>
-						<label>One image path per line
-							<textarea rows="3" bind:value={editGallery}></textarea>
-						</label>
+						<GalleryUpload bind:value={editGallery} folder="bots/gallery" />
 					</div>
 				{/if}
 				<input type="hidden" name="galleryImages" value={serializeGallery(editGallery)} />

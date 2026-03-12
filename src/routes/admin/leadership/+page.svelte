@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import ImageUpload from '$lib/components/ImageUpload.svelte';
 
 	let { data, form } = $props();
 	let editing: number | null = $state(null);
 	let showNew = $state(false);
+	let newImage = $state('');
+	let editImage = $state('');
+	let groupPhotoValue = $state(data.groupPhoto);
 </script>
 
 <svelte:head>
@@ -22,7 +26,7 @@
 	<div class="form-card" style="margin-bottom: 1.5rem;">
 		<h2>Group Photo</h2>
 		<form method="POST" action="?/updateGroupPhoto" use:enhance>
-			<label>Image Path <input type="text" name="groupPhoto" value={data.groupPhoto} /></label>
+			<ImageUpload bind:value={groupPhotoValue} name="groupPhoto" folder="leadership" label="Group Photo" />
 			<button type="submit" class="btn-admin primary" style="margin-top: 0.5rem;">Update Group Photo</button>
 		</form>
 	</div>
@@ -37,7 +41,7 @@
 			<form method="POST" action="?/create" use:enhance={() => { return async ({ update }) => { await update(); showNew = false; }; }}>
 				<label>Name <input type="text" name="name" required /></label>
 				<label>Title / Position <input type="text" name="title" required /></label>
-				<label>Image Path <input type="text" name="image" placeholder="/USINGimg/placeholder.png" /></label>
+				<ImageUpload bind:value={newImage} name="image" folder="leadership" label="Photo" />
 				<label>Bio <textarea name="bio" rows="3"></textarea></label>
 				<label>Stats (one per line) <textarea name="stats" rows="4" placeholder="Years in Robotics: 2&#10;Club Member: 1 year&#10;Major: Engineering"></textarea></label>
 				<label>Sort Order <input type="number" name="sortOrder" value="0" /></label>
@@ -59,7 +63,7 @@
 						<div class="edit-grid">
 							<label>Name <input type="text" name="name" value={member.name} required /></label>
 							<label>Title <input type="text" name="title" value={member.title} required /></label>
-							<label>Image Path <input type="text" name="image" value={member.image} /></label>
+							<ImageUpload bind:value={editImage} name="image" folder="leadership" label="Photo" />
 							<label>Bio <textarea name="bio" rows="3">{member.bio}</textarea></label>
 							<label>Stats (one per line) <textarea name="stats" rows="4">{(member.stats as string[]).join('\n')}</textarea></label>
 							<label>Sort Order <input type="number" name="sortOrder" value={member.sortOrder} /></label>
@@ -81,7 +85,7 @@
 							<span class="item-badge" class:current={member.isCurrent}>{member.isCurrent ? 'Current' : 'Former'}</span>
 						</div>
 						<div class="item-actions">
-							<button class="btn-admin small" onclick={() => { editing = member.id; showNew = false; }}>Edit</button>
+							<button class="btn-admin small" onclick={() => { editing = member.id; editImage = member.image; showNew = false; }}>Edit</button>
 							<form method="POST" action="?/delete" use:enhance style="display:inline">
 								<input type="hidden" name="id" value={member.id} />
 								<button type="submit" class="btn-admin small danger" onclick={(e) => { if (!confirm('Delete this member?')) e.preventDefault(); }}>Delete</button>

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { slide } from 'svelte/transition';
+	import ImageUpload from '$lib/components/ImageUpload.svelte';
+	import GalleryUpload from '$lib/components/GalleryUpload.svelte';
 
 	let { data, form } = $props();
 	let editing: number | null = $state(null);
@@ -12,6 +14,7 @@
 	function isOpen(key: string) { return openSections[key] ?? false; }
 
 	// ─── Friendly field state for NEW project form ─────────────
+	let newImage = $state('');
 	let newSpecs = $state<{ key: string; value: string }[]>([{ key: '', value: '' }]);
 	let newTeam = $state<{ role: string; name: string; history: string }[]>([{ role: '', name: '', history: '' }]);
 	let newGallery = $state('');
@@ -20,6 +23,7 @@
 	let newMediaCoverage = $state<{ text: string; link: string }[]>([]);
 
 	// ─── Friendly field state for EDIT project form ────────────
+	let editImage = $state('');
 	let editSpecs = $state<{ key: string; value: string }[]>([]);
 	let editTeam = $state<{ role: string; name: string; history: string }[]>([]);
 	let editGallery = $state('');
@@ -31,6 +35,8 @@
 		editing = project.id;
 		showNew = false;
 		openSections = {};
+
+		editImage = project.image ?? '';
 
 		const specs = project.specs as Record<string, string> | null;
 		editSpecs = specs && Object.keys(specs).length ? Object.entries(specs).map(([key, value]) => ({ key, value })) : [{ key: '', value: '' }];
@@ -58,6 +64,7 @@
 		showNew = !showNew;
 		editing = null;
 		openSections = {};
+		newImage = '';
 		newSpecs = [{ key: '', value: '' }];
 		newTeam = [{ role: '', name: '', history: '' }];
 		newGallery = '';
@@ -128,7 +135,7 @@
 					<label>Slug (URL) <input type="text" name="slug" required placeholder="printer" /></label>
 					<label>Icon (emoji) <input type="text" name="icon" placeholder="🖨️" /></label>
 				</div>
-				<label>Image Path <input type="text" name="image" placeholder="/USINGimg/placeholder.png" /></label>
+				<ImageUpload bind:value={newImage} name="image" folder="projects" label="Image" />
 				<label>Short Description <input type="text" name="description" placeholder="Brief one-line summary" /></label>
 
 				<!-- About -->
@@ -195,9 +202,7 @@
 				</button>
 				{#if isOpen('new-gallery')}
 					<div class="section-body" transition:slide={{ duration: 200 }}>
-						<label>One image path per line
-							<textarea rows="3" bind:value={newGallery} placeholder="/projects/img/photo1.jpg&#10;/projects/img/photo2.jpg"></textarea>
-						</label>
+						<GalleryUpload bind:value={newGallery} folder="projects/gallery" />
 					</div>
 				{/if}
 				<input type="hidden" name="galleryImages" value={serializeGallery(newGallery)} />
@@ -283,7 +288,7 @@
 							<label>Slug <input type="text" name="slug" value={project.slug} required /></label>
 							<label>Icon <input type="text" name="icon" value={project.icon} /></label>
 						</div>
-						<label>Image Path <input type="text" name="image" value={project.image} /></label>
+						<ImageUpload bind:value={editImage} name="image" folder="projects" label="Image" />
 						<label>Short Description <input type="text" name="description" value={project.description} /></label>
 
 						<!-- About -->
@@ -352,9 +357,7 @@
 						</button>
 						{#if isOpen(`edit-gallery-${project.id}`)}
 							<div class="section-body" transition:slide={{ duration: 200 }}>
-								<label>One image path per line
-									<textarea rows="3" bind:value={editGallery}></textarea>
-								</label>
+								<GalleryUpload bind:value={editGallery} folder="projects/gallery" />
 							</div>
 						{/if}
 						<input type="hidden" name="galleryImages" value={serializeGallery(editGallery)} />

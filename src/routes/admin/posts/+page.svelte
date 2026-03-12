@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { slide } from 'svelte/transition';
+	import ImageUpload from '$lib/components/ImageUpload.svelte';
+	import GalleryUpload from '$lib/components/GalleryUpload.svelte';
 
 	let { data, form } = $props();
 	let editing: number | null = $state(null);
@@ -12,12 +14,14 @@
 	function isOpen(key: string) { return openSections[key] ?? false; }
 
 	// ─── State for NEW post form ─────────────────
+	let newImage = $state('');
 	let newGallery = $state('');
 	let newVideos = $state<{ src: string; poster: string }[]>([]);
 	let newYoutubeLinks = $state<{ url: string; label: string }[]>([]);
 	let newMediaCoverage = $state<{ text: string; link: string }[]>([]);
 
 	// ─── State for EDIT post form ────────────────
+	let editImage = $state('');
 	let editGallery = $state('');
 	let editVideos = $state<{ src: string; poster: string }[]>([]);
 	let editYoutubeLinks = $state<{ url: string; label: string }[]>([]);
@@ -27,6 +31,8 @@
 		editing = post.id;
 		showNew = false;
 		openSections = {};
+
+		editImage = post.image ?? '';
 
 		const gallery = post.galleryImages as string[] | null;
 		editGallery = gallery ? gallery.join('\n') : '';
@@ -45,6 +51,7 @@
 		showNew = !showNew;
 		editing = null;
 		openSections = {};
+		newImage = '';
 		newGallery = '';
 		newVideos = [];
 		newYoutubeLinks = [];
@@ -101,7 +108,7 @@
 					<label>Date <input type="text" name="date" placeholder="March 11, 2026" /></label>
 					<label>Tags (comma separated) <input type="text" name="tags" placeholder="events, info" /></label>
 				</div>
-				<label>Image Path <input type="text" name="image" placeholder="/blog/img/photo.jpg" /></label>
+				<ImageUpload bind:value={newImage} name="image" folder="posts" label="Cover Image" />
 				<label>Excerpt <textarea name="excerpt" rows="2" placeholder="Short summary shown in the post list..."></textarea></label>
 				<label>Full Content
 					<textarea name="content" rows="12" placeholder="## Section Heading&#10;&#10;Write paragraphs separated by blank lines.&#10;&#10;![Photo description](/blog/img/photo.jpg)&#10;&#10;- List item one&#10;- List item two&#10;&#10;Use **bold text** and [link text](https://example.com) inline."></textarea>
@@ -116,9 +123,7 @@
 				</button>
 				{#if isOpen('new-gallery')}
 					<div class="section-body" transition:slide={{ duration: 200 }}>
-						<label>One image path per line
-							<textarea rows="3" bind:value={newGallery} placeholder="/blog/img/photo1.jpg&#10;/blog/img/photo2.jpg"></textarea>
-						</label>
+						<GalleryUpload bind:value={newGallery} folder="posts/gallery" />
 					</div>
 				{/if}
 				<input type="hidden" name="galleryImages" value={serializeGallery(newGallery)} />
@@ -210,7 +215,7 @@
 							<label>Date <input type="text" name="date" value={post.date} /></label>
 							<label>Tags <input type="text" name="tags" value={(post.tags as string[]).join(', ')} /></label>
 						</div>
-						<label>Image Path <input type="text" name="image" value={post.image} /></label>
+						<ImageUpload bind:value={editImage} name="image" folder="posts" label="Cover Image" />
 						<label>Excerpt <textarea name="excerpt" rows="2">{post.excerpt}</textarea></label>
 						<label>Full Content
 						<textarea name="content" rows="12">{post.content}</textarea>
@@ -225,9 +230,7 @@
 						</button>
 						{#if isOpen(`edit-gallery-${post.id}`)}
 							<div class="section-body" transition:slide={{ duration: 200 }}>
-								<label>One image path per line
-									<textarea rows="3" bind:value={editGallery}></textarea>
-								</label>
+								<GalleryUpload bind:value={editGallery} folder="posts/gallery" />
 							</div>
 						{/if}
 						<input type="hidden" name="galleryImages" value={serializeGallery(editGallery)} />

@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import ImageUpload from '$lib/components/ImageUpload.svelte';
 
 	let { data, form } = $props();
 	let editing: number | null = $state(null);
 	let showNew = $state(false);
+	let newImage = $state('');
+	let editImage = $state('');
 </script>
 
 <svelte:head>
@@ -32,7 +35,7 @@
 					<label>Date <input type="text" name="date" placeholder="March 29, 2023" /></label>
 					<label>Sort Order <input type="number" name="sortOrder" value="0" /></label>
 				</div>
-				<label>Image Path <input type="text" name="image" placeholder="/USINGimg/photo.jpg" /></label>
+				<ImageUpload bind:value={newImage} name="image" folder="publicity" label="Image" />
 				<label>Summary
 					<textarea name="summary" rows="3" placeholder="Brief description of the article..."></textarea>
 				</label>
@@ -53,7 +56,7 @@
 							<label>Date <input type="text" name="date" value={item.date} /></label>
 							<label>Sort Order <input type="number" name="sortOrder" value={item.sortOrder} /></label>
 						</div>
-						<label>Image Path <input type="text" name="image" value={item.image} /></label>
+						<ImageUpload bind:value={editImage} name="image" folder="publicity" label="Image" />
 						<label>Summary <textarea name="summary" rows="3">{item.summary}</textarea></label>
 						<div class="edit-actions">
 							<button type="submit" class="btn-admin primary">Save</button>
@@ -67,7 +70,7 @@
 							<span class="item-meta">{item.date}</span>
 						</div>
 						<div class="item-actions">
-							<button class="btn-admin small" onclick={() => { editing = item.id; showNew = false; }}>Edit</button>
+							<button class="btn-admin small" onclick={() => { editing = item.id; editImage = item.image; showNew = false; }}>Edit</button>
 							<form method="POST" action="?/delete" use:enhance style="display:inline">
 								<input type="hidden" name="id" value={item.id} />
 								<button type="submit" class="btn-admin small danger" onclick={(e) => { if (!confirm('Delete this article?')) e.preventDefault(); }}>Delete</button>
