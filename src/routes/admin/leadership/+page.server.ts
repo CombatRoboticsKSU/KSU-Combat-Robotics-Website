@@ -1,12 +1,14 @@
 import { db } from '$lib/server/db';
-import { leadership } from '$lib/server/schema';
+import { leadership, siteSettings } from '$lib/server/schema';
 import { eq } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const members = await db.select().from(leadership).orderBy(leadership.sortOrder);
-	return { members };
+	const row = await db.select().from(siteSettings).where(eq(siteSettings.key, 'leadership_group_photo'));
+	const groupPhoto = row[0]?.value ?? '/USINGimg/BOARD25/group.JPG';
+	return { members, groupPhoto };
 };
 
 export const actions: Actions = {
@@ -49,6 +51,14 @@ export const actions: Actions = {
 		const form = await request.formData();
 		const id = parseInt(form.get('id') as string);
 		await db.delete(leadership).where(eq(leadership.id, id));
+		return { success: true };
+	},
+
+	updateGroupPhoto: async ({ request }) => {
+		const form = await request.formData();
+		const value = (form.get('groupPhoto') as string) || '/USINGimg/BOARD25/group.JPG';
+		await db.insert(siteSettings).values({ key: 'leadership_group_photo', value })
+			.onConflictDoUpdate({ target: siteSettings.key, set: { value } });
 		return { success: true };
 	}
 };

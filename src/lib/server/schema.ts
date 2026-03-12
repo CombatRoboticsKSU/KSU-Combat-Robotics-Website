@@ -150,6 +150,13 @@ export const posts = pgTable('posts', {
 	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
 
+// ─── Site Settings (key-value) ───────────────────────────────────
+
+export const siteSettings = pgTable('site_settings', {
+	key: text('key').primaryKey(),
+	value: text('value').notNull().default('')
+});
+
 // ─── Publicity / News Coverage ───────────────────────────────────
 
 export const publicity = pgTable('publicity', {
