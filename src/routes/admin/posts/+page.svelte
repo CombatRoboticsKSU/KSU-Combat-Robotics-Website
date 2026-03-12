@@ -346,7 +346,7 @@
 	.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
 	label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.8125rem; color: var(--text-secondary); font-weight: 500; }
 	.checkbox-label { flex-direction: row; align-items: center; gap: 0.5rem; }
-	input[type="text"], input[type="number"], textarea { padding: 0.5rem 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; background: var(--bg-primary); color: inherit; font-family: inherit; font-size: 0.875rem; }
+  input[type="text"], textarea { padding: 0.5rem 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; background: var(--bg-primary); color: inherit; font-family: inherit; font-size: 0.875rem; }
 	input:focus, textarea:focus { outline: none; border-color: var(--gold); }
 
 	/* ─── Collapsible sections ─── */
