@@ -15,6 +15,7 @@
 		{ href: '/admin/bots', label: 'Bots', icon: '🤖' },
 		{ href: '/admin/projects', label: 'Projects', icon: '🔧' },
 		{ href: '/admin/posts', label: 'Posts', icon: '📝' },
+		{ href: '/admin/publicity', label: 'Publicity', icon: '📰' },
 		{ href: '/admin/users', label: 'Users', icon: '🔑' }
 	];
 

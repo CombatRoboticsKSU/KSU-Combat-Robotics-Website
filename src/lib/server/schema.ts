@@ -141,7 +141,25 @@ export const posts = pgTable('posts', {
 	excerpt: text('excerpt').notNull().default(''),
 	image: text('image').notNull().default(''),
 	content: text('content').notNull().default(''), // full post body (markdown/html)
+	galleryImages: json('gallery_images').$type<string[]>().default([]),
+	videos: json('videos').$type<{ src: string; poster?: string }[]>().default([]),
+	youtubeLinks: json('youtube_links').$type<{ url: string; label?: string }[]>().default([]),
+	mediaCoverage: json('media_coverage').$type<{ text: string; link: string }[]>().default([]),
 	published: boolean('published').notNull().default(false),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
+});
+
+// ─── Publicity / News Coverage ───────────────────────────────────
+
+export const publicity = pgTable('publicity', {
+	id: serial('id').primaryKey(),
+	title: text('title').notNull(),
+	link: text('link').notNull(),
+	date: text('date').notNull(),
+	image: text('image').notNull().default(''),
+	summary: text('summary').notNull().default(''),
+	sortOrder: integer('sort_order').notNull().default(0),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
