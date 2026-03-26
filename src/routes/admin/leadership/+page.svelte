@@ -7,7 +7,6 @@
 	let showNew = $state(false);
 	let newImage = $state('');
 	let editImage = $state('');
-	let groupPhotoValue = $state(data.groupPhoto);
 </script>
 
 <svelte:head>
@@ -20,15 +19,6 @@
 		<button class="btn-admin" onclick={() => { showNew = !showNew; editing = null; }}>
 			{showNew ? 'Cancel' : '+ Add Member'}
 		</button>
-	</div>
-
-	<!-- Group Photo Setting -->
-	<div class="form-card" style="margin-bottom: 1.5rem;">
-		<h2>Group Photo</h2>
-		<form method="POST" action="?/updateGroupPhoto" use:enhance>
-			<ImageUpload bind:value={groupPhotoValue} name="groupPhoto" folder="leadership" label="Group Photo" />
-			<button type="submit" class="btn-admin primary" style="margin-top: 0.5rem;">Update Group Photo</button>
-		</form>
 	</div>
 
 	{#if form?.error}

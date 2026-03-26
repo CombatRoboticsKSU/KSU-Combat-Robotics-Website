@@ -333,7 +333,6 @@
 </div>
 
 <style>
-	.admin-page { }
 	.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
 	.page-header h1 { font-size: 1.5rem; }
 	.btn-admin { padding: 0.5rem 1rem; border: 1px solid var(--border-color); border-radius: 0.5rem; background: var(--bg-card, var(--bg-secondary)); color: inherit; cursor: pointer; font-family: inherit; font-size: 0.875rem; transition: border-color 0.15s; }

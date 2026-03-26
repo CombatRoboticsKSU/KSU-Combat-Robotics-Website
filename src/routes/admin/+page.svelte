@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Users, Bot, Wrench, FileText, Newspaper, Key } from 'lucide-svelte';
+	import { Users, Bot, Wrench, FileText, Newspaper, Key, Settings } from 'lucide-svelte';
 	let { data } = $props();
 	const c = $derived(data.counts);
 </script>
@@ -78,6 +78,16 @@
 				<span class="stat-value">System</span>
 				<h3 class="stat-label">Users</h3>
 				<span class="stat-desc">Manage accounts</span>
+			</div>
+		</a>
+		<a href="/admin/settings" class="stat-card">
+			<div class="stat-icon-wrapper gray" style="background: rgba(100, 116, 139, 0.15); color: #94a3b8;">
+				<Settings size={28} />
+			</div>
+			<div class="stat-info">
+				<span class="stat-value">Config</span>
+				<h3 class="stat-label">Site Settings</h3>
+				<span class="stat-desc">Global preferences</span>
 			</div>
 		</a>
 	</div>

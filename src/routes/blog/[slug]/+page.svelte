@@ -8,7 +8,69 @@
 	const videos = $derived((data.post.videos as { src: string; poster?: string }[] | null) ?? []);
 	const youtubeLinks = $derived((data.post.youtubeLinks as { url: string; label?: string }[] | null) ?? []);
 	const mediaCoverage = $derived((data.post.mediaCoverage as { text: string; link: string }[] | null) ?? []);
+
+	// Lightbox state
+	let lightboxSrc = $state('');
+	let lightboxAlt = $state('');
+	let lightboxOpen = $state(false);
+	let lightboxVisible = $state(false);
+
+	function openLightbox(src: string, alt: string) {
+		lightboxSrc = src;
+		lightboxAlt = alt;
+		lightboxOpen = true;
+		requestAnimationFrame(() => {
+			lightboxVisible = true;
+		});
+	}
+
+	function closeLightbox() {
+		lightboxVisible = false;
+		setTimeout(() => {
+			lightboxOpen = false;
+			lightboxSrc = '';
+			lightboxAlt = '';
+		}, 300);
+	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && lightboxOpen) {
+			closeLightbox();
+		}
+	}
+
+	// Capture clicks on markdown images
+	function handleContentClick(e: MouseEvent) {
+		const target = e.target as HTMLElement;
+		if (target.tagName === 'IMG') {
+			const img = target as HTMLImageElement;
+			openLightbox(img.src, img.alt || 'Image');
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
+
+{#if lightboxOpen}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="lightbox-overlay"
+		class:lightbox-visible={lightboxVisible}
+		onclick={closeLightbox}
+		onkeydown={handleKeydown}
+	>
+		<button class="lightbox-close" onclick={closeLightbox} aria-label="Close lightbox">&times;</button>
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+		<img
+			class="lightbox-image"
+			class:lightbox-visible={lightboxVisible}
+			src={lightboxSrc}
+			alt={lightboxAlt}
+			onclick={(e) => e.stopPropagation()}
+			onkeydown={(e) => e.stopPropagation()}
+		/>
+	</div>
+{/if}
 
 <svelte:head>
 	<title>{data.post.title} | KSU Combat Robotics</title>
@@ -20,7 +82,9 @@
 </section>
 
 <article class="section">
-	<div class="container article-content">
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="container article-content" onclick={handleContentClick}>
 		{@html renderedContent}
 
 		{#if galleryImages.length > 0}
@@ -29,7 +93,9 @@
 				<div class="gallery-grid">
 					{#each galleryImages as img}
 						<div class="gallery-item">
-							<img src={img} alt="{data.post.title} gallery" />
+							<button class="lightbox-trigger" onclick={() => openLightbox(img, `${data.post.title} gallery`)}>
+								<img src={img} alt="{data.post.title} gallery" />
+							</button>
 						</div>
 					{/each}
 				</div>
@@ -199,5 +265,81 @@
 		color: var(--gold);
 		font-weight: 500;
 		margin-top: 2rem;
+	}
+
+	/* Lightbox trigger button */
+	.lightbox-trigger {
+		all: unset;
+		display: block;
+		width: 100%;
+		height: 100%;
+		cursor: zoom-in;
+	}
+
+	.lightbox-trigger img {
+		width: 100%;
+		height: 100%;
+		display: block;
+		object-fit: cover;
+	}
+
+	/* Lightbox overlay */
+	.lightbox-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 9999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0);
+		backdrop-filter: blur(0px);
+		transition: background 0.3s ease, backdrop-filter 0.3s ease;
+		cursor: zoom-out;
+	}
+
+	.lightbox-overlay.lightbox-visible {
+		background: rgba(0, 0, 0, 0.85);
+		backdrop-filter: blur(8px);
+	}
+
+	.lightbox-image {
+		max-width: 90vw;
+		max-height: 85vh;
+		border-radius: var(--radius-lg);
+		box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+		cursor: default;
+		transform: scale(0.8);
+		opacity: 0;
+		transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+	}
+
+	.lightbox-image.lightbox-visible {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	.lightbox-close {
+		position: absolute;
+		top: 1.5rem;
+		right: 1.5rem;
+		background: none;
+		border: none;
+		color: white;
+		font-size: 2.5rem;
+		cursor: pointer;
+		line-height: 1;
+		opacity: 0.7;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+		z-index: 10000;
+	}
+
+	.lightbox-close:hover {
+		opacity: 1;
+		transform: scale(1.15);
+	}
+
+	/* Make inline article images clickable */
+	.article-content :global(img) {
+		cursor: zoom-in;
 	}
 </style>

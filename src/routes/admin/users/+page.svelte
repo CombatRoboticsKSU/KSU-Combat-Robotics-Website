@@ -54,8 +54,6 @@
 </div>
 
 <style>
-	.admin-page { }
-
 	.page-header {
 		display: flex;
 		align-items: center;

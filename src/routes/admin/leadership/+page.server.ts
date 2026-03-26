@@ -52,13 +52,5 @@ export const actions: Actions = {
 		const id = parseInt(form.get('id') as string);
 		await db.delete(leadership).where(eq(leadership.id, id));
 		return { success: true };
-	},
-
-	updateGroupPhoto: async ({ request }) => {
-		const form = await request.formData();
-		const value = (form.get('groupPhoto') as string) || '/USINGimg/BOARD25/group.JPG';
-		await db.insert(siteSettings).values({ key: 'leadership_group_photo', value })
-			.onConflictDoUpdate({ target: siteSettings.key, set: { value } });
-		return { success: true };
 	}
 };

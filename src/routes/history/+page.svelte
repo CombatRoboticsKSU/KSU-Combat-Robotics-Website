@@ -1,3 +1,58 @@
+<script lang="ts">
+	// Lightbox state
+	let lightboxSrc = $state('');
+	let lightboxAlt = $state('');
+	let lightboxOpen = $state(false);
+	let lightboxVisible = $state(false);
+
+	function openLightbox(src: string, alt: string) {
+		lightboxSrc = src;
+		lightboxAlt = alt;
+		lightboxOpen = true;
+		requestAnimationFrame(() => {
+			lightboxVisible = true;
+		});
+	}
+
+	function closeLightbox() {
+		lightboxVisible = false;
+		setTimeout(() => {
+			lightboxOpen = false;
+			lightboxSrc = '';
+			lightboxAlt = '';
+		}, 300);
+	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && lightboxOpen) {
+			closeLightbox();
+		}
+	}
+</script>
+
+<svelte:window onkeydown={handleKeydown} />
+
+{#if lightboxOpen}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="lightbox-overlay"
+		class:lightbox-visible={lightboxVisible}
+		onclick={closeLightbox}
+		onkeydown={handleKeydown}
+	>
+		<button class="lightbox-close" onclick={closeLightbox} aria-label="Close lightbox">&times;</button>
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+		<img
+			class="lightbox-image"
+			class:lightbox-visible={lightboxVisible}
+			src={lightboxSrc}
+			alt={lightboxAlt}
+			onclick={(e) => e.stopPropagation()}
+			onkeydown={(e) => e.stopPropagation()}
+		/>
+	</div>
+{/if}
+
 <svelte:head>
 	<title>History | KSU Combat Robotics</title>
 </svelte:head>
@@ -15,7 +70,9 @@
 				<div class="timeline-marker"></div>
 				<div class="timeline-content">
 					<div class="timeline-image">
-						<img src="/USINGimg/team_w.JPG" alt="Early team" />
+						<button class="lightbox-trigger" onclick={() => openLightbox('/USINGimg/team_w.JPG', 'Early team')}>
+							<img src="/USINGimg/team_w.JPG" alt="Early team" />
+						</button>
 					</div>
 					<div class="timeline-text">
 						<span class="timeline-era">2016 - 2018</span>
@@ -44,7 +101,9 @@
 				<div class="timeline-marker"></div>
 				<div class="timeline-content reverse">
 					<div class="timeline-image">
-						<img src="/USINGimg/bigish_old.jpg" alt="Big-Ish" />
+						<button class="lightbox-trigger" onclick={() => openLightbox('/USINGimg/bigish_old.jpg', 'Big-Ish')}>
+							<img src="/USINGimg/bigish_old.jpg" alt="Big-Ish" />
+						</button>
 					</div>
 					<div class="timeline-text">
 						<span class="timeline-era">2019 - 2022</span>
@@ -67,7 +126,9 @@
 				<div class="timeline-marker"></div>
 				<div class="timeline-content">
 					<div class="timeline-image">
-						<img src="/USINGimg/FlashBang.jpg" alt="Flash-BANG" />
+						<button class="lightbox-trigger" onclick={() => openLightbox('/USINGimg/FlashBang.jpg', 'Flash-BANG')}>
+							<img src="/USINGimg/FlashBang.jpg" alt="Flash-BANG" />
+						</button>
 					</div>
 					<div class="timeline-text">
 						<span class="timeline-era">2022 - Present</span>
@@ -241,5 +302,76 @@
 		.timeline-image {
 			max-width: 100%;
 		}
+	}
+
+	/* Lightbox trigger button */
+	.lightbox-trigger {
+		all: unset;
+		display: block;
+		width: 100%;
+		height: 100%;
+		cursor: zoom-in;
+	}
+
+	.lightbox-trigger img {
+		width: 100%;
+		height: 100%;
+		display: block;
+		object-fit: cover;
+	}
+
+	/* Lightbox overlay */
+	.lightbox-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 9999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0);
+		backdrop-filter: blur(0px);
+		transition: background 0.3s ease, backdrop-filter 0.3s ease;
+		cursor: zoom-out;
+	}
+
+	.lightbox-overlay.lightbox-visible {
+		background: rgba(0, 0, 0, 0.85);
+		backdrop-filter: blur(8px);
+	}
+
+	.lightbox-image {
+		max-width: 90vw;
+		max-height: 85vh;
+		border-radius: var(--radius-lg);
+		box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+		cursor: default;
+		transform: scale(0.8);
+		opacity: 0;
+		transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+	}
+
+	.lightbox-image.lightbox-visible {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	.lightbox-close {
+		position: absolute;
+		top: 1.5rem;
+		right: 1.5rem;
+		background: none;
+		border: none;
+		color: white;
+		font-size: 2.5rem;
+		cursor: pointer;
+		line-height: 1;
+		opacity: 0.7;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+		z-index: 10000;
+	}
+
+	.lightbox-close:hover {
+		opacity: 1;
+		transform: scale(1.15);
 	}
 </style>

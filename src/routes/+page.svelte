@@ -1,4 +1,6 @@
 <script lang="ts">
+	let { data } = $props();
+	
 	const bots = [
 		{
 			name: 'Flash-BANG',
@@ -73,8 +75,8 @@
 <section class="team-section section">
 	<div class="container">
 		<div class="team-photo-wrapper">
-			<img src="/USINGimg/TEAM25.JPG" alt="KSU Combat Robotics Team 2025" class="team-photo" />
-			<div class="team-photo-caption">KSU Combat Robotics Team 2025</div>
+			<img src={data.teamPhoto} alt="KSU Combat Robotics Team 2025" class="team-photo" />
+			<div class="team-photo-caption">KSU Combat Robotics Team</div>
 		</div>
 		<div style="text-align: center; margin-top: 2rem;">
 			<a href="/history" class="btn btn-primary">

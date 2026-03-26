@@ -144,7 +144,7 @@
 					<label>Name <input type="text" name="name" required /></label>
 					<label>Slug (URL) <input type="text" name="slug" required placeholder="printer" /></label>
 				</div>
-				<label>Icon</label>
+				<div style="font-weight: 500; font-size: 0.875rem; margin-bottom: 0.5rem;">Icon</div>
 				<input type="hidden" name="icon" value={newIcon} />
 				<div class="icon-picker">
 					{#each iconNames as iconName}
@@ -312,7 +312,7 @@
 							<label>Name <input type="text" name="name" value={project.name} required /></label>
 							<label>Slug <input type="text" name="slug" value={project.slug} required /></label>
 						</div>
-						<label>Icon</label>
+						<div style="font-weight: 500; font-size: 0.875rem; margin-bottom: 0.5rem;">Icon</div>
 						<input type="hidden" name="icon" value={editIcon} />
 						<div class="icon-picker">
 							{#each iconNames as iconName}
@@ -498,8 +498,6 @@
 </div>
 
 <style>
-	.admin-page { }
-
 	.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
 	.page-header h1 { font-size: 1.5rem; }
 
