@@ -83,10 +83,21 @@
 
 <style>
 	.footer {
-		background: var(--navy-dark);
-		border-top: 1px solid rgba(255,255,255,0.05);
+		background: linear-gradient(180deg, var(--navy-dark) 0%, #010e1f 100%);
+		border-top: 1px solid rgba(235,171,33,0.1);
 		padding: 3.5rem 1.5rem 1.5rem;
 		margin-top: auto;
+		position: relative;
+	}
+
+	.footer::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: linear-gradient(90deg, transparent 0%, rgba(235,171,33,0.3) 50%, transparent 100%);
 	}
 
 	.footer-inner {
@@ -146,7 +157,7 @@
 	.footer-section a {
 		color: var(--text-muted);
 		font-size: 0.8125rem;
-		transition: color 0.15s;
+		transition: all 0.2s ease;
 		display: inline-flex;
 		align-items: center;
 		gap: 0.3rem;
@@ -154,6 +165,7 @@
 
 	.footer-section a:hover {
 		color: var(--gold);
+		transform: translateX(3px);
 	}
 
 	.ext-icon {

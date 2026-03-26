@@ -81,6 +81,16 @@
 	.wiki-card {
 		text-decoration: none;
 		color: inherit;
+		animation: fadeInUp 0.5s ease both;
+	}
+
+	.wiki-card:nth-child(1) { animation-delay: 0s; }
+	.wiki-card:nth-child(2) { animation-delay: 0.1s; }
+	.wiki-card:nth-child(3) { animation-delay: 0.2s; }
+
+	@keyframes fadeInUp {
+		from { opacity: 0; transform: translateY(16px); }
+		to { opacity: 1; transform: translateY(0); }
 	}
 
 	.wiki-card:hover {
@@ -97,17 +107,17 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		transition: transform 0.4s ease;
+		transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.wiki-card:hover .wiki-image img {
-		transform: scale(1.05);
+		transform: scale(1.08);
 	}
 
 	.wiki-overlay {
 		position: absolute;
 		inset: 0;
-		background: rgba(0,0,0,0.5);
+		background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -127,6 +137,11 @@
 		font-size: 1.375rem;
 		margin-bottom: 0.75rem;
 		color: var(--gold);
+		transition: color 0.2s ease;
+	}
+
+	.wiki-card:hover .wiki-info h3 {
+		color: var(--gold-light);
 	}
 
 	.wiki-meta {
@@ -142,6 +157,7 @@
 		border: 1px solid var(--border-color);
 		border-radius: 100px;
 		color: var(--text-secondary);
+		transition: all 0.2s ease;
 	}
 
 	.meta-tag.active {
@@ -159,8 +175,10 @@
 	.cross-link {
 		text-align: center;
 		margin-top: 3rem;
-		padding-top: 2rem;
-		border-top: 1px solid var(--border-color);
+		padding: 2.5rem;
+		background: linear-gradient(135deg, rgba(1,57,117,0.3) 0%, rgba(1,37,80,0.4) 100%);
+		border: 1px solid rgba(235,171,33,0.1);
+		border-radius: var(--radius-lg);
 	}
 
 	.cross-link p {

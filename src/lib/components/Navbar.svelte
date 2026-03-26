@@ -4,6 +4,7 @@
 
 	let mobileOpen = $state(false);
 	let updatesOpen = $state(false);
+	let botsOpen = $state(false);
 	let scrolled = $state(false);
 
 	const sessionStore = authClient.useSession();
@@ -18,8 +19,12 @@
 	const navLinks = [
 		{ href: '/sponsorship', label: 'Sponsors' },
 		{ href: '/contact', label: 'Contact' },
-		{ href: '/wiki', label: 'Bot Wiki' },
 		{ href: '/leadership', label: 'Leadership' },
+	];
+
+	const botsLinks = [
+		{ href: '/wiki', label: 'Club Bots' },
+		{ href: '/pbots', label: 'Personal Bots' },
 	];
 
 	const updatesLinks = [
@@ -41,6 +46,7 @@
 	function closeMobile() {
 		mobileOpen = false;
 		updatesOpen = false;
+		botsOpen = false;
 	}
 
 	function handleScroll() {
@@ -72,7 +78,29 @@
 			<div class="dropdown">
 				<button
 					class="nav-link dropdown-toggle"
-					onclick={() => updatesOpen = !updatesOpen}
+					onclick={() => { botsOpen = !botsOpen; updatesOpen = false; }}
+					class:active={isActive('/wiki') || isActive('/pbots')}
+				>
+					Bots
+					<svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="chevron" class:rotated={botsOpen}>
+						<path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				</button>
+				{#if botsOpen}
+					<div class="dropdown-menu">
+						{#each botsLinks as link}
+							<a href={link.href} class="dropdown-item" onclick={closeMobile}>
+								{link.label}
+							</a>
+						{/each}
+					</div>
+				{/if}
+			</div>
+
+			<div class="dropdown">
+				<button
+					class="nav-link dropdown-toggle"
+					onclick={() => { updatesOpen = !updatesOpen; botsOpen = false; }}
 					class:active={isActive('/blog') || isActive('/publicity') || isActive('/projects')}
 				>
 					Updates
@@ -138,20 +166,27 @@
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		background: rgba(1, 57, 117, 0.92);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
-		transition: all 0.3s ease;
+		background: rgba(1, 57, 117, 0.85);
+		backdrop-filter: blur(20px) saturate(1.2);
+		-webkit-backdrop-filter: blur(20px) saturate(1.2);
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.navbar.scrolled {
-		background: rgba(1, 42, 88, 0.98);
-		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+		background: rgba(1, 37, 70, 0.98);
+		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(235,171,33,0.05);
 	}
 
 	.nav-accent {
 		height: 3px;
-		background: linear-gradient(90deg, var(--gold) 0%, var(--gold-dark) 50%, var(--gold) 100%);
+		background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, var(--gold-dark) 100%);
+		background-size: 200% 100%;
+		animation: shimmer 6s ease-in-out infinite;
+	}
+
+	@keyframes shimmer {
+		0% { background-position: 200% center; }
+		100% { background-position: -200% center; }
 	}
 
 	.nav-inner {
@@ -208,12 +243,13 @@
 
 	.nav-link:hover {
 		color: white;
-		background: rgba(255,255,255,0.08);
+		background: rgba(255,255,255,0.1);
 	}
 
 	.nav-link.active {
 		color: var(--gold);
 		background: rgba(235,171,33,0.12);
+		box-shadow: inset 0 -2px 0 var(--gold);
 	}
 
 	.external-icon {
@@ -347,15 +383,22 @@
 			left: 0;
 			right: 0;
 			flex-direction: column;
-			background: rgba(1, 42, 88, 0.98);
-			backdrop-filter: blur(16px);
+			background: rgba(1, 37, 70, 0.98);
+			backdrop-filter: blur(20px) saturate(1.2);
 			padding: 0.75rem 1rem 1rem;
-			border-bottom: 1px solid rgba(255,255,255,0.08);
+			border-bottom: 1px solid rgba(235,171,33,0.08);
 			gap: 0.125rem;
+			box-shadow: 0 12px 32px rgba(0,0,0,0.4);
 		}
 
 		.nav-links.open {
 			display: flex;
+			animation: slideDown 0.25s ease;
+		}
+
+		@keyframes slideDown {
+			from { opacity: 0; transform: translateY(-8px); }
+			to { opacity: 1; transform: translateY(0); }
 		}
 
 		.nav-spacer {

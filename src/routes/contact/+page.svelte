@@ -157,7 +157,7 @@
 		color: var(--text-primary);
 		font-size: 0.9375rem;
 		font-family: inherit;
-		transition: border-color 0.2s ease;
+		transition: all 0.25s ease;
 		box-sizing: border-box;
 	}
 
@@ -165,6 +165,14 @@
 	.form-group textarea:focus {
 		outline: none;
 		border-color: var(--gold);
+		box-shadow: 0 0 0 3px rgba(235,171,33,0.1), 0 0 20px rgba(235,171,33,0.05);
+		background: rgba(17,24,39,0.8);
+	}
+
+	.form-group input::placeholder,
+	.form-group textarea::placeholder {
+		color: var(--text-muted);
+		opacity: 0.6;
 	}
 
 	.form-group textarea {

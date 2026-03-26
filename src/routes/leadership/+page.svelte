@@ -203,7 +203,7 @@
 		padding: 1.5rem 1rem;
 		text-align: center;
 		cursor: pointer;
-		transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		border: 2px solid transparent;
 		background: var(--bg-card, var(--bg-secondary));
 		color: inherit;
@@ -213,14 +213,16 @@
 	}
 
 	.member-card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+		transform: translateY(-6px);
+		box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 40px rgba(235,171,33,0.06);
+		border-color: rgba(235,171,33,0.15);
 	}
 
 	.member-card.active {
 		border-color: var(--gold);
 		transform: none;
-		box-shadow: 0 4px 16px rgba(235, 171, 33, 0.15);
+		box-shadow: 0 4px 20px rgba(235, 171, 33, 0.2);
+		background: var(--bg-card-hover);
 	}
 
 	.member-image-wrapper {
@@ -228,15 +230,26 @@
 		height: 110px;
 		border-radius: 50%;
 		overflow: hidden;
-		border: 3px solid var(--gold);
+		border: 3px solid rgba(235,171,33,0.5);
 		margin-bottom: 0.75rem;
 		flex-shrink: 0;
+		transition: all 0.3s ease;
+	}
+
+	.member-card:hover .member-image-wrapper {
+		border-color: var(--gold);
+		box-shadow: 0 0 20px rgba(235,171,33,0.2);
 	}
 
 	.member-image-wrapper img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		transition: transform 0.4s ease;
+	}
+
+	.member-card:hover .member-image-wrapper img {
+		transform: scale(1.05);
 	}
 
 	.member-card h3 {
