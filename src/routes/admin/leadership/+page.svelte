@@ -7,6 +7,9 @@
 	let showNew = $state(false);
 	let newImage = $state('');
 	let editImage = $state('');
+
+	let currentMembers = $derived(data.members.filter(m => m.isCurrent));
+	let formerMembers = $derived(data.members.filter(m => !m.isCurrent));
 </script>
 
 <svelte:head>
@@ -44,47 +47,61 @@
 		</div>
 	{/if}
 
-	<div class="items-list">
-		{#each data.members as member}
-			<div class="item-row">
-				{#if editing === member.id}
-					<form method="POST" action="?/update" use:enhance={() => { return async ({ update }) => { await update(); editing = null; }; }}>
-						<input type="hidden" name="id" value={member.id} />
-						<div class="edit-grid">
-							<label>Name <input type="text" name="name" value={member.name} required /></label>
-							<label>Title <input type="text" name="title" value={member.title} required /></label>
-							<ImageUpload bind:value={editImage} name="image" folder="leadership" label="Photo" />
-							<label>Bio <textarea name="bio" rows="3">{member.bio}</textarea></label>
-							<label>Stats (one per line) <textarea name="stats" rows="4">{(member.stats as string[]).join('\n')}</textarea></label>
-							<label>Sort Order <input type="number" name="sortOrder" value={member.sortOrder} /></label>
-							<label class="checkbox-label">
-								<input type="checkbox" name="isCurrent" value="true" checked={member.isCurrent} />
-								Current member
-							</label>
-						</div>
-						<div class="edit-actions">
-							<button type="submit" class="btn-admin primary">Save</button>
-							<button type="button" class="btn-admin" onclick={() => editing = null}>Cancel</button>
-						</div>
-					</form>
-				{:else}
-					<div class="item-summary">
-						<div class="item-info">
-							<strong>{member.name}</strong>
-							<span class="item-meta">{member.title}</span>
-							<span class="item-badge" class:current={member.isCurrent}>{member.isCurrent ? 'Current' : 'Former'}</span>
-						</div>
-						<div class="item-actions">
-							<button class="btn-admin small" onclick={() => { editing = member.id; editImage = member.image; showNew = false; }}>Edit</button>
-							<form method="POST" action="?/delete" use:enhance style="display:inline">
-								<input type="hidden" name="id" value={member.id} />
-								<button type="submit" class="btn-admin small danger" onclick={(e) => { if (!confirm('Delete this member?')) e.preventDefault(); }}>Delete</button>
-							</form>
-						</div>
+	{#snippet memberCard(member: (typeof data.members)[0])}
+		<div class="item-row">
+			{#if editing === member.id}
+				<form method="POST" action="?/update" use:enhance={() => { return async ({ update }) => { await update(); editing = null; }; }}>
+					<input type="hidden" name="id" value={member.id} />
+					<div class="edit-grid">
+						<label>Name <input type="text" name="name" value={member.name} required /></label>
+						<label>Title <input type="text" name="title" value={member.title} required /></label>
+						<ImageUpload bind:value={editImage} name="image" folder="leadership" label="Photo" />
+						<label>Bio <textarea name="bio" rows="3">{member.bio}</textarea></label>
+						<label>Stats (one per line) <textarea name="stats" rows="4">{(member.stats as string[]).join('\n')}</textarea></label>
+						<label>Sort Order <input type="number" name="sortOrder" value={member.sortOrder} /></label>
+						<label class="checkbox-label">
+							<input type="checkbox" name="isCurrent" value="true" checked={member.isCurrent} />
+							Current member
+						</label>
 					</div>
-				{/if}
-			</div>
-		{/each}
+					<div class="edit-actions">
+						<button type="submit" class="btn-admin primary">Save</button>
+						<button type="button" class="btn-admin" onclick={() => editing = null}>Cancel</button>
+					</div>
+				</form>
+			{:else}
+				<div class="item-summary">
+					<div class="item-info">
+						<strong>{member.name}</strong>
+						<span class="item-meta">{member.title}</span>
+						<span class="item-badge" class:current={member.isCurrent}>{member.isCurrent ? 'Current' : 'Former'}</span>
+					</div>
+					<div class="item-actions">
+						<button class="btn-admin small" onclick={() => { editing = member.id; editImage = member.image; showNew = false; }}>Edit</button>
+						<form method="POST" action="?/delete" use:enhance style="display:inline">
+							<input type="hidden" name="id" value={member.id} />
+							<button type="submit" class="btn-admin small danger" onclick={(e) => { if (!confirm('Delete this member?')) e.preventDefault(); }}>Delete</button>
+						</form>
+					</div>
+				</div>
+			{/if}
+		</div>
+	{/snippet}
+
+	<div class="items-list">
+		{#if currentMembers.length > 0}
+			<h2 class="section-heading">Current Leadership</h2>
+			{#each currentMembers as member}
+				{@render memberCard(member)}
+			{/each}
+		{/if}
+
+		{#if formerMembers.length > 0}
+			<h2 class="section-heading" style={currentMembers.length > 0 ? "margin-top: 1.5rem;" : ""}>Former Leadership</h2>
+			{#each formerMembers as member}
+				{@render memberCard(member)}
+			{/each}
+		{/if}
 
 		{#if data.members.length === 0}
 			<p class="empty-state">No leadership members yet. Add one above.</p>
@@ -129,5 +146,6 @@ input:focus, textarea:focus { outline: none; border-color: var(--gold); box-shad
 .item-actions { display: flex; gap: 0.5rem; }
 .edit-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
 .empty-state { text-align: center; color: var(--text-muted); font-style: normal; padding: 2rem; }
+.section-heading { font-size: 1.25rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
 </style>
 
