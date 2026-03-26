@@ -332,11 +332,12 @@
 		color: white;
 		cursor: pointer;
 		padding: 0.5rem;
+		margin-left: auto;
 	}
 
 	.hamburger {
-		width: 20px;
-		height: 14px;
+		width: 24px;
+		height: 18px;
 		position: relative;
 	}
 
@@ -348,24 +349,26 @@
 		background: white;
 		border-radius: 2px;
 		left: 0;
-		transition: all 0.25s ease;
+		transition: all 0.3s ease-in-out;
+		transform-origin: center;
 	}
 
 	.hamburger span:nth-child(1) { top: 0; }
-	.hamburger span:nth-child(2) { top: 6px; }
-	.hamburger span:nth-child(3) { top: 12px; }
+	.hamburger span:nth-child(2) { top: 8px; }
+	.hamburger span:nth-child(3) { top: 16px; }
 
 	.hamburger.open span:nth-child(1) {
-		top: 6px;
+		top: 8px;
 		transform: rotate(45deg);
 	}
 
 	.hamburger.open span:nth-child(2) {
 		opacity: 0;
+		transform: scaleX(0);
 	}
 
 	.hamburger.open span:nth-child(3) {
-		top: 6px;
+		top: 8px;
 		transform: rotate(-45deg);
 	}
 
@@ -383,21 +386,22 @@
 			left: 0;
 			right: 0;
 			flex-direction: column;
-			background: rgba(1, 37, 70, 0.98);
-			backdrop-filter: blur(20px) saturate(1.2);
-			padding: 0.75rem 1rem 1rem;
-			border-bottom: 1px solid rgba(235,171,33,0.08);
-			gap: 0.125rem;
-			box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+			background: var(--navy-dark);
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
+			padding: 1rem 1rem 1.5rem;
+			border-bottom: 2px solid var(--gold);
+			gap: 0.25rem;
+			box-shadow: 0 16px 40px rgba(0,0,0,0.5);
 		}
 
 		.nav-links.open {
 			display: flex;
-			animation: slideDown 0.25s ease;
+			animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 		}
 
 		@keyframes slideDown {
-			from { opacity: 0; transform: translateY(-8px); }
+			from { opacity: 0; transform: translateY(-12px); }
 			to { opacity: 1; transform: translateY(0); }
 		}
 
@@ -407,8 +411,14 @@
 
 		.nav-link {
 			width: 100%;
-			justify-content: flex-start;
-			padding: 0.625rem 0.75rem;
+			justify-content: space-between;
+			padding: 0.875rem 1rem;
+			font-size: 1rem;
+			border-radius: var(--radius-md);
+		}
+
+		.dropdown {
+			width: 100%;
 		}
 
 		.dropdown-menu {
@@ -420,6 +430,15 @@
 			box-shadow: none;
 			background: transparent;
 			animation: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+		}
+
+		.dropdown-item {
+			padding: 0.75rem 1rem;
+			font-size: 0.9375rem;
+			border-radius: var(--radius-md);
 		}
 	}
 </style>

@@ -195,5 +195,34 @@
 		.sponsors-grid {
 			grid-template-columns: 1fr;
 		}
+
+		.sponsor-cta {
+			padding: 2.5rem 1.25rem;
+		}
+
+		.sponsor-cta h2 {
+			font-size: 1.5rem;
+		}
+
+		.sponsor-cta-actions {
+			flex-direction: column;
+			gap: 0.75rem;
+			width: 100%;
+		}
+
+		.sponsor-cta-actions :global(.btn) {
+			width: 100%;
+			justify-content: center;
+			text-align: center;
+		}
+
+		.donors {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.donor-badge {
+			justify-content: center;
+		}
 	}
 </style>

@@ -37,7 +37,7 @@
 
 <section class="hero">
 	<h1>KSU Bot Wiki</h1>
-	<p>Our club-owned combat robots</p>
+	<p>Our club-owned combat robots — {bots.length} bots and counting</p>
 </section>
 
 <section class="section">

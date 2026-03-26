@@ -502,29 +502,108 @@
 
 	@media (max-width: 768px) {
 		.hero-home {
-			padding: 2.5rem 1.5rem 2rem;
-		}
-
-		.bots-grid {
-			grid-template-columns: 1fr;
+			padding: 2.5rem 1rem 2rem;
 		}
 
 		.hero-logo {
-			max-width: 300px;
+			max-width: 320px;
+			margin-bottom: 1.25rem;
+		}
+
+		.hero-tagline {
+			font-size: 1rem;
+			margin-bottom: 1.5rem;
+			padding: 0 0.5rem;
+		}
+
+		.hero-info {
+			gap: 0.75rem;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		.info-badge {
+			font-size: 0.8125rem;
+			padding: 0.5rem 1rem;
+			width: auto;
+			max-width: none;
 		}
 
 		.hero-stats {
 			gap: 1.5rem;
+			padding-top: 1.5rem;
+			flex-wrap: wrap;
+			justify-content: center;
+			width: 100%;
+		}
+
+		.stat-item {
+			flex: 0 1 auto;
+			min-width: 100px;
 		}
 
 		.stat-value {
-			font-size: 1.375rem;
+			font-size: 1.5rem;
+		}
+
+		.stat-label {
+			font-size: 0.7rem;
+		}
+
+		.bots-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
 		}
 
 		.bot-header {
 			flex-direction: column;
 			align-items: flex-start;
-			gap: 0.375rem;
+			gap: 0.5rem;
+		}
+
+		.team-photo-caption {
+			padding: 1.5rem 1rem 0.75rem;
+			font-size: 0.75rem;
+		}
+
+		.cta-section {
+			padding: 3rem 1rem;
+		}
+
+		.cta-card {
+			padding: 2.5rem 1.25rem;
+		}
+
+		.cta-card h2 {
+			font-size: 1.75rem;
+		}
+
+		.cta-actions {
+			flex-direction: column;
+			width: 100%;
+			gap: 0.75rem;
+		}
+
+		.cta-actions :global(.btn) {
+			width: 100%;
+			justify-content: center;
+			text-align: center;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.hero-stats {
+			gap: 1rem 0.5rem;
+			justify-content: space-evenly;
+		}
+
+		.stat-value {
+			font-size: 1.35rem;
+		}
+
+		.stat-label {
+			font-size: 0.65rem;
 		}
 	}
 </style>

@@ -274,5 +274,17 @@
 		.contact-layout {
 			grid-template-columns: 1fr;
 		}
+
+		.contact-form {
+			padding: 1.5rem 1rem;
+		}
+
+		.sidebar-card {
+			padding: 1.5rem 1rem;
+		}
+
+		.contact-method {
+			padding: 1rem;
+		}
 	}
 </style>

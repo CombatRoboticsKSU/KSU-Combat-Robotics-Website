@@ -369,25 +369,70 @@
 	}
 
 	@media (max-width: 768px) {
+		.members-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1rem;
+		}
+
+		.member-card {
+			width: 100%;
+			padding: 1rem 0.5rem;
+		}
+
+		.member-image-wrapper {
+			width: 90px;
+			height: 90px;
+		}
+
+		.member-card h3 {
+			font-size: 1rem;
+		}
+
+		.member-title {
+			font-size: 0.75rem;
+		}
+
+		.detail-panel {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 1000;
+			margin: 0;
+			padding: 3rem 1.5rem 2rem;
+			border: none;
+			border-top: 2px solid var(--gold);
+			border-radius: 1.5rem 1.5rem 0 0;
+			max-height: 85vh;
+			overflow-y: auto;
+			box-shadow: 0 -10px 40px rgba(0,0,0,0.5), 0 0 0 100vh rgba(0,0,0,0.7);
+			background: var(--navy-dark);
+		}
+
+		.detail-close {
+			top: 0.75rem;
+			right: 1rem;
+			font-size: 2.25rem;
+			z-index: 10;
+		}
+
 		.detail-inner {
 			flex-direction: column;
 			align-items: center;
 			text-align: center;
+			gap: 1rem;
 		}
 
 		.detail-image-wrapper {
-			width: 120px;
-			height: 120px;
+			width: 100px;
+			height: 100px;
 		}
 	}
 
 	@media (max-width: 400px) {
-		.member-card {
-			width: 150px;
-		}
-
 		.members-grid {
-			gap: 1rem;
+			grid-template-columns: 1fr;
 		}
 	}
 </style>

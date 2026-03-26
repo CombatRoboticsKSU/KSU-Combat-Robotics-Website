@@ -43,8 +43,8 @@
 <section class="section">
 	<div class="container">
 		<div class="posts-list">
-			{#each posts as post}
-				<a href="/blog/{post.slug}" class="post-card card">
+			{#each posts as post, i}
+				<a href="/blog/{post.slug}" class="post-card card" style="animation-delay: {i * 0.08}s">
 					<div class="post-image">
 						<img src={post.image} alt={post.title} />
 					</div>
@@ -66,6 +66,11 @@
 					</div>
 				</a>
 			{/each}
+			{#if posts.length === 0}
+				<div class="empty-state">
+					<p>No updates yet — check back soon!</p>
+				</div>
+			{/if}
 		</div>
 	</div>
 </section>

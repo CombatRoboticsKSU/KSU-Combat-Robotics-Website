@@ -175,11 +175,24 @@
 		.projects-grid {
 			grid-template-columns: repeat(2, 1fr);
 		}
+
+		.board-wrapper iframe {
+			height: 50vh;
+		}
 	}
 
-	@media (max-width: 400px) {
+	@media (max-width: 480px) {
 		.projects-grid {
 			grid-template-columns: 1fr;
+		}
+
+		.project-card {
+			padding: 1.5rem 1rem;
+		}
+
+		.board-link .btn {
+			width: 100%;
+			justify-content: center;
 		}
 	}
 </style>
