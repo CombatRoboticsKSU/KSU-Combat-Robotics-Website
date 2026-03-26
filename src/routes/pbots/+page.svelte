@@ -107,6 +107,19 @@
 	.wiki-card {
 		text-decoration: none;
 		color: inherit;
+		animation: fadeInUp 0.5s ease both;
+	}
+
+	.wiki-card:nth-child(1) { animation-delay: 0s; }
+	.wiki-card:nth-child(2) { animation-delay: 0.08s; }
+	.wiki-card:nth-child(3) { animation-delay: 0.16s; }
+	.wiki-card:nth-child(4) { animation-delay: 0.24s; }
+	.wiki-card:nth-child(5) { animation-delay: 0.32s; }
+	.wiki-card:nth-child(6) { animation-delay: 0.4s; }
+
+	@keyframes fadeInUp {
+		from { opacity: 0; transform: translateY(16px); }
+		to { opacity: 1; transform: translateY(0); }
 	}
 
 	.wiki-card:hover {
@@ -123,17 +136,17 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		transition: transform 0.4s ease;
+		transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.wiki-card:hover .wiki-image img {
-		transform: scale(1.05);
+		transform: scale(1.08);
 	}
 
 	.wiki-overlay {
 		position: absolute;
 		inset: 0;
-		background: rgba(0,0,0,0.5);
+		background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -153,12 +166,29 @@
 		font-size: 1.375rem;
 		margin-bottom: 0.25rem;
 		color: var(--gold);
+		transition: color 0.2s ease;
+	}
+
+	.wiki-card:hover .wiki-info h3 {
+		color: var(--gold-light);
 	}
 
 	.bot-owner {
-		font-size: 0.875rem;
+		font-size: 0.8125rem;
 		color: var(--text-muted);
 		margin-bottom: 0.75rem;
+		display: flex;
+		align-items: center;
+		gap: 0.375rem;
+	}
+
+	.bot-owner::before {
+		content: '';
+		width: 14px;
+		height: 14px;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+		background-size: contain;
+		flex-shrink: 0;
 	}
 
 	.wiki-meta {
@@ -174,13 +204,20 @@
 		border: 1px solid var(--border-color);
 		border-radius: 100px;
 		color: var(--text-secondary);
+		transition: all 0.2s ease;
+	}
+
+	.wiki-card:hover .meta-tag {
+		border-color: rgba(235,171,33,0.15);
 	}
 
 	.cross-link {
 		text-align: center;
 		margin-top: 3rem;
-		padding-top: 2rem;
-		border-top: 1px solid var(--border-color);
+		padding: 2.5rem;
+		background: linear-gradient(135deg, rgba(1,57,117,0.3) 0%, rgba(1,37,80,0.4) 100%);
+		border: 1px solid rgba(235,171,33,0.1);
+		border-radius: var(--radius-lg);
 	}
 
 	.cross-link p {
@@ -190,6 +227,13 @@
 	}
 
 	@media (max-width: 768px) {
+		.wiki-grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1.25rem;
+		}
+	}
+
+	@media (max-width: 480px) {
 		.wiki-grid {
 			grid-template-columns: 1fr;
 		}

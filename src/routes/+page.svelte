@@ -141,11 +141,10 @@
 <style>
 	.hero-home {
 		background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 40%, #012d60 100%);
-		padding: 5rem 1.5rem 3rem;
+		padding: 3rem 1.5rem 2rem;
 		text-align: center;
 		position: relative;
 		overflow: hidden;
-		min-height: 85vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -217,7 +216,7 @@
 		font-size: 1.125rem;
 		color: var(--text-secondary);
 		line-height: 1.7;
-		margin-bottom: 2rem;
+		margin-bottom: 1.25rem;
 		animation: fadeInUp 0.6s ease 0.1s both;
 	}
 
@@ -225,7 +224,7 @@
 		display: flex;
 		justify-content: center;
 		gap: 1rem;
-		margin-bottom: 1.5rem;
+		margin-bottom: 1rem;
 		flex-wrap: wrap;
 		animation: fadeInUp 0.6s ease 0.2s both;
 	}
@@ -266,8 +265,8 @@
 		display: flex;
 		justify-content: center;
 		gap: 2.5rem;
-		margin-top: 2.5rem;
-		padding-top: 2rem;
+		margin-top: 1.5rem;
+		padding-top: 1.25rem;
 		border-top: 1px solid rgba(255,255,255,0.06);
 	}
 
@@ -295,18 +294,15 @@
 	}
 
 	.hero-scroll-indicator {
-		position: absolute;
-		bottom: 2rem;
-		left: 50%;
-		transform: translateX(-50%);
+		margin-top: 1.25rem;
 		color: var(--text-muted);
 		opacity: 0.4;
 		animation: bounce 2s ease infinite;
 	}
 
 	@keyframes bounce {
-		0%, 100% { transform: translateX(-50%) translateY(0); }
-		50% { transform: translateX(-50%) translateY(8px); }
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(6px); }
 	}
 
 	/* Team Photo */
@@ -506,8 +502,7 @@
 
 	@media (max-width: 768px) {
 		.hero-home {
-			min-height: auto;
-			padding: 4rem 1.5rem 3rem;
+			padding: 2.5rem 1.5rem 2rem;
 		}
 
 		.bots-grid {
