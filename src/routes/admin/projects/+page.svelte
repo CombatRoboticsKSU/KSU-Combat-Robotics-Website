@@ -3,6 +3,12 @@
 	import { slide } from 'svelte/transition';
 	import ImageUpload from '$lib/components/ImageUpload.svelte';
 	import GalleryUpload from '$lib/components/GalleryUpload.svelte';
+	import { Printer, Box, Timer, Bot, Wrench, Cpu, Hammer, Zap, Cog, Code, Shield, Hexagon, Component, Radio, Rocket, Activity, Gamepad2, PenTool } from 'lucide-svelte';
+
+	const availableIcons: Record<string, any> = {
+		Printer, Box, Timer, Bot, Wrench, Cpu, Hammer, Zap, Cog, Code, Shield, Hexagon, Component, Radio, Rocket, Activity, Gamepad2, PenTool
+	};
+	const iconNames = Object.keys(availableIcons);
 
 	let { data, form } = $props();
 	let editing: number | null = $state(null);
@@ -14,6 +20,7 @@
 	function isOpen(key: string) { return openSections[key] ?? false; }
 
 	// ─── Friendly field state for NEW project form ─────────────
+	let newIcon = $state('Box');
 	let newImage = $state('');
 	let newSpecs = $state<{ key: string; value: string }[]>([{ key: '', value: '' }]);
 	let newTeam = $state<{ role: string; name: string; history: string }[]>([{ role: '', name: '', history: '' }]);
@@ -23,6 +30,7 @@
 	let newMediaCoverage = $state<{ text: string; link: string }[]>([]);
 
 	// ─── Friendly field state for EDIT project form ────────────
+	let editIcon = $state('Box');
 	let editImage = $state('');
 	let editSpecs = $state<{ key: string; value: string }[]>([]);
 	let editTeam = $state<{ role: string; name: string; history: string }[]>([]);
@@ -36,6 +44,7 @@
 		showNew = false;
 		openSections = {};
 
+		editIcon = project.icon ?? 'Box';
 		editImage = project.image ?? '';
 
 		const specs = project.specs as Record<string, string> | null;
@@ -64,6 +73,7 @@
 		showNew = !showNew;
 		editing = null;
 		openSections = {};
+		newIcon = 'Box';
 		newImage = '';
 		newSpecs = [{ key: '', value: '' }];
 		newTeam = [{ role: '', name: '', history: '' }];
@@ -133,7 +143,22 @@
 				<div class="form-row">
 					<label>Name <input type="text" name="name" required /></label>
 					<label>Slug (URL) <input type="text" name="slug" required placeholder="printer" /></label>
-					<label>Icon (emoji) <input type="text" name="icon" placeholder="🖨️" /></label>
+				</div>
+				<label>Icon</label>
+				<input type="hidden" name="icon" value={newIcon} />
+				<div class="icon-picker">
+					{#each iconNames as iconName}
+						{@const Icon = availableIcons[iconName]}
+						<button
+							type="button"
+							class="icon-btn"
+							class:selected={newIcon === iconName}
+							onclick={() => newIcon = iconName}
+							title={iconName}
+						>
+							<Icon size={20} />
+						</button>
+					{/each}
 				</div>
 				<ImageUpload bind:value={newImage} name="image" folder="projects" label="Image" />
 				<label>Short Description <input type="text" name="description" placeholder="Brief one-line summary" /></label>
@@ -286,7 +311,22 @@
 						<div class="form-row">
 							<label>Name <input type="text" name="name" value={project.name} required /></label>
 							<label>Slug <input type="text" name="slug" value={project.slug} required /></label>
-							<label>Icon <input type="text" name="icon" value={project.icon} /></label>
+						</div>
+						<label>Icon</label>
+						<input type="hidden" name="icon" value={editIcon} />
+						<div class="icon-picker">
+							{#each iconNames as iconName}
+								{@const Icon = availableIcons[iconName]}
+								<button
+									type="button"
+									class="icon-btn"
+									class:selected={editIcon === iconName}
+									onclick={() => editIcon = iconName}
+									title={iconName}
+								>
+									<Icon size={20} />
+								</button>
+							{/each}
 						</div>
 						<ImageUpload bind:value={editImage} name="image" folder="projects" label="Image" />
 						<label>Short Description <input type="text" name="description" value={project.description} /></label>
@@ -433,9 +473,10 @@
 						</div>
 					</form>
 				{:else}
+					{@const SummaryIcon = availableIcons[project.icon] || availableIcons.Box}
 					<div class="item-summary">
 						<div class="item-info">
-							<span>{project.icon}</span>
+							<span class="summary-icon"><SummaryIcon size={24} /></span>
 							<strong>{project.name}</strong>
 							<span class="item-meta">/{project.slug}</span>
 						</div>
@@ -600,6 +641,53 @@ input[type="text"], input[type="number"], textarea { padding: 0.5rem 0.75rem; bo
 	.item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
 	.edit-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
 	.empty-state { text-align: center; color: var(--text-muted); padding: 2rem 0; }
+
+	.icon-picker {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		padding: 0.75rem;
+		border: 1px solid var(--border-color);
+		border-radius: 0.375rem;
+		background: var(--bg-primary);
+		max-height: 144px;
+		overflow-y: auto;
+	}
+
+	.icon-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border: 1px solid transparent;
+		border-radius: 0.375rem;
+		background: transparent;
+		color: var(--text-muted);
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.icon-btn:hover {
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--text-primary);
+	}
+
+	.icon-btn.selected {
+		border-color: var(--gold);
+		background: rgba(235, 171, 33, 0.15);
+		color: var(--gold);
+	}
+
+	.summary-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--gold);
+		background: rgba(235, 171, 33, 0.15);
+		padding: 0.375rem;
+		border-radius: 0.375rem;
+	}
 
 	@media (max-width: 640px) {
 		.kv-row { grid-template-columns: 1fr auto; }

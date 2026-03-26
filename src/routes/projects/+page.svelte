@@ -1,30 +1,11 @@
 <script lang="ts">
-	const projects = [
-		{
-			name: 'Club Printer',
-			slug: 'printer',
-			icon: '🖨️',
-			description: 'Custom Voron 3D Printer designed for use during competitions'
-		},
-		{
-			name: 'Test Cage / Mini Arena',
-			slug: 'test-cage',
-			icon: '🏟️',
-			description: 'Our testing and competition arena'
-		},
-		{
-			name: 'Event Countdown Clock',
-			slug: 'countdown-clock',
-			icon: '⏱️',
-			description: 'Custom Countdown Timer for Competitions'
-		},
-		{
-			name: '3lb Event',
-			slug: '3lb-event',
-			icon: '🤖',
-			description: 'Our hosted 3lb plastic competition'
-		}
-	];
+	import { Printer, Box, Timer, Bot, Wrench, Cpu, Hammer, Zap, Cog, Code, Shield, Hexagon, Component, Radio, Rocket, Activity, Gamepad2, PenTool } from 'lucide-svelte';
+
+	const availableIcons: Record<string, any> = {
+		Printer, Box, Timer, Bot, Wrench, Cpu, Hammer, Zap, Cog, Code, Shield, Hexagon, Component, Radio, Rocket, Activity, Gamepad2, PenTool
+	};
+
+	let { data } = $props();
 </script>
 
 <svelte:head>
@@ -58,9 +39,10 @@
 	<div class="container">
 		<h2 class="section-title">Club <span>Projects</span></h2>
 		<div class="projects-grid">
-			{#each projects as project}
+			{#each data.projects as project}
+				{@const Icon = availableIcons[project.icon] || availableIcons.Box}
 				<a href="/projects/{project.slug}" class="project-card card">
-					<span class="project-icon">{project.icon}</span>
+					<span class="project-icon"><Icon size={40} /></span>
 					<h3>{project.name}</h3>
 					<p>{project.description}</p>
 				</a>
