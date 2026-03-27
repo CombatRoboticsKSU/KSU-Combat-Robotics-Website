@@ -149,17 +149,26 @@
 <style>
 	.article-content {
 		max-width: 700px;
+		animation: fadeInUp 0.5s ease both;
+	}
+
+	@keyframes fadeInUp {
+		from { opacity: 0; transform: translateY(16px); }
+		to { opacity: 1; transform: translateY(0); }
 	}
 
 	.article-content :global(h2) {
 		font-size: 1.5rem;
 		margin: 2.5rem 0 1rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid var(--border-color);
 	}
 
 	.article-content :global(p) {
 		color: var(--text-secondary);
 		line-height: 1.8;
 		margin-bottom: 1.5rem;
+		font-size: 0.9375rem;
 	}
 
 	.article-content :global(ul) {
@@ -178,11 +187,25 @@
 		width: 100%;
 		border-radius: var(--radius-lg);
 		margin-bottom: 1.5rem;
-		box-shadow: var(--shadow-md);
+		box-shadow: var(--shadow-lg);
+		border: 1px solid rgba(235,171,33,0.08);
+		transition: transform 0.3s ease;
+	}
+
+	.article-content :global(img:hover) {
+		transform: scale(1.01);
 	}
 
 	.article-content :global(a) {
 		color: var(--gold);
+		text-decoration: underline;
+		text-decoration-color: rgba(235,171,33,0.3);
+		text-underline-offset: 2px;
+		transition: text-decoration-color 0.2s ease;
+	}
+
+	.article-content :global(a:hover) {
+		text-decoration-color: var(--gold);
 	}
 
 	/* Gallery */
@@ -197,12 +220,31 @@
 		margin-top: 1rem;
 	}
 
+	.gallery-item {
+		border-radius: var(--radius-md);
+		overflow: hidden;
+		border: 1px solid var(--border-color);
+		transition: all 0.3s ease;
+	}
+
+	.gallery-item:hover {
+		border-color: rgba(235,171,33,0.2);
+		box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+	}
+
 	.gallery-item img {
 		width: 100%;
 		aspect-ratio: 4/3;
 		object-fit: cover;
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-md);
+		border-radius: 0;
+		box-shadow: none;
+		border: none;
+		margin-bottom: 0;
+		transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.gallery-item:hover img {
+		transform: scale(1.06);
 	}
 
 	/* Videos */
@@ -245,17 +287,22 @@
 	}
 
 	.media-list li {
-		padding: 0.5rem 0;
-		border-bottom: 1px solid var(--border-color);
+		padding: 0.75rem 1rem;
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-md);
+		transition: all 0.2s ease;
+	}
+
+	.media-list li:hover {
+		border-color: rgba(235,171,33,0.2);
+		transform: translateX(4px);
 	}
 
 	.media-list a {
 		color: var(--gold);
 		text-decoration: none;
-	}
-
-	.media-list a:hover {
-		text-decoration: underline;
+		font-weight: 500;
 	}
 
 	.back-link {
@@ -263,8 +310,18 @@
 		align-items: center;
 		gap: 0.5rem;
 		color: var(--gold);
-		font-weight: 500;
-		margin-top: 2rem;
+		font-weight: 600;
+		margin-top: 3rem;
+		padding: 0.5rem 1rem;
+		background: rgba(235,171,33,0.08);
+		border-radius: var(--radius-sm);
+		transition: all 0.2s ease;
+	}
+
+	.back-link:hover {
+		background: rgba(235,171,33,0.15);
+		gap: 0.75rem;
+		color: var(--gold-light);
 	}
 
 	/* Lightbox trigger button */
