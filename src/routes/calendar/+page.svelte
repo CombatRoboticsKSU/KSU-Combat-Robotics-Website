@@ -1,3 +1,7 @@
+<script lang="ts">
+	let { data } = $props();
+</script>
+
 <svelte:head>
 	<title>Calendar | KSU Combat Robotics</title>
 </svelte:head>
@@ -12,7 +16,7 @@
 		<div class="calendar-intro">
 			<div class="cal-badge">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-				We meet every Friday, 4:30 - 6:30 PM in 120 AEB
+				{data.meetingTime} in {data.meetingLocation}
 			</div>
 		</div>
 		<div class="calendar-wrapper">

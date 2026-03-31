@@ -1,25 +1,24 @@
 import { db } from '$lib/server/db';
 import { siteSettings } from '$lib/server/schema';
-import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-    // Default to the hardcoded team photo if one isn't set in DB
-    let teamPhotoFilePath = '/USINGimg/TEAM25.JPG';
-    
     try {
-        const teamPhotoSetting = await db.query.siteSettings.findFirst({
-            where: eq(siteSettings.key, 'homepage_team_photo')
-        });
-        
-        if (teamPhotoSetting?.value) {
-            teamPhotoFilePath = teamPhotoSetting.value;
-        }
+        const settings = await db.select().from(siteSettings);
+        const getSetting = (key: string, fallback: string) =>
+            settings.find(s => s.key === key)?.value ?? fallback;
+
+        return {
+            teamPhoto: getSetting('homepage_team_photo', '/USINGimg/TEAM25.JPG'),
+            meetingTime: getSetting('meeting_time', 'Every Friday 4:30-6:30pm'),
+            meetingLocation: getSetting('meeting_location', '120 AEB')
+        };
     } catch (e) {
-        console.error('Error fetching team photo from settings:', e);
+        console.error('Error fetching site settings:', e);
+        return {
+            teamPhoto: '/USINGimg/TEAM25.JPG',
+            meetingTime: 'Every Friday 4:30-6:30pm',
+            meetingLocation: '120 AEB'
+        };
     }
-    
-    return {
-        teamPhoto: teamPhotoFilePath
-    };
 };

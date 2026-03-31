@@ -13,7 +13,9 @@ export const load: PageServerLoad = async () => {
 
 	return {
 		teamPhoto: getSetting('homepage_team_photo', '/USINGimg/TEAM25.JPG'),
-		groupPhoto: getSetting('leadership_group_photo', '/USINGimg/BOARD25/group.JPG')
+		groupPhoto: getSetting('leadership_group_photo', '/USINGimg/BOARD25/group.JPG'),
+		meetingTime: getSetting('meeting_time', 'Every Friday 4:30-6:30pm'),
+		meetingLocation: getSetting('meeting_location', '120 AEB')
 	};
 };
 
@@ -31,6 +33,18 @@ export const actions: Actions = {
 		if (groupPhoto) {
 			await db.insert(siteSettings).values({ key: 'leadership_group_photo', value: groupPhoto })
 				.onConflictDoUpdate({ target: siteSettings.key, set: { value: groupPhoto } });
+		}
+
+		const meetingTime = form.get('meetingTime') as string;
+		if (meetingTime !== null) {
+			await db.insert(siteSettings).values({ key: 'meeting_time', value: meetingTime })
+				.onConflictDoUpdate({ target: siteSettings.key, set: { value: meetingTime } });
+		}
+
+		const meetingLocation = form.get('meetingLocation') as string;
+		if (meetingLocation !== null) {
+			await db.insert(siteSettings).values({ key: 'meeting_location', value: meetingLocation })
+				.onConflictDoUpdate({ target: siteSettings.key, set: { value: meetingLocation } });
 		}
 
 		return { success: true };

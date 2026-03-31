@@ -7,6 +7,8 @@
 
 	let teamPhotoValue = $state(untrack(() => data.teamPhoto));
 	let groupPhotoValue = $state(untrack(() => data.groupPhoto));
+	let meetingTimeValue = $state(untrack(() => data.meetingTime));
+	let meetingLocationValue = $state(untrack(() => data.meetingLocation));
 </script>
 
 <svelte:head>
@@ -23,6 +25,37 @@
 			Settings saved successfully!
 		</div>
 	{/if}
+
+	<div class="form-card">
+		<h2>Meeting Info</h2>
+		<form method="POST" action="?/updateSettings" use:enhance>
+			<div style="margin-bottom: 1.5rem;">
+				<label class="field-label" for="meetingTime">Meeting Time</label>
+				<input
+					id="meetingTime"
+					name="meetingTime"
+					type="text"
+					class="field-input"
+					bind:value={meetingTimeValue}
+					placeholder="e.g. Every Friday 4:30-6:30pm"
+				/>
+				<p class="help-text">Displayed on the homepage hero and calendar page.</p>
+			</div>
+			<div style="margin-bottom: 1.5rem;">
+				<label class="field-label" for="meetingLocation">Meeting Location</label>
+				<input
+					id="meetingLocation"
+					name="meetingLocation"
+					type="text"
+					class="field-input"
+					bind:value={meetingLocationValue}
+					placeholder="e.g. 120 AEB"
+				/>
+				<p class="help-text">Displayed on the homepage hero and calendar page.</p>
+			</div>
+			<button type="submit" class="btn-admin primary">Save Meeting Info</button>
+		</form>
+	</div>
 
 	<div class="form-card">
 		<h2>Global Images</h2>
@@ -72,6 +105,31 @@
 		font-size: 1.125rem;
 		margin-bottom: 1.5rem;
 		color: #fff;
+	}
+
+	.field-label {
+		display: block;
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: var(--text-secondary, #cbd5e1);
+		margin-bottom: 0.5rem;
+	}
+
+	.field-input {
+		width: 100%;
+		background: rgba(255,255,255,0.05);
+		border: 1px solid rgba(255,255,255,0.1);
+		border-radius: 0.5rem;
+		padding: 0.625rem 0.875rem;
+		color: #fff;
+		font-size: 0.9375rem;
+		box-sizing: border-box;
+		transition: border-color 0.2s;
+	}
+
+	.field-input:focus {
+		outline: none;
+		border-color: var(--gold);
 	}
 
 	.help-text {

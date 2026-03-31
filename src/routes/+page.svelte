@@ -48,11 +48,11 @@
 		<div class="hero-info">
 			<div class="info-badge">
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-				Every Friday 4:30-6:30pm
+				{data.meetingTime}
 			</div>
 			<div class="info-badge">
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-				120 AEB
+				{data.meetingLocation}
 			</div>
 		</div>
 		<p class="hero-note">Club membership is <em>only</em> available to KSU students.</p>
