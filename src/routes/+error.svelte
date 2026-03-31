@@ -1,24 +1,29 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
 	const bots = [
 		{
 			name: 'Flash-BANG',
 			image: '/USINGimg/FlashBangIcon.png',
 			href: '/wiki/flashbang',
-			hit404: 'Whatever you were looking for took a direct hit from Flash-BANG and doesn\'t exist anymore. Or maybe it never did.',
-			hitOther: 'Flash-BANG spun up too fast and something broke. Our bots are on it.'
+			hit404: "Whatever you were looking for took a direct hit from Flash-BANG and doesn't exist anymore. Or maybe it never did.",
+			hitOther: "Flash-BANG spun up too fast and something broke. Our bots are on it."
 		},
 		{
 			name: 'Big-ISH',
 			image: '/USINGimg/Bigish_new.JPG',
 			href: '/wiki/bigish',
-			hit404: 'Big-ISH rolled right over whatever you were looking for. It\'s gone — and it\'s not coming back.',
-			hitOther: 'Big-ISH took out something it shouldn\'t have. An unexpected error occurred.'
+			hit404: "Big-ISH rolled right over whatever you were looking for. It's gone — and it's not coming back.",
+			hitOther: "Big-ISH took out something it shouldn't have. An unexpected error occurred."
 		}
 	];
 
-	const bot = bots[Math.floor(Math.random() * bots.length)];
+	let bot = $state(bots[0]);
+
+	onMount(() => {
+		bot = bots[Math.floor(Math.random() * bots.length)];
+	});
 </script>
 
 <svelte:head>
