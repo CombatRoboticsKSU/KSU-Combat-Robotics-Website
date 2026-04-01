@@ -4,7 +4,7 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	let isAdmin = $derived($page.url.pathname.startsWith('/admin') && $page.url.pathname !== '/admin/login');
 </script>
@@ -18,11 +18,11 @@
 	{@render children()}
 {:else}
 	<div class="app">
-		<Navbar />
+		<Navbar socialLinks={data.socialLinks} />
 		<main>
 			{@render children()}
 		</main>
-		<Footer />
+		<Footer socialLinks={data.socialLinks} />
 	</div>
 {/if}
 

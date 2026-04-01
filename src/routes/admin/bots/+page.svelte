@@ -171,6 +171,13 @@
 					<label>Weapon <input type="text" name="weapon" /></label>
 					<label>Owner (personal bots) <input type="text" name="owner" /></label>
 				</div>
+				<div class="form-row">
+					<label>Tagline <input type="text" name="tagline" placeholder="Short punchy phrase for the homepage" /></label>
+					<label class="checkbox-label">
+						<input type="checkbox" name="isFeatured" />
+						Feature on homepage
+					</label>
+				</div>
 				<ImageUpload bind:value={newImage} name="image" folder="bots" label="Image" />
 
 				<!-- Description / About -->
@@ -396,6 +403,13 @@
 					<label>Weapon <input type="text" name="weapon" value={bot.weapon} /></label>
 					<label>Owner <input type="text" name="owner" value={bot.owner ?? ''} /></label>
 				</div>
+				<div class="form-row">
+					<label>Tagline <input type="text" name="tagline" value={bot.tagline ?? ''} placeholder="Short punchy phrase for the homepage" /></label>
+					<label class="checkbox-label">
+						<input type="checkbox" name="isFeatured" checked={bot.isFeatured} />
+						Feature on homepage
+					</label>
+				</div>
 				<ImageUpload bind:value={editImage} name="image" folder="bots" label="Image" />
 
 				<!-- Description / About -->
@@ -615,6 +629,7 @@
 	.form-card form { display: flex; flex-direction: column; gap: 0.75rem; }
 
 	.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
+	.checkbox-label { display: flex; align-items: center; gap: 0.5rem; flex-direction: row; font-size: 0.9rem; color: var(--text-secondary); padding-top: 1.5rem; }
 	.form-row.five-col { grid-template-columns: repeat(5, 1fr); }
 
 	label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.8125rem; color: var(--text-secondary); font-weight: 500; }

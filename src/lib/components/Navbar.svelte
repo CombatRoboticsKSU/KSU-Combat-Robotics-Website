@@ -2,6 +2,8 @@
 	import { page } from '$app/state';
 	import { authClient } from '$lib/auth-client';
 
+	let { socialLinks = [] } = $props<{ socialLinks?: { label: string; url: string }[] }>();
+
 	let mobileOpen = $state(false);
 	let updatesOpen = $state(false);
 	let botsOpen = $state(false);
@@ -33,11 +35,10 @@
 		{ href: '/projects', label: 'Projects' },
 	];
 
-	const rightLinks = [
-		{ href: '/calendar', label: 'Calendar' },
-		{ href: 'https://www.instagram.com/ksucombatrobotics/', label: 'Instagram', external: true },
-		{ href: 'https://kent.campuslabs.com/engage/organization/combatrobotics', label: 'KSU Engage', external: true },
-	];
+	const rightLinks = $derived([
+		{ href: '/calendar', label: 'Calendar', external: false },
+		...socialLinks.map(s => ({ href: s.url, label: s.label, external: true }))
+	]);
 
 	function isActive(href: string): boolean {
 		return page.url?.pathname === href;

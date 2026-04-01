@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Users, Bot, Wrench, FileText, Newspaper, Key, Settings, Star } from 'lucide-svelte';
+	import { Users, Bot, Wrench, FileText, Newspaper, Key, Settings, Star, Link } from 'lucide-svelte';
 	let { data } = $props();
 	const c = $derived(data.counts);
 </script>
@@ -78,6 +78,16 @@
 				<span class="stat-value">{c.sponsors}</span>
 				<h3 class="stat-label">Sponsors</h3>
 				<span class="stat-desc">{c.donations} recent donations</span>
+			</div>
+		</a>
+		<a href="/admin/social" class="stat-card">
+			<div class="stat-icon-wrapper blue">
+				<Link size={28} />
+			</div>
+			<div class="stat-info">
+				<span class="stat-value">{c.socialLinks}</span>
+				<h3 class="stat-label">Social Links</h3>
+				<span class="stat-desc">Navbar & footer links</span>
 			</div>
 		</a>
 		<a href="/admin/users" class="stat-card">

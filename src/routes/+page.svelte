@@ -1,26 +1,15 @@
 <script lang="ts">
 	let { data } = $props();
 	
-	const bots = [
-		{
-			name: 'Flash-BANG',
-			image: '/USINGimg/FlashBang25.png',
-			href: '/wiki/flashbang',
-			tagline: 'Hit them Hard, Hit them Fast',
-			description: "Flash-BANG is named after our school's mascot, a golden eagle named Flash. It takes significant inspiration from Battlebots like Minotaur & Copperhead.",
-			weight: '12lb',
-			weapon: 'Drum Spinner'
-		},
-		{
-			name: 'Big-ISH',
-			image: '/USINGimg/Bigish_new.JPG',
-			href: '/wiki/bigish',
-			tagline: "It's not HUGE, It's not small, It's BIG-ISH",
-			description: "BIG-ISH is built to resemble the Battlebot HUGE, but at the 12lb weight class. It features significant improvements & design tweaks that contribute to its ability to be competitive.",
-			weight: '12lb',
-			weapon: 'Vertical Spinner'
-		}
-	];
+	const bots = $derived(data.featuredBots.map(b => ({
+		name: b.name,
+		image: b.image,
+		href: `/${b.type === 'personal' ? 'pbots' : 'wiki'}/${b.slug}`,
+		tagline: b.tagline,
+		description: b.description ?? '',
+		weight: b.weight,
+		weapon: b.weapon
+	})));
 
 	const stats = $derived([
 		{ value: data.statYears, label: 'Years Active' },

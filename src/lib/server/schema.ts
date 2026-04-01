@@ -98,6 +98,8 @@ export const bots = pgTable('bots', {
 	videos: json('videos').$type<{ src: string; poster?: string }[]>().default([]),
 	youtubeLinks: json('youtube_links').$type<{ url: string; label?: string }[]>().default([]),
 	mediaCoverage: json('media_coverage').$type<{ text: string; link: string }[]>().default([]),
+	tagline: text('tagline').notNull().default(''),
+	isFeatured: boolean('is_featured').notNull().default(false),
 	backLink: text('back_link').default('/wiki'),
 	backLabel: text('back_label').default('Back to Wiki'),
 	sortOrder: integer('sort_order').notNull().default(0),
@@ -167,6 +169,17 @@ export const sponsors = pgTable('sponsors', {
 export const donations = pgTable('donations', {
 	id: serial('id').primaryKey(),
 	name: text('name').notNull(),
+	sortOrder: integer('sort_order').notNull().default(0),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
+});
+
+// ─── Social Links ─────────────────────────────────────────────────
+
+export const socialLinks = pgTable('social_links', {
+	id: serial('id').primaryKey(),
+	label: text('label').notNull(),
+	url: text('url').notNull(),
 	sortOrder: integer('sort_order').notNull().default(0),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow()

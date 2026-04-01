@@ -1,33 +1,32 @@
 <script lang="ts">
-	const footerSections: { title: string; links: { label: string; href: string; external?: boolean }[] }[] = [
+	let { socialLinks = [] } = $props<{ socialLinks?: { label: string; url: string }[] }>();
+
+	const footerSections = $derived([
 		{
 			title: 'About',
 			links: [
-				{ label: 'Team Updates', href: '/blog' },
-				{ label: 'Leadership', href: '/leadership' },
-				{ label: 'History', href: '/history' },
-				{ label: 'Projects', href: '/projects' },
+				{ label: 'Team Updates', href: '/blog', external: false },
+				{ label: 'Leadership', href: '/leadership', external: false },
+				{ label: 'History', href: '/history', external: false },
+				{ label: 'Projects', href: '/projects', external: false },
 			]
 		},
 		{
 			title: 'Our Bots',
 			links: [
-				{ label: 'Club Owned Bots', href: '/wiki' },
-				{ label: 'Personal Bots', href: '/pbots' },
+				{ label: 'Club Owned Bots', href: '/wiki', external: false },
+				{ label: 'Personal Bots', href: '/pbots', external: false },
 			]
 		},
 		{
 			title: 'Connect',
-			links: [
-				{ label: 'Instagram', href: 'https://www.instagram.com/ksucombatrobotics/', external: true },
-				{ label: 'KSU Engage', href: 'https://kent.campuslabs.com/engage/organization/combatrobotics', external: true },
-			]
+			links: socialLinks.map((s: { label: string; url: string }) => ({ label: s.label, href: s.url, external: true }))
 		},
 		{
 			title: 'Sponsorship & Contact',
 			links: [
-				{ label: 'Sponsors', href: '/sponsorship' },
-				{ label: 'Email Us', href: '/contact' },
+				{ label: 'Sponsors', href: '/sponsorship', external: false },
+				{ label: 'Email Us', href: '/contact', external: false },
 			]
 		},
 		{
@@ -37,7 +36,7 @@
 				{ label: 'Anti-Hazing Policy', href: 'https://www.kent.edu/studentconduct/anti-hazing', external: true },
 			]
 		}
-	];
+	]);
 </script>
 
 <footer class="footer">
