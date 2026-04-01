@@ -11,7 +11,8 @@ const ALLOWED_TYPES = [
 	'image/webp',
 	'image/svg+xml',
 	'video/mp4',
-	'video/webm'
+	'video/webm',
+	'application/pdf'
 ];
 
 export const POST: RequestHandler = async ({ request, locals }) => {

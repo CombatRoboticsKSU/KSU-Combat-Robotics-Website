@@ -15,7 +15,10 @@ export const load: PageServerLoad = async () => {
 		teamPhoto: getSetting('homepage_team_photo', '/USINGimg/TEAM25.JPG'),
 		groupPhoto: getSetting('leadership_group_photo', '/USINGimg/BOARD25/group.JPG'),
 		meetingTime: getSetting('meeting_time', 'Every Friday 4:30-6:30pm'),
-		meetingLocation: getSetting('meeting_location', '120 AEB')
+		meetingLocation: getSetting('meeting_location', '120 AEB'),
+		statYears: getSetting('stat_years', '10+'),
+		statWeightClass: getSetting('stat_weight_class', '12lb & 3lb'),
+		statMembers: getSetting('stat_members', '30+')
 	};
 };
 
@@ -45,6 +48,18 @@ export const actions: Actions = {
 		if (meetingLocation !== null) {
 			await db.insert(siteSettings).values({ key: 'meeting_location', value: meetingLocation })
 				.onConflictDoUpdate({ target: siteSettings.key, set: { value: meetingLocation } });
+		}
+
+		for (const [formKey, settingKey] of [
+			['statYears', 'stat_years'],
+			['statWeightClass', 'stat_weight_class'],
+			['statMembers', 'stat_members']
+		] as const) {
+			const val = form.get(formKey) as string;
+			if (val !== null) {
+				await db.insert(siteSettings).values({ key: settingKey, value: val })
+					.onConflictDoUpdate({ target: siteSettings.key, set: { value: val } });
+			}
 		}
 
 		return { success: true };

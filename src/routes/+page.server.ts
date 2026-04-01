@@ -11,14 +11,20 @@ export const load: PageServerLoad = async () => {
         return {
             teamPhoto: getSetting('homepage_team_photo', '/USINGimg/TEAM25.JPG'),
             meetingTime: getSetting('meeting_time', 'Every Friday 4:30-6:30pm'),
-            meetingLocation: getSetting('meeting_location', '120 AEB')
+            meetingLocation: getSetting('meeting_location', '120 AEB'),
+            statYears: getSetting('stat_years', '10+'),
+            statWeightClass: getSetting('stat_weight_class', '12lb & 3lb'),
+            statMembers: getSetting('stat_members', '30+')
         };
     } catch (e) {
         console.error('Error fetching site settings:', e);
         return {
             teamPhoto: '/USINGimg/TEAM25.JPG',
             meetingTime: 'Every Friday 4:30-6:30pm',
-            meetingLocation: '120 AEB'
+            meetingLocation: '120 AEB',
+            statYears: '10+',
+            statWeightClass: '12lb & 3lb',
+            statMembers: '30+'
         };
     }
 };

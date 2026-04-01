@@ -1,15 +1,5 @@
 <script lang="ts">
-	const sponsors = [
-		{ link: 'https://www.wardjet.com', src: '/USINGimg/WARDjet.jpg', alt: 'WARDjet' },
-		{ link: 'https://itgresa.com', src: '/USINGimg/ITGresa.jpg', alt: 'IT Gresa' },
-		{ link: 'https://badasspower.com', src: '/USINGimg/BadAss.jpg', alt: 'Bad-Ass Motors' },
-		{ link: 'https://repeat-robotics.com', src: '/USINGimg/repeat_g.jpg', alt: 'Repeat Robotics' },
-		{ link: 'https://sendcutsend.com', src: '/USINGimg/send_g.jpg', alt: 'SendCutSend' },
-		{ link: 'https://www.haascnc.com/content/ghf/en/home.html', src: '/USINGimg/haascnc.jpg', alt: 'Gene Haas Foundation' },
-		{ link: 'https://www.skbcases.com', src: '/USINGimg/skb.jpg', alt: 'SKB Cases' },
-	];
-
-	const donors = ['Brendan Steele', 'Sternberg Family'];
+	let { data } = $props();
 </script>
 
 <svelte:head>
@@ -26,9 +16,13 @@
 		<h2 class="section-title">Current <span>Sponsors</span></h2>
 
 		<div class="sponsors-grid">
-			{#each sponsors as sponsor}
+			{#each data.sponsors as sponsor}
 				<a href={sponsor.link} target="_blank" rel="noopener noreferrer" class="sponsor-logo-card">
-					<img src={sponsor.src} alt={sponsor.alt} />
+					{#if sponsor.image}
+						<img src={sponsor.image} alt={sponsor.name} />
+					{:else}
+						<span class="sponsor-name-fallback">{sponsor.name}</span>
+					{/if}
 				</a>
 			{/each}
 		</div>
@@ -39,8 +33,8 @@
 	<div class="container" style="text-align: center;">
 		<h2 class="section-title">Recent <span>Donations</span></h2>
 		<div class="donors">
-			{#each donors as donor}
-				<div class="donor-badge">{donor}</div>
+			{#each data.donations as donor}
+				<div class="donor-badge">{donor.name}</div>
 			{/each}
 		</div>
 	</div>
@@ -55,7 +49,7 @@
 				Your support directly funds competition travel, parts, and equipment that help our team grow and succeed.
 			</p>
 			<div class="sponsor-cta-actions">
-				<a href="/img/Letter.pdf" target="_blank" class="btn btn-primary">
+				<a href={data.letterUrl} target="_blank" class="btn btn-primary">
 					View Sponsorship Packet
 					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l8-8M5 4h7v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
 				</a>
@@ -101,6 +95,13 @@
 
 	.sponsor-logo-card:hover img {
 		transform: scale(1.05);
+	}
+
+	.sponsor-name-fallback {
+		font-weight: 600;
+		color: #333;
+		font-size: 0.9375rem;
+		text-align: center;
 	}
 
 	.donors {

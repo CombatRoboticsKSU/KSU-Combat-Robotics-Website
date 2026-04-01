@@ -150,6 +150,28 @@ export const posts = pgTable('posts', {
 	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
 
+// ─── Sponsors ────────────────────────────────────────────────────
+
+export const sponsors = pgTable('sponsors', {
+	id: serial('id').primaryKey(),
+	name: text('name').notNull(),
+	image: text('image').notNull().default(''),
+	link: text('link').notNull().default(''),
+	sortOrder: integer('sort_order').notNull().default(0),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
+});
+
+// ─── Donations ────────────────────────────────────────────────────
+
+export const donations = pgTable('donations', {
+	id: serial('id').primaryKey(),
+	name: text('name').notNull(),
+	sortOrder: integer('sort_order').notNull().default(0),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
+});
+
 // ─── Site Settings (key-value) ───────────────────────────────────
 
 export const siteSettings = pgTable('site_settings', {

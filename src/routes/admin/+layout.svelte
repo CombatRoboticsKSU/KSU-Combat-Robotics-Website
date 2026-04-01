@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { authClient } from '$lib/auth-client';
 	import { goto } from '$app/navigation';
-	import { LayoutDashboard, Users, Bot, Wrench, FileText, Newspaper, Key, Globe, LogOut, Settings, ChevronDown } from 'lucide-svelte';
+	import { LayoutDashboard, Users, Bot, Wrench, FileText, Newspaper, Key, Globe, LogOut, Settings, ChevronDown, Star } from 'lucide-svelte';
 
 	let { data, children } = $props();
 
@@ -17,6 +17,7 @@
 		{ href: '/admin/projects', label: 'Projects', icon: Wrench },
 		{ href: '/admin/posts', label: 'Posts', icon: FileText },
 		{ href: '/admin/publicity', label: 'Publicity', icon: Newspaper },
+		{ href: '/admin/sponsors', label: 'Sponsors', icon: Star },
 		{ href: '/admin/users', label: 'Users', icon: Key },
 		{ href: '/admin/settings', label: 'Settings', icon: Settings }
 	];

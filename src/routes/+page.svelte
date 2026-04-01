@@ -22,11 +22,11 @@
 		}
 	];
 
-	const stats = [
-		{ value: '10+', label: 'Years Active' },
-		{ value: '12lb & 3lb', label: 'Weight Class' },
-		{ value: '30+', label: 'Club Members' },
-	];
+	const stats = $derived([
+		{ value: data.statYears, label: 'Years Active' },
+		{ value: data.statWeightClass, label: 'Weight Class' },
+		{ value: data.statMembers, label: 'Club Members' },
+	]);
 </script>
 
 <svelte:head>

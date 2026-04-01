@@ -9,6 +9,9 @@
 	let groupPhotoValue = $state(untrack(() => data.groupPhoto));
 	let meetingTimeValue = $state(untrack(() => data.meetingTime));
 	let meetingLocationValue = $state(untrack(() => data.meetingLocation));
+	let statYearsValue = $state(untrack(() => data.statYears));
+	let statWeightClassValue = $state(untrack(() => data.statWeightClass));
+	let statMembersValue = $state(untrack(() => data.statMembers));
 </script>
 
 <svelte:head>
@@ -27,9 +30,11 @@
 	{/if}
 
 	<div class="form-card">
-		<h2>Meeting Info</h2>
+		<h2>Homepage Hero</h2>
 		<form method="POST" action="?/updateSettings" use:enhance>
-			<div style="margin-bottom: 1.5rem;">
+			<p class="section-desc">These values appear in the hero section of the landing page.</p>
+
+			<div class="field-group">
 				<label class="field-label" for="meetingTime">Meeting Time</label>
 				<input
 					id="meetingTime"
@@ -39,9 +44,10 @@
 					bind:value={meetingTimeValue}
 					placeholder="e.g. Every Friday 4:30-6:30pm"
 				/>
-				<p class="help-text">Displayed on the homepage hero and calendar page.</p>
+				<p class="help-text">Also shown on the calendar page.</p>
 			</div>
-			<div style="margin-bottom: 1.5rem;">
+
+			<div class="field-group">
 				<label class="field-label" for="meetingLocation">Meeting Location</label>
 				<input
 					id="meetingLocation"
@@ -51,9 +57,47 @@
 					bind:value={meetingLocationValue}
 					placeholder="e.g. 120 AEB"
 				/>
-				<p class="help-text">Displayed on the homepage hero and calendar page.</p>
+				<p class="help-text">Also shown on the calendar page.</p>
 			</div>
-			<button type="submit" class="btn-admin primary">Save Meeting Info</button>
+
+			<div class="stats-grid">
+				<div>
+					<label class="field-label" for="statYears">Years Active</label>
+					<input
+						id="statYears"
+						name="statYears"
+						type="text"
+						class="field-input"
+						bind:value={statYearsValue}
+						placeholder="e.g. 10+"
+					/>
+				</div>
+				<div>
+					<label class="field-label" for="statWeightClass">Weight Class</label>
+					<input
+						id="statWeightClass"
+						name="statWeightClass"
+						type="text"
+						class="field-input"
+						bind:value={statWeightClassValue}
+						placeholder="e.g. 12lb & 3lb"
+					/>
+				</div>
+				<div>
+					<label class="field-label" for="statMembers">Club Members</label>
+					<input
+						id="statMembers"
+						name="statMembers"
+						type="text"
+						class="field-input"
+						bind:value={statMembersValue}
+						placeholder="e.g. 30+"
+					/>
+				</div>
+			</div>
+			<p class="help-text" style="margin-bottom: 1.5rem;">Stats row shown below the hero badges.</p>
+
+			<button type="submit" class="btn-admin primary">Save Hero Settings</button>
 		</form>
 	</div>
 
@@ -105,6 +149,23 @@
 		font-size: 1.125rem;
 		margin-bottom: 1.5rem;
 		color: #fff;
+	}
+
+	.section-desc {
+		font-size: 0.875rem;
+		color: var(--text-muted);
+		margin-bottom: 1.5rem;
+	}
+
+	.field-group {
+		margin-bottom: 1.5rem;
+	}
+
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.field-label {

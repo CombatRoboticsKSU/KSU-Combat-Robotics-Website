@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Users, Bot, Wrench, FileText, Newspaper, Key, Settings } from 'lucide-svelte';
+	import { Users, Bot, Wrench, FileText, Newspaper, Key, Settings, Star } from 'lucide-svelte';
 	let { data } = $props();
 	const c = $derived(data.counts);
 </script>
@@ -68,6 +68,16 @@
 				<span class="stat-value">{c.publicity}</span>
 				<h3 class="stat-label">Publicity</h3>
 				<span class="stat-desc">Features & press</span>
+			</div>
+		</a>
+		<a href="/admin/sponsors" class="stat-card">
+			<div class="stat-icon-wrapper gold">
+				<Star size={28} />
+			</div>
+			<div class="stat-info">
+				<span class="stat-value">{c.sponsors}</span>
+				<h3 class="stat-label">Sponsors</h3>
+				<span class="stat-desc">{c.donations} recent donations</span>
 			</div>
 		</a>
 		<a href="/admin/users" class="stat-card">
@@ -195,6 +205,7 @@
 	.stat-icon-wrapper.green { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
 	.stat-icon-wrapper.pink { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
 	.stat-icon-wrapper.gray { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+	.stat-icon-wrapper.gold { background: rgba(235, 171, 33, 0.15); color: var(--gold); }
 
 	.stat-info {
 		display: flex;
