@@ -24,6 +24,7 @@
 
 <!-- Hero -->
 <section class="hero-home">
+	<h1 class="sr-only">KSU Combat Robotics</h1>
 	<div class="hero-bg-effects">
 		<div class="hero-orb hero-orb-1"></div>
 		<div class="hero-orb hero-orb-2"></div>
@@ -428,7 +429,7 @@
 
 	.bot-tagline {
 		font-size: 0.9375rem;
-		color: var(--text-secondary);
+		color: #b0c3d5;
 		font-style: italic;
 		margin-bottom: 0.75rem;
 	}
