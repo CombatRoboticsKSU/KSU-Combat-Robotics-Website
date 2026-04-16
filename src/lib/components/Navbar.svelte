@@ -272,11 +272,6 @@
 
 	.admin-link {
 		color: var(--gold);
-		opacity: 0.8;
-	}
-
-	.admin-link:hover {
-		opacity: 1;
 	}
 
 	.nav-spacer {

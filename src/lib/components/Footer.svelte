@@ -49,7 +49,7 @@
 			<div class="footer-grid">
 				{#each footerSections as section}
 					<div class="footer-section">
-						<h4>{section.title}</h4>
+						<h3>{section.title}</h3>
 						<ul>
 							{#each section.links as link}
 								<li>
@@ -137,7 +137,7 @@
 		gap: 1.5rem;
 	}
 
-	.footer-section h4 {
+	.footer-section h3 {
 		color: rgba(255,255,255,0.9);
 		font-size: 0.6875rem;
 		text-transform: uppercase;
@@ -241,7 +241,7 @@
 			max-width: 100%;
 		}
 
-		.footer-section h4 {
+		.footer-section h3 {
 			font-size: 0.75rem;
 			margin-bottom: 1rem;
 		}

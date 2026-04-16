@@ -184,7 +184,7 @@
 		font-size: 0.6875rem;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		color: var(--text-muted);
+		color: var(--text-secondary);
 		margin: 1rem 0 0.5rem 0.75rem;
 		font-weight: 600;
 	}
@@ -195,7 +195,7 @@
 		gap: 0.75rem;
 		padding: 0.625rem 0.875rem;
 		border-radius: 0.5rem;
-		color: var(--text-secondary);
+		color: #b4c4d6;
 		text-decoration: none;
 		font-size: 0.9375rem;
 		font-weight: 500;
@@ -242,7 +242,7 @@
 
 	.nav-item-ghost {
 		font-size: 0.875rem;
-		color: var(--text-muted);
+		color: var(--text-secondary);
 	}
 
 	.nav-item-ghost:hover {
@@ -368,7 +368,7 @@
 
 	.dropdown-email {
 		font-size: 0.8125rem;
-		color: var(--text-muted);
+		color: var(--text-secondary);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;

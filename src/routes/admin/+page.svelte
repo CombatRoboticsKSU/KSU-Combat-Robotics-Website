@@ -26,7 +26,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">{c.leadership}</span>
-				<h3 class="stat-label">Leadership</h3>
+				<p class="stat-label">Leadership</p>
 				<span class="stat-desc">Active board members</span>
 			</div>
 		</a>
@@ -36,7 +36,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">{c.bots}</span>
-				<h3 class="stat-label">Bots</h3>
+				<p class="stat-label">Bots</p>
 				<span class="stat-desc">Club & personal builds</span>
 			</div>
 		</a>
@@ -46,7 +46,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">{c.projects}</span>
-				<h3 class="stat-label">Projects</h3>
+				<p class="stat-label">Projects</p>
 				<span class="stat-desc">Ongoing developments</span>
 			</div>
 		</a>
@@ -56,7 +56,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">{c.posts}</span>
-				<h3 class="stat-label">Posts</h3>
+				<p class="stat-label">Posts</p>
 				<span class="stat-desc">{c.published} public updates</span>
 			</div>
 		</a>
@@ -66,7 +66,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">{c.publicity}</span>
-				<h3 class="stat-label">Publicity</h3>
+				<p class="stat-label">Publicity</p>
 				<span class="stat-desc">Features & press</span>
 			</div>
 		</a>
@@ -76,7 +76,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">{c.sponsors}</span>
-				<h3 class="stat-label">Sponsors</h3>
+				<p class="stat-label">Sponsors</p>
 				<span class="stat-desc">{c.donations} recent donations</span>
 			</div>
 		</a>
@@ -86,7 +86,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">{c.socialLinks}</span>
-				<h3 class="stat-label">Social Links</h3>
+				<p class="stat-label">Social Links</p>
 				<span class="stat-desc">Navbar & footer links</span>
 			</div>
 		</a>
@@ -96,7 +96,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">System</span>
-				<h3 class="stat-label">Users</h3>
+				<p class="stat-label">Users</p>
 				<span class="stat-desc">Manage accounts</span>
 			</div>
 		</a>
@@ -106,7 +106,7 @@
 			</div>
 			<div class="stat-info">
 				<span class="stat-value">Config</span>
-				<h3 class="stat-label">Site Settings</h3>
+				<p class="stat-label">Site Settings</p>
 				<span class="stat-desc">Global preferences</span>
 			</div>
 		</a>
@@ -239,6 +239,6 @@
 
 	.stat-desc {
 		font-size: 0.8125rem;
-		color: var(--text-muted);
+		color: var(--text-secondary);
 	}
 </style>
