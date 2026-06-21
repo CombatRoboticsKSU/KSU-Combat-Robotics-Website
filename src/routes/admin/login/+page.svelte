@@ -48,6 +48,13 @@
 		}
 		loading = false;
 	}
+
+	async function handleDiscord() {
+		error = '';
+		loading = true;
+		// Redirects the browser to Discord; control does not return here on success.
+		await authClient.signIn.social({ provider: 'discord', callbackURL: '/admin' });
+	}
 </script>
 
 <svelte:head>
@@ -62,6 +69,15 @@
 		{#if error}
 			<div class="error-msg">{error}</div>
 		{/if}
+
+		<button type="button" class="btn-discord" onclick={handleDiscord} disabled={loading}>
+			<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+				<path d="M20.317 4.369A19.79 19.79 0 0 0 15.885 3c-.21.375-.444.882-.608 1.283a18.27 18.27 0 0 0-5.487 0A12.6 12.6 0 0 0 9.18 3a19.74 19.74 0 0 0-4.434 1.369C1.96 8.555 1.2 12.63 1.58 16.65a19.94 19.94 0 0 0 6.075 3.078c.49-.668.927-1.378 1.304-2.124a12.94 12.94 0 0 1-2.053-.989c.172-.127.34-.26.503-.397a14.2 14.2 0 0 0 12.18 0c.165.14.333.272.504.397-.655.39-1.345.722-2.056.99.378.745.814 1.455 1.304 2.123a19.9 19.9 0 0 0 6.078-3.078c.448-4.66-.766-8.697-3.203-12.281ZM8.02 14.18c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.42 2.157-2.42 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.955 2.419-2.157 2.419Zm7.974 0c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.42 2.157-2.42 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419Z" />
+			</svg>
+			Continue with Discord
+		</button>
+
+		<div class="divider"><span>or</span></div>
 
 		<form onsubmit={(e) => { e.preventDefault(); mode === 'login' ? handleLogin() : handleRegister(); }}>
 			{#if mode === 'register'}
@@ -128,6 +144,45 @@
 		font-size: 0.875rem;
 		margin-bottom: 1.5rem;
 	}
+
+	.btn-discord {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 0.75rem 1.5rem;
+		background: #5865f2;
+		color: #fff;
+		font-weight: 600;
+		font-size: 1rem;
+		font-family: inherit;
+		border: none;
+		border-radius: 0.5rem;
+		cursor: pointer;
+		transition: opacity 0.15s;
+	}
+
+	.btn-discord:hover { opacity: 0.9; }
+	.btn-discord:disabled { opacity: 0.5; cursor: not-allowed; }
+
+	.divider {
+		display: flex;
+		align-items: center;
+		text-align: center;
+		color: var(--text-muted);
+		font-size: 0.8125rem;
+		margin: 1.5rem 0;
+	}
+
+	.divider::before,
+	.divider::after {
+		content: '';
+		flex: 1;
+		border-bottom: 1px solid var(--border-color);
+	}
+
+	.divider span { padding: 0 0.75rem; }
 
 	form {
 		display: flex;
