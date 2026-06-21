@@ -14,8 +14,12 @@ const rolePrecedence = (env.DISCORD_ROLE_PRECEDENCE ?? 'admin,user')
 	.filter(Boolean);
 const guildId = env.DISCORD_GUILD_ID ?? '';
 
-// Only enable Discord if credentials are present, so the app still boots without them.
-const discordConfigured = Boolean(env.DISCORD_CLIENT_ID && env.DISCORD_CLIENT_SECRET);
+// Only enable Discord if credentials AND the guild are present, so the app boots
+// without Discord and we never silently resolve every login to 'user' when the
+// guild is unset (which would make role-gating appear to work while granting none).
+const discordConfigured = Boolean(
+	env.DISCORD_CLIENT_ID && env.DISCORD_CLIENT_SECRET && env.DISCORD_GUILD_ID
+);
 
 const socialProviders = discordConfigured
 	? {
@@ -34,6 +38,9 @@ const socialProviders = discordConfigured
 					});
 					if (!profileRes.ok) return null;
 					const profile = await profileRes.json();
+					// Discord can return a null email; better-auth lowercases the email
+					// downstream and would throw an opaque error. Abort cleanly instead.
+					if (!profile.email) return null;
 
 					const roleIds = await fetchGuildMemberRoles(accessToken, guildId);
 					const role = mapRolesToSiteRole(roleIds, roleMap, rolePrecedence);
