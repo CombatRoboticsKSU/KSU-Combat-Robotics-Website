@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { parseRoleMap, mapRolesToSiteRole } from './discord-roles';
+import { describe, it, expect, afterEach, vi } from 'vitest';
+import { parseRoleMap, mapRolesToSiteRole, fetchGuildMemberRoles } from './discord-roles';
 
 describe('parseRoleMap', () => {
 	it('returns {} for undefined', () => {
@@ -44,5 +44,42 @@ describe('mapRolesToSiteRole', () => {
 
 	it('ranks a matched-but-unranked site role above nothing', () => {
 		expect(mapRolesToSiteRole(['222'], map, ['admin', 'user'])).toBe('editor');
+	});
+});
+
+describe('fetchGuildMemberRoles', () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
+	it('returns the roles array on success', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response(JSON.stringify({ roles: ['111', '222'] }), { status: 200 }))
+		);
+		await expect(fetchGuildMemberRoles('token', 'guild')).resolves.toEqual(['111', '222']);
+	});
+
+	it('returns [] when the user is not in the guild (404)', async () => {
+		vi.stubGlobal('fetch', vi.fn(async () => new Response('', { status: 404 })));
+		await expect(fetchGuildMemberRoles('token', 'guild')).resolves.toEqual([]);
+	});
+
+	it('returns [] when fetch throws', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => {
+				throw new Error('network');
+			})
+		);
+		await expect(fetchGuildMemberRoles('token', 'guild')).resolves.toEqual([]);
+	});
+
+	it('returns [] when roles is missing from the response', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response(JSON.stringify({ nick: 'x' }), { status: 200 }))
+		);
+		await expect(fetchGuildMemberRoles('token', 'guild')).resolves.toEqual([]);
 	});
 });

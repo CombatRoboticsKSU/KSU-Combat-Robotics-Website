@@ -38,3 +38,23 @@ export function mapRolesToSiteRole(
 	};
 	return matched.reduce((best, cur) => (rank(cur) < rank(best) ? cur : best));
 }
+
+const DISCORD_API = 'https://discord.com/api/v10';
+
+/**
+ * Fetch the caller's role IDs within a specific guild using their OAuth access
+ * token. Requires the `guilds.members.read` scope. Fails closed to [] on any
+ * error (not in guild, revoked token, network failure).
+ */
+export async function fetchGuildMemberRoles(accessToken: string, guildId: string): Promise<string[]> {
+	try {
+		const res = await fetch(`${DISCORD_API}/users/@me/guilds/${guildId}/member`, {
+			headers: { Authorization: `Bearer ${accessToken}` }
+		});
+		if (!res.ok) return [];
+		const data = await res.json();
+		return Array.isArray(data?.roles) ? data.roles : [];
+	} catch {
+		return [];
+	}
+}
