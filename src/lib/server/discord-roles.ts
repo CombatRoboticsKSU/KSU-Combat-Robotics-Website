@@ -53,7 +53,8 @@ export async function fetchGuildMemberRoles(accessToken: string, guildId: string
 		});
 		if (!res.ok) return [];
 		const data = await res.json();
-		return Array.isArray(data?.roles) ? data.roles : [];
+		if (!Array.isArray(data?.roles)) return [];
+		return data.roles.filter((r: unknown): r is string => typeof r === 'string');
 	} catch {
 		return [];
 	}

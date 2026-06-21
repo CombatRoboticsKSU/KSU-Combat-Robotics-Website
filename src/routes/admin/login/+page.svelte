@@ -52,8 +52,13 @@
 	async function handleDiscord() {
 		error = '';
 		loading = true;
-		// Redirects the browser to Discord; control does not return here on success.
-		await authClient.signIn.social({ provider: 'discord', callbackURL: '/admin' });
+		try {
+			// Redirects the browser to Discord; control does not return here on success.
+			await authClient.signIn.social({ provider: 'discord', callbackURL: '/admin' });
+		} catch {
+			error = 'Something went wrong. Please try again.';
+			loading = false;
+		}
 	}
 </script>
 

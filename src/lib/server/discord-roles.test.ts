@@ -82,4 +82,12 @@ describe('fetchGuildMemberRoles', () => {
 		);
 		await expect(fetchGuildMemberRoles('token', 'guild')).resolves.toEqual([]);
 	});
+
+	it('filters out non-string entries from the roles array', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response(JSON.stringify({ roles: ['111', 42, null, '222'] }), { status: 200 }))
+		);
+		await expect(fetchGuildMemberRoles('token', 'guild')).resolves.toEqual(['111', '222']);
+	});
 });
