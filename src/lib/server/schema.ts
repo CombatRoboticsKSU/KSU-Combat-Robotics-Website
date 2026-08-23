@@ -1,4 +1,4 @@
-import { pgTable, text, integer, boolean, timestamp, json, serial } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, boolean, timestamp, json, serial, index } from 'drizzle-orm/pg-core';
 
 // ─── Better Auth tables ───────────────────────────────────────────
 
@@ -205,3 +205,64 @@ export const publicity = pgTable('publicity', {
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
+
+// ─── Events ───────────────────────────────────────────────────────
+
+export const events = pgTable('events', {
+	id: serial('id').primaryKey(),
+	name: text('name').notNull(),
+	slug: text('slug').notNull().unique(),
+	tagline: text('tagline').notNull().default(''),
+	image: text('image').notNull().default('/USINGimg/placeholder.png'),
+	weightClass: text('weight_class').notNull().default(''),
+	eventDate: text('event_date').notNull().default(''),
+	sortDate: timestamp('sort_date').notNull().defaultNow(),
+	doorsTime: text('doors_time').notNull().default(''),
+	location: text('location').notNull().default(''),
+	address: text('address').notNull().default(''),
+	// 'upcoming' | 'past'. Registration gating is registrationOpen, not this.
+	status: text('status').notNull().default('upcoming'),
+	overview: text('overview').notNull().default(''),
+	rulesPdfUrl: text('rules_pdf_url').notNull().default(''),
+	rulesLabel: text('rules_label').notNull().default('Download Rules (PDF)'),
+	registrationOpen: boolean('registration_open').notNull().default(false),
+	competitorPriceId: text('competitor_price_id').notNull().default(''),
+	competitorLabel: text('competitor_label').notNull().default('Register to Compete'),
+	competitorPrice: text('competitor_price').notNull().default(''),
+	competitorNote: text('competitor_note').notNull().default(''),
+	capacity: integer('capacity').notNull().default(0), // 0 means unlimited
+	spectatorUrl: text('spectator_url').notNull().default(''),
+	spectatorLabel: text('spectator_label').notNull().default('Buy Spectator Tickets'),
+	spectatorPrice: text('spectator_price').notNull().default(''),
+	spectatorNote: text('spectator_note').notNull().default(''),
+	schedule: json('schedule').$type<{ time: string; label: string }[]>().notNull().default([]),
+	faq: json('faq').$type<{ question: string; answer: string }[]>().notNull().default([]),
+	published: boolean('published').notNull().default(false),
+	sortOrder: integer('sort_order').notNull().default(0),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
+});
+
+// ─── Event Registrations ─────────────────────────────────────────
+
+export const registrations = pgTable('registrations', {
+	id: serial('id').primaryKey(),
+	eventId: integer('event_id').notNull().references(() => events.id),
+	// 'pending' | 'paid' | 'expired' | 'refunded'
+	status: text('status').notNull().default('pending'),
+	builderName: text('builder_name').notNull(),
+	email: text('email').notNull(),
+	phone: text('phone').notNull().default(''),
+	teamName: text('team_name').notNull().default(''),
+	botName: text('bot_name').notNull(),
+	weaponType: text('weapon_type').notNull().default(''),
+	notes: text('notes').notNull().default(''),
+	waiverAck: boolean('waiver_ack').notNull().default(false),
+	stripeSessionId: text('stripe_session_id').unique(),
+	stripePaymentIntentId: text('stripe_payment_intent_id'),
+	amountTotal: integer('amount_total'),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	paidAt: timestamp('paid_at')
+}, (table) => [
+	index('registrations_event_id_idx').on(table.eventId)
+]);
