@@ -1,55 +1,8 @@
-CREATE TABLE "account" (
-	"id" text PRIMARY KEY NOT NULL,
-	"account_id" text NOT NULL,
-	"provider_id" text NOT NULL,
-	"user_id" text NOT NULL,
-	"access_token" text,
-	"refresh_token" text,
-	"id_token" text,
-	"access_token_expires_at" timestamp,
-	"refresh_token_expires_at" timestamp,
-	"scope" text,
-	"password" text,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "bots" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"slug" text NOT NULL,
-	"image" text DEFAULT '/USINGimg/placeholder.png' NOT NULL,
-	"weight" text NOT NULL,
-	"weapon" text DEFAULT '' NOT NULL,
-	"status" text DEFAULT 'Active' NOT NULL,
-	"type" text DEFAULT 'club' NOT NULL,
-	"owner" text,
-	"description" text DEFAULT '',
-	"specs" json DEFAULT '{}'::json,
-	"competitions" json DEFAULT '[]'::json,
-	"team" json DEFAULT '[]'::json,
-	"gallery_images" json DEFAULT '[]'::json,
-	"videos" json DEFAULT '[]'::json,
-	"youtube_links" json DEFAULT '[]'::json,
-	"media_coverage" json DEFAULT '[]'::json,
-	"tagline" text DEFAULT '' NOT NULL,
-	"is_featured" boolean DEFAULT false NOT NULL,
-	"back_link" text DEFAULT '/wiki',
-	"back_label" text DEFAULT 'Back to Wiki',
-	"sort_order" integer DEFAULT 0 NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "bots_slug_unique" UNIQUE("slug")
-);
---> statement-breakpoint
-CREATE TABLE "donations" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"sort_order" integer DEFAULT 0 NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
+-- This repo applies schema changes with `drizzle-kit push`, not `drizzle-kit migrate`.
+-- Several existing tables were pushed without generated migrations, so the snapshot
+-- history is incomplete and a generated delta is not reliable. This file is a record of
+-- what this change adds, for applying to production by hand.
+
 CREATE TABLE "events" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
@@ -85,70 +38,6 @@ CREATE TABLE "events" (
 	CONSTRAINT "events_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
-CREATE TABLE "leadership" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"image" text DEFAULT '/USINGimg/placeholder.png' NOT NULL,
-	"title" text NOT NULL,
-	"stats" json DEFAULT '[]'::json NOT NULL,
-	"bio" text DEFAULT '' NOT NULL,
-	"is_current" boolean DEFAULT true NOT NULL,
-	"sort_order" integer DEFAULT 0 NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "posts" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"slug" text NOT NULL,
-	"title" text NOT NULL,
-	"date" text NOT NULL,
-	"tags" json DEFAULT '[]'::json NOT NULL,
-	"excerpt" text DEFAULT '' NOT NULL,
-	"image" text DEFAULT '' NOT NULL,
-	"content" text DEFAULT '' NOT NULL,
-	"gallery_images" json DEFAULT '[]'::json,
-	"videos" json DEFAULT '[]'::json,
-	"youtube_links" json DEFAULT '[]'::json,
-	"media_coverage" json DEFAULT '[]'::json,
-	"published" boolean DEFAULT false NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "posts_slug_unique" UNIQUE("slug")
-);
---> statement-breakpoint
-CREATE TABLE "projects" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"slug" text NOT NULL,
-	"icon" text DEFAULT '' NOT NULL,
-	"image" text DEFAULT '/USINGimg/placeholder.png' NOT NULL,
-	"description" text DEFAULT '' NOT NULL,
-	"about" text DEFAULT '' NOT NULL,
-	"specs" json DEFAULT '{}'::json,
-	"team" json DEFAULT '[]'::json,
-	"gallery_images" json DEFAULT '[]'::json,
-	"videos" json DEFAULT '[]'::json,
-	"youtube_links" json DEFAULT '[]'::json,
-	"media_coverage" json DEFAULT '[]'::json,
-	"sort_order" integer DEFAULT 0 NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "projects_slug_unique" UNIQUE("slug")
-);
---> statement-breakpoint
-CREATE TABLE "publicity" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"title" text NOT NULL,
-	"link" text NOT NULL,
-	"date" text NOT NULL,
-	"image" text DEFAULT '' NOT NULL,
-	"summary" text DEFAULT '' NOT NULL,
-	"sort_order" integer DEFAULT 0 NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE "registrations" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"event_id" integer NOT NULL,
@@ -169,64 +58,6 @@ CREATE TABLE "registrations" (
 	CONSTRAINT "registrations_stripe_session_id_unique" UNIQUE("stripe_session_id")
 );
 --> statement-breakpoint
-CREATE TABLE "session" (
-	"id" text PRIMARY KEY NOT NULL,
-	"expires_at" timestamp NOT NULL,
-	"token" text NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	"ip_address" text,
-	"user_agent" text,
-	"user_id" text NOT NULL,
-	CONSTRAINT "session_token_unique" UNIQUE("token")
-);
+ALTER TABLE "registrations" ADD CONSTRAINT "registrations_event_id_events_id_fk" FOREIGN KEY ("event_id") REFERENCES "public"."events"("id") ON DELETE no action ON UPDATE no action;
 --> statement-breakpoint
-CREATE TABLE "site_settings" (
-	"key" text PRIMARY KEY NOT NULL,
-	"value" text DEFAULT '' NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "social_links" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"label" text NOT NULL,
-	"url" text NOT NULL,
-	"sort_order" integer DEFAULT 0 NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "sponsors" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"image" text DEFAULT '' NOT NULL,
-	"link" text DEFAULT '' NOT NULL,
-	"sort_order" integer DEFAULT 0 NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "user" (
-	"id" text PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"email" text NOT NULL,
-	"email_verified" boolean DEFAULT false NOT NULL,
-	"image" text,
-	"role" text DEFAULT 'user',
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "user_email_unique" UNIQUE("email")
-);
---> statement-breakpoint
-CREATE TABLE "verification" (
-	"id" text PRIMARY KEY NOT NULL,
-	"identifier" text NOT NULL,
-	"value" text NOT NULL,
-	"expires_at" timestamp NOT NULL,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
-);
---> statement-breakpoint
-ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "registrations" ADD CONSTRAINT "registrations_event_id_events_id_fk" FOREIGN KEY ("event_id") REFERENCES "public"."events"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "registrations_event_id_idx" ON "registrations" USING btree ("event_id");
