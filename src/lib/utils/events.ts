@@ -1,0 +1,14 @@
+export type EventStatus = 'upcoming' | 'past';
+
+export type BadgeTone = 'open' | 'closed' | 'past';
+
+export function eventBadge(
+	status: string,
+	registrationOpen: boolean,
+	isFull: boolean
+): { text: string; tone: BadgeTone } {
+	if (status === 'past') return { text: 'Past event', tone: 'past' };
+	if (isFull) return { text: 'Registration full', tone: 'closed' };
+	if (registrationOpen) return { text: 'Registration open', tone: 'open' };
+	return { text: 'Registration closed', tone: 'closed' };
+}

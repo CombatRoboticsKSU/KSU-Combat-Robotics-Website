@@ -19,6 +19,7 @@
 	});
 
 	const navLinks = [
+		{ href: '/events', label: 'Events' },
 		{ href: '/sponsorship', label: 'Sponsors' },
 		{ href: '/contact', label: 'Contact' },
 		{ href: '/leadership', label: 'Leadership' },
