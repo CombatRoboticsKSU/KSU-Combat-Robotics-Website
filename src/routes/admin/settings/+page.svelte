@@ -12,6 +12,7 @@
 	let statYearsValue = $state(untrack(() => data.statYears));
 	let statWeightClassValue = $state(untrack(() => data.statWeightClass));
 	let statMembersValue = $state(untrack(() => data.statMembers));
+	let discordUrlValue = $state(untrack(() => data.discordUrl));
 </script>
 
 <svelte:head>
@@ -115,6 +116,29 @@
 			</div>
 			
 			<button type="submit" class="btn-admin primary">Save Settings</button>
+		</form>
+	</div>
+
+	<div class="form-card">
+		<h2>Community</h2>
+		<form method="POST" action="?/updateSettings" use:enhance>
+			<div class="field-group">
+				<label class="field-label" for="discordUrl">Discord Invite URL</label>
+				<input
+					id="discordUrl"
+					name="discordUrl"
+					type="url"
+					class="field-input"
+					bind:value={discordUrlValue}
+					placeholder="https://discord.gg/..."
+				/>
+				<p class="help-text">
+					Where /discord sends people. Leave this empty and the page tells visitors the invite is not
+					set up yet. Paste a new link here whenever the invite is rotated. No deploy needed.
+				</p>
+			</div>
+
+			<button type="submit" class="btn-admin primary">Save Community Settings</button>
 		</form>
 	</div>
 </div>
