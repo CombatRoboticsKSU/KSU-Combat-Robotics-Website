@@ -2,6 +2,12 @@ export type EventStatus = 'upcoming' | 'past';
 
 export type BadgeTone = 'open' | 'closed' | 'past';
 
+// Single source of truth for capacity math, used by both the listing loader
+// and the detail loader so they can never disagree on whether an event is full.
+export function isEventFull(capacity: number, taken: number): boolean {
+	return capacity > 0 && taken >= capacity;
+}
+
 export function eventBadge(
 	status: string,
 	registrationOpen: boolean,
