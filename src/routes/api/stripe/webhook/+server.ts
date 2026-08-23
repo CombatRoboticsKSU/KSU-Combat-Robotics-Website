@@ -79,7 +79,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	switch (event.type) {
 		case 'checkout.session.completed': {
-			const session = event.data.object as Stripe.Checkout.Session | null;
+			const session = event.data?.object as Stripe.Checkout.Session | null;
 			if (!session) {
 				logMalformedPayload(event);
 				break;
@@ -98,7 +98,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 
 		case 'checkout.session.async_payment_succeeded': {
-			const session = event.data.object as Stripe.Checkout.Session | null;
+			const session = event.data?.object as Stripe.Checkout.Session | null;
 			if (!session) {
 				logMalformedPayload(event);
 				break;
@@ -113,7 +113,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		case 'checkout.session.expired':
 		case 'checkout.session.async_payment_failed': {
-			const session = event.data.object as Stripe.Checkout.Session | null;
+			const session = event.data?.object as Stripe.Checkout.Session | null;
 			if (!session) {
 				logMalformedPayload(event);
 				break;
@@ -136,7 +136,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 
 		case 'charge.refunded': {
-			const charge = event.data.object as Stripe.Charge | null;
+			const charge = event.data?.object as Stripe.Charge | null;
 			if (!charge) {
 				logMalformedPayload(event);
 				break;

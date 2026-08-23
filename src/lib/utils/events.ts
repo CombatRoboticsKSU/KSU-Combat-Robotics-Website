@@ -22,9 +22,14 @@ export function canRegister(
 export function eventBadge(
 	status: string,
 	registrationOpen: boolean,
-	isFull: boolean
+	isFull: boolean,
+	hasCompetitorPrice: boolean
 ): { text: string; tone: BadgeTone } {
 	if (status === 'past') return { text: 'Past event', tone: 'past' };
+	// No Stripe price configured yet: the competitor card is disabled regardless of
+	// registrationOpen or capacity, so the badge must agree instead of promising
+	// registration that the action card will not actually offer.
+	if (!hasCompetitorPrice) return { text: 'Coming soon', tone: 'closed' };
 	if (isFull) return { text: 'Registration full', tone: 'closed' };
 	if (registrationOpen) return { text: 'Registration open', tone: 'open' };
 	return { text: 'Registration closed', tone: 'closed' };

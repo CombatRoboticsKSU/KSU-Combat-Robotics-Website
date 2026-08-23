@@ -4,7 +4,9 @@
 
 	let { data } = $props();
 
-	const badge = $derived(eventBadge(data.event.status, data.event.registrationOpen, data.isFull));
+	const badge = $derived(
+		eventBadge(data.event.status, data.event.registrationOpen, data.isFull, data.event.competitorPriceId !== '')
+	);
 </script>
 
 <svelte:head>

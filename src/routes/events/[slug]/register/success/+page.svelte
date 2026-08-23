@@ -63,7 +63,7 @@
 				<h2>Payment received, confirming your registration.</h2>
 				<p class="status-detail">
 					<strong>{data.botName}</strong> for {data.builderName} is being confirmed for {data.event.name}.
-					A confirmation email follows shortly.
+					Show up on event day and check in with a signed waiver.
 				</p>
 			{/if}
 

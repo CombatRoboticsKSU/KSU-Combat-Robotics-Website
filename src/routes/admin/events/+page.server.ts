@@ -35,7 +35,9 @@ function readEventFields(form: FormData) {
 		image: (form.get('image') as string) || '/USINGimg/placeholder.png',
 		weightClass: (form.get('weightClass') as string) ?? '',
 		eventDate: (form.get('eventDate') as string) ?? '',
-		sortDate: form.get('sortDate') ? new Date(form.get('sortDate') as string) : new Date(),
+		// sortDate is intentionally excluded here: createEvent and updateEvent handle it
+		// differently (see readSortDate below) so that clearing the field on an update
+		// preserves the existing value instead of silently writing today's date.
 		doorsTime: (form.get('doorsTime') as string) ?? '',
 		location: (form.get('location') as string) ?? '',
 		address: (form.get('address') as string) ?? '',
@@ -58,6 +60,14 @@ function readEventFields(form: FormData) {
 		published: form.get('published') === 'on',
 		sortOrder: parseInt(form.get('sortOrder') as string) || 0
 	};
+}
+
+// An empty sortDate field must not silently write today's date. CREATE has no prior value
+// to preserve, so falling back to now is fine; UPDATE returns null on empty so the caller
+// can omit the column entirely and leave the stored value untouched.
+function readSortDate(form: FormData): Date | null {
+	const raw = (form.get('sortDate') as string) ?? '';
+	return raw ? new Date(raw) : null;
 }
 
 function pgErrorCode(err: unknown): string | undefined {
@@ -84,7 +94,7 @@ export const actions: Actions = {
 			return fail(400, { error: 'Slug must be lowercase letters, numbers, and hyphens only' });
 		}
 		try {
-			await db.insert(events).values(values);
+			await db.insert(events).values({ ...values, sortDate: readSortDate(form) ?? new Date() });
 		} catch (err) {
 			if (isUniqueViolation(err)) {
 				return fail(400, { error: 'That slug is already in use' });
@@ -104,8 +114,15 @@ export const actions: Actions = {
 		if (!/^[a-z0-9-]+$/.test(values.slug)) {
 			return fail(400, { error: 'Slug must be lowercase letters, numbers, and hyphens only' });
 		}
+		// Omit sortDate from the update entirely when the field was submitted empty, so
+		// clearing it in the form preserves the existing stored value instead of
+		// overwriting it with today's date.
+		const sortDate = readSortDate(form);
 		try {
-			await db.update(events).set({ ...values, updatedAt: new Date() }).where(eq(events.id, id));
+			await db
+				.update(events)
+				.set({ ...values, ...(sortDate ? { sortDate } : {}), updatedAt: new Date() })
+				.where(eq(events.id, id));
 		} catch (err) {
 			if (isUniqueViolation(err)) {
 				return fail(400, { error: 'That slug is already in use' });
@@ -121,20 +138,28 @@ export const actions: Actions = {
 		const id = parseInt(form.get('id') as string);
 		if (!Number.isFinite(id)) return fail(400, { error: 'Invalid event id' });
 
-		// Paid and refunded rows are financial records. Neither may be destroyed here.
+		// Paid and refunded rows are financial records and may never be destroyed here.
+		// Pending rows must also be protected: a pending row can be someone on the Stripe
+		// checkout page right now. Deleting the event out from under them lets the payment
+		// complete with no registration left for the webhook to mark paid. Only rows that
+		// have resolved to 'expired' (or no rows at all) may be deleted.
 		const [{ value: protectedRows }] = await db
 			.select({ value: count() })
 			.from(registrations)
 			.where(
 				and(
 					eq(registrations.eventId, id),
-					or(eq(registrations.status, 'paid'), eq(registrations.status, 'refunded'))
+					or(
+						eq(registrations.status, 'pending'),
+						eq(registrations.status, 'paid'),
+						eq(registrations.status, 'refunded')
+					)
 				)
 			);
 
 		if (protectedRows > 0) {
 			return fail(400, {
-				error: `This event has ${protectedRows} paid or refunded registration(s) and cannot be deleted. Mark it past instead.`
+				error: `This event has ${protectedRows} pending, paid, or refunded registration(s) and cannot be deleted. A pending registration may just be an in-flight checkout that will resolve itself shortly; wait for it to complete or expire, or mark the event past instead.`
 			});
 		}
 

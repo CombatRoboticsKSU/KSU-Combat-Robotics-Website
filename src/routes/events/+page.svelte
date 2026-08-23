@@ -22,7 +22,7 @@
 				<h2 class="section-title">Upcoming <span>Events</span></h2>
 				<div class="events-grid">
 					{#each data.upcoming as e}
-						{@const badge = eventBadge(e.status, e.registrationOpen, e.isFull)}
+						{@const badge = eventBadge(e.status, e.registrationOpen, e.isFull, e.competitorPriceId !== '')}
 						<a href="/events/{e.slug}" class="event-card card">
 							<img src={e.image} alt={e.name} class="event-image" />
 							<div class="event-body">
@@ -41,7 +41,7 @@
 				<h2 class="section-title" class:with-margin={data.upcoming.length > 0}>Past <span>Events</span></h2>
 				<div class="events-grid">
 					{#each data.past as e}
-						{@const badge = eventBadge(e.status, e.registrationOpen, e.isFull)}
+						{@const badge = eventBadge(e.status, e.registrationOpen, e.isFull, e.competitorPriceId !== '')}
 						<a href="/events/{e.slug}" class="event-card card">
 							<img src={e.image} alt={e.name} class="event-image" />
 							<div class="event-body">
