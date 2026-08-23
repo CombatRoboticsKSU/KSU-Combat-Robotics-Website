@@ -1,10 +1,10 @@
 import { db } from '$lib/server/db';
-import { leadership, bots, projects, posts, publicity, sponsors, donations, socialLinks } from '$lib/server/schema';
+import { leadership, bots, projects, posts, publicity, sponsors, donations, socialLinks, events } from '$lib/server/schema';
 import { count, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-	const [[leadershipCount], [botsCount], [projectsCount], [postsCount], [publishedCount], [publicityCount], [sponsorsCount], [donationsCount], [socialLinksCount]] = await Promise.all([
+	const [[leadershipCount], [botsCount], [projectsCount], [postsCount], [publishedCount], [publicityCount], [sponsorsCount], [donationsCount], [socialLinksCount], [eventsCount]] = await Promise.all([
 		db.select({ value: count() }).from(leadership),
 		db.select({ value: count() }).from(bots),
 		db.select({ value: count() }).from(projects),
@@ -14,6 +14,7 @@ export const load: PageServerLoad = async () => {
 		db.select({ value: count() }).from(sponsors),
 		db.select({ value: count() }).from(donations),
 		db.select({ value: count() }).from(socialLinks),
+		db.select({ value: count() }).from(events),
 	]);
 
 	return {
@@ -27,6 +28,7 @@ export const load: PageServerLoad = async () => {
 			sponsors: sponsorsCount.value,
 			donations: donationsCount.value,
 			socialLinks: socialLinksCount.value,
+			events: eventsCount.value,
 		}
 	};
 };
