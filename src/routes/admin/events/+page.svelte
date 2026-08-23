@@ -118,7 +118,8 @@
 				method="POST"
 				action={editing ? '?/updateEvent' : '?/createEvent'}
 				use:enhance={() => {
-					return ({ result }) => {
+					return async ({ result, update }) => {
+						await update();
 						if (result.type !== 'failure') closeForm();
 					};
 				}}

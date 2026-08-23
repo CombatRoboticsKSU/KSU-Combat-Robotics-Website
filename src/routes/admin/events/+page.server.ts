@@ -60,6 +60,21 @@ function readEventFields(form: FormData) {
 	};
 }
 
+function pgErrorCode(err: unknown): string | undefined {
+	if (!err || typeof err !== 'object') return undefined;
+	if ('code' in err && typeof (err as { code?: unknown }).code === 'string') {
+		return (err as { code: string }).code;
+	}
+	// drizzle-orm wraps the underlying postgres error in a DrizzleQueryError,
+	// putting the real error (with its SQLSTATE code) on `.cause`.
+	if ('cause' in err) return pgErrorCode((err as { cause?: unknown }).cause);
+	return undefined;
+}
+
+function isUniqueViolation(err: unknown): boolean {
+	return pgErrorCode(err) === '23505';
+}
+
 export const actions: Actions = {
 	createEvent: async ({ request }) => {
 		const form = await request.formData();
@@ -70,8 +85,12 @@ export const actions: Actions = {
 		}
 		try {
 			await db.insert(events).values(values);
-		} catch {
-			return fail(400, { error: 'That slug is already in use' });
+		} catch (err) {
+			if (isUniqueViolation(err)) {
+				return fail(400, { error: 'That slug is already in use' });
+			}
+			console.error('createEvent failed', err);
+			return fail(400, { error: 'Failed to create event' });
 		}
 		return { success: true };
 	},
@@ -79,6 +98,7 @@ export const actions: Actions = {
 	updateEvent: async ({ request }) => {
 		const form = await request.formData();
 		const id = parseInt(form.get('id') as string);
+		if (!Number.isFinite(id)) return fail(400, { error: 'Invalid event id' });
 		const values = readEventFields(form);
 		if (!values.name) return fail(400, { error: 'Name is required' });
 		if (!/^[a-z0-9-]+$/.test(values.slug)) {
@@ -86,8 +106,12 @@ export const actions: Actions = {
 		}
 		try {
 			await db.update(events).set({ ...values, updatedAt: new Date() }).where(eq(events.id, id));
-		} catch {
-			return fail(400, { error: 'That slug is already in use' });
+		} catch (err) {
+			if (isUniqueViolation(err)) {
+				return fail(400, { error: 'That slug is already in use' });
+			}
+			console.error('updateEvent failed', err);
+			return fail(400, { error: 'Failed to update event' });
 		}
 		return { success: true };
 	},
@@ -95,6 +119,7 @@ export const actions: Actions = {
 	deleteEvent: async ({ request }) => {
 		const form = await request.formData();
 		const id = parseInt(form.get('id') as string);
+		if (!Number.isFinite(id)) return fail(400, { error: 'Invalid event id' });
 
 		// Paid and refunded rows are financial records. Neither may be destroyed here.
 		const [{ value: protectedRows }] = await db
