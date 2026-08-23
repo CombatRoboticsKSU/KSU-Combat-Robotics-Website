@@ -1,22 +1,32 @@
 <script lang="ts">
-	import { CheckCircle2, Clock, ShieldAlert, ArrowLeft } from 'lucide-svelte';
+	import { CheckCircle2, Clock, AlertTriangle, Ban, ShieldAlert, ArrowLeft } from 'lucide-svelte';
 
 	let { data } = $props();
+
+	const statusLabel = $derived(
+		data.status === 'paid'
+			? 'Confirmed'
+			: data.status === 'expired'
+				? 'Expired'
+				: data.status === 'refunded'
+					? 'Refunded'
+					: 'Received'
+	);
 </script>
 
 <svelte:head>
-	<title>Registration {data.confirmed ? 'Confirmed' : 'Pending'} | {data.event.name} | KSU Combat Robotics</title>
+	<title>Registration {statusLabel} | {data.event.name} | KSU Combat Robotics</title>
 </svelte:head>
 
 <section class="hero">
-	<h1>Registration {data.confirmed ? 'Confirmed' : 'Received'}</h1>
+	<h1>Registration {statusLabel}</h1>
 	<p>{data.event.name}</p>
 </section>
 
 <section class="section">
 	<div class="container">
 		<div class="status-card card">
-			{#if data.confirmed}
+			{#if data.status === 'paid'}
 				<div class="status-icon confirmed">
 					<CheckCircle2 size={40} />
 				</div>
@@ -28,6 +38,24 @@
 					<ShieldAlert size={18} />
 					<span>A signed waiver is required at check-in.</span>
 				</div>
+			{:else if data.status === 'expired'}
+				<div class="status-icon warning">
+					<AlertTriangle size={40} />
+				</div>
+				<h2>This registration session expired.</h2>
+				<p class="status-detail">
+					The checkout session for <strong>{data.botName}</strong> expired before payment was completed,
+					so this registration was not held. Please start a new registration to save a spot.
+				</p>
+			{:else if data.status === 'refunded'}
+				<div class="status-icon warning">
+					<Ban size={40} />
+				</div>
+				<h2>This registration was refunded.</h2>
+				<p class="status-detail">
+					The payment for <strong>{data.botName}</strong> was refunded, so this registration is no
+					longer active.
+				</p>
 			{:else}
 				<div class="status-icon pending">
 					<Clock size={40} />
@@ -71,7 +99,12 @@
 	}
 
 	.status-icon.pending {
-		background: rgba(235, 171, 33, 0.1);
+		background: color-mix(in srgb, var(--gold) 10%, transparent);
+		color: var(--gold);
+	}
+
+	.status-icon.warning {
+		background: color-mix(in srgb, var(--gold) 10%, transparent);
 		color: var(--gold);
 	}
 

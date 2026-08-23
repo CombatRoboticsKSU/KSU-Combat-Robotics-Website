@@ -23,6 +23,6 @@ export const load: PageServerLoad = async ({ params, url }) => {
 		event: ev,
 		botName: reg.botName,
 		builderName: reg.builderName,
-		confirmed: reg.status === 'paid'
+		status: reg.status
 	};
 };
