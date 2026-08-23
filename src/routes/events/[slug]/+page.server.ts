@@ -2,7 +2,7 @@ import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
 import { eq, and, or, count } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
-import { isEventFull } from '$lib/utils/events';
+import { isEventFull, canRegister } from '$lib/utils/events';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -30,6 +30,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		event: ev,
 		isFull,
 		spotsLeft: ev.capacity > 0 ? Math.max(0, ev.capacity - taken) : null,
-		canRegister: ev.status !== 'past' && ev.registrationOpen && ev.competitorPriceId !== '' && !isFull
+		canRegister: canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull)
 	};
 };

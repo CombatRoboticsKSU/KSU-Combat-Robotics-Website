@@ -1,10 +1,17 @@
 import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
 import { stripe } from '$lib/server/stripe';
-import { isEventFull } from '$lib/utils/events';
+import { isEventFull, canRegister } from '$lib/utils/events';
 import { eq, and, or, count } from 'drizzle-orm';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+
+// A crafted multipart POST can make form.get(name) return a File instead of a string.
+// Treat anything non-string as absent rather than letting .trim() throw and 500.
+function readField(form: FormData, name: string): string {
+	const value = form.get(name);
+	return typeof value === 'string' ? value.trim() : '';
+}
 
 async function loadOpenEvent(slug: string) {
 	const [ev] = await db
@@ -32,7 +39,7 @@ async function loadOpenEvent(slug: string) {
 export const load: PageServerLoad = async ({ params }) => {
 	const { ev, isFull } = await loadOpenEvent(params.slug);
 
-	if (ev.status === 'past' || !ev.registrationOpen || ev.competitorPriceId === '' || isFull) {
+	if (!canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull)) {
 		throw redirect(303, `/events/${ev.slug}`);
 	}
 
@@ -43,13 +50,13 @@ export const actions: Actions = {
 	default: async ({ request, params, url }) => {
 		const form = await request.formData();
 		const values = {
-			builderName: (form.get('builderName') as string)?.trim() ?? '',
-			email: (form.get('email') as string)?.trim() ?? '',
-			phone: (form.get('phone') as string)?.trim() ?? '',
-			teamName: (form.get('teamName') as string)?.trim() ?? '',
-			botName: (form.get('botName') as string)?.trim() ?? '',
-			weaponType: (form.get('weaponType') as string)?.trim() ?? '',
-			notes: (form.get('notes') as string)?.trim() ?? '',
+			builderName: readField(form, 'builderName'),
+			email: readField(form, 'email'),
+			phone: readField(form, 'phone'),
+			teamName: readField(form, 'teamName'),
+			botName: readField(form, 'botName'),
+			weaponType: readField(form, 'weaponType'),
+			notes: readField(form, 'notes'),
 			waiverAck: form.get('waiverAck') === 'on'
 		};
 
@@ -64,7 +71,9 @@ export const actions: Actions = {
 
 		const { ev, isFull } = await loadOpenEvent(params.slug);
 
-		if (ev.status === 'past' || !ev.registrationOpen || ev.competitorPriceId === '') {
+		// isFull is checked separately below so it can carry its own message; pass isFull: false
+		// here so this call only covers the "closed" reasons canRegister otherwise folds together.
+		if (!canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, false)) {
 			return fail(400, { error: 'Registration is closed for this event.', values });
 		}
 		if (isFull) {
@@ -97,12 +106,21 @@ export const actions: Actions = {
 
 			checkoutUrl = session.url;
 		} catch (e) {
-			// Free the capacity slot the pending row was holding.
-			await db.delete(registrations).where(eq(registrations.id, row.id));
 			console.error('Stripe checkout session creation failed', e);
+			try {
+				// Free the capacity slot the pending row was holding.
+				await db.delete(registrations).where(eq(registrations.id, row.id));
+			} catch (cleanupError) {
+				// The original Stripe error above is still the one we report to the user;
+				// log this separately so an orphaned pending row doesn't hide silently.
+				console.error('Failed to clean up pending registration after Stripe error', cleanupError);
+			}
 			return fail(500, { error: 'Could not start checkout. Please try again.', values });
 		}
 
+		// redirect() is thrown by SvelteKit, so it must stay outside the try/catch above:
+		// if it were thrown from inside the try, the catch would swallow it and then delete
+		// the registration of a customer who was already on their way to pay.
 		throw redirect(303, checkoutUrl);
 	}
 };

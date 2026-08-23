@@ -8,6 +8,17 @@ export function isEventFull(capacity: number, taken: number): boolean {
 	return capacity > 0 && taken >= capacity;
 }
 
+// Single source of truth for whether the competitor registration flow is open, used by
+// both the event detail page and the register route so they can never disagree.
+export function canRegister(
+	status: string,
+	registrationOpen: boolean,
+	competitorPriceId: string,
+	isFull: boolean
+): boolean {
+	return status !== 'past' && registrationOpen && competitorPriceId !== '' && !isFull;
+}
+
 export function eventBadge(
 	status: string,
 	registrationOpen: boolean,
