@@ -18,7 +18,8 @@ export const load: PageServerLoad = async () => {
 		meetingLocation: getSetting('meeting_location', '120 AEB'),
 		statYears: getSetting('stat_years', '10+'),
 		statWeightClass: getSetting('stat_weight_class', '12lb & 3lb'),
-		statMembers: getSetting('stat_members', '30+')
+		statMembers: getSetting('stat_members', '30+'),
+		discordUrl: getSetting('discord_url', '')
 	};
 };
 
@@ -53,7 +54,8 @@ export const actions: Actions = {
 		for (const [formKey, settingKey] of [
 			['statYears', 'stat_years'],
 			['statWeightClass', 'stat_weight_class'],
-			['statMembers', 'stat_members']
+			['statMembers', 'stat_members'],
+			['discordUrl', 'discord_url']
 		] as const) {
 			const val = form.get(formKey) as string;
 			if (val !== null) {

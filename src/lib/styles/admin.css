@@ -1,0 +1,292 @@
+/* Shared admin chrome: page layout, form cards, item lists, and buttons used across /admin routes. */
+
+.page-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	margin-bottom: 2.5rem;
+	border-bottom: 1px solid rgba(255,255,255,0.05);
+	padding-bottom: 1.5rem;
+}
+
+.page-header h1 {
+	font-size: 1.875rem;
+	font-weight: 700;
+	color: #fff;
+}
+
+.alert-success {
+	background: rgba(34, 197, 94, 0.1);
+	border: 1px solid rgba(34, 197, 94, 0.3);
+	color: #4ade80;
+	padding: 0.75rem 1rem;
+	border-radius: 0.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.section-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+}
+
+.section-header h2 {
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: #fff;
+}
+
+.form-card {
+	background: #1e293b;
+	border: 1px solid rgba(255,255,255,0.05);
+	border-radius: 1rem;
+	padding: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.form-card h3 {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #fff;
+	margin-bottom: 1.25rem;
+}
+
+.field-group {
+	margin-bottom: 1.25rem;
+}
+
+.field-label {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: #cbd5e1;
+	margin-bottom: 0.5rem;
+}
+
+.field-input {
+	width: 100%;
+	background: rgba(255,255,255,0.05);
+	border: 1px solid rgba(255,255,255,0.1);
+	border-radius: 0.5rem;
+	padding: 0.625rem 0.875rem;
+	color: #fff;
+	font-size: 0.9375rem;
+	box-sizing: border-box;
+	transition: border-color 0.2s;
+}
+
+.field-input:focus {
+	outline: none;
+	border-color: var(--gold);
+}
+
+.field-input-sm {
+	max-width: 120px;
+}
+
+.form-actions {
+	display: flex;
+	gap: 0.75rem;
+	margin-top: 0.5rem;
+}
+
+.items-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin-bottom: 1.5rem;
+}
+
+.list-item {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	background: #1e293b;
+	border: 1px solid rgba(255,255,255,0.05);
+	border-radius: 0.75rem;
+	padding: 0.875rem 1rem;
+}
+
+.item-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	min-width: 0;
+}
+
+.item-name {
+	font-weight: 600;
+	color: #fff;
+	font-size: 0.9375rem;
+}
+
+.item-sub {
+	font-size: 0.8125rem;
+	color: var(--text-muted);
+	text-decoration: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.item-sub:hover {
+	color: var(--gold);
+}
+
+.item-actions {
+	display: flex;
+	gap: 0.5rem;
+	flex-shrink: 0;
+}
+
+.empty-state {
+	color: var(--text-muted);
+	font-size: 0.9375rem;
+	padding: 2rem;
+	text-align: center;
+	background: #1e293b;
+	border: 1px dashed rgba(255,255,255,0.08);
+	border-radius: 0.75rem;
+	margin-bottom: 1.5rem;
+}
+
+.help-text {
+	font-size: 0.8125rem;
+	color: var(--text-muted);
+}
+
+.alert-error {
+	background: rgba(239,68,68,0.1);
+	border: 1px solid rgba(239,68,68,0.3);
+	color: #f87171;
+	padding: 0.75rem 1rem;
+	border-radius: 0.5rem;
+	font-size: 0.875rem;
+}
+
+/* Buttons */
+.btn-admin {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.625rem 1.25rem;
+	border-radius: 0.5rem;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	cursor: pointer;
+	border: 1px solid transparent;
+	transition: all 0.2s;
+	background: transparent;
+	text-decoration: none;
+}
+
+.btn-admin.primary {
+	background: var(--gold);
+	color: #000;
+	border-color: var(--gold);
+}
+
+.btn-admin.primary:hover { background: #d4981a; }
+
+.btn-admin.ghost {
+	background: rgba(255,255,255,0.06);
+	color: var(--text-secondary);
+	border-color: rgba(255,255,255,0.1);
+}
+
+.btn-admin.ghost:hover {
+	background: rgba(255,255,255,0.1);
+	color: #fff;
+}
+
+.btn-admin.danger {
+	background: rgba(239,68,68,0.1);
+	color: #f87171;
+	border-color: rgba(239,68,68,0.2);
+}
+
+.btn-admin.danger:hover {
+	background: rgba(239,68,68,0.2);
+}
+
+.btn-admin.sm {
+	padding: 0.375rem 0.75rem;
+	font-size: 0.8125rem;
+}
+
+/* Data table (registrations roster, etc.) */
+.table-wrap {
+	background: var(--bg-card);
+	border: 1px solid rgba(255,255,255,0.05);
+	border-radius: 1rem;
+	overflow-x: auto;
+}
+
+.data-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.875rem;
+}
+
+.data-table th {
+	padding: 0.75rem 1rem;
+	text-align: left;
+	color: var(--text-secondary);
+	border-bottom: 1px solid rgba(255,255,255,0.1);
+	white-space: nowrap;
+}
+
+.data-table td {
+	padding: 0.75rem 1rem;
+	color: var(--text-muted);
+	border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.data-table tr:last-child td {
+	border-bottom: none;
+}
+
+.data-table td.strong {
+	color: var(--text-primary);
+}
+
+/* Status pills */
+.status-pill {
+	display: inline-block;
+	padding: 0.25rem 0.625rem;
+	border-radius: 1rem;
+	font-size: 0.75rem;
+	font-weight: 500;
+	text-transform: capitalize;
+	background: color-mix(in srgb, var(--text-secondary) 15%, transparent);
+	color: var(--text-secondary);
+}
+
+.status-pill.paid {
+	background: color-mix(in srgb, var(--gold) 15%, transparent);
+	color: var(--gold);
+}
+
+.status-pill.pending {
+	background: color-mix(in srgb, var(--text-secondary) 15%, transparent);
+	color: var(--text-secondary);
+}
+
+.status-pill.expired,
+.status-pill.refunded {
+	background: color-mix(in srgb, var(--text-muted) 12%, transparent);
+	color: var(--text-muted);
+}
+
+/* Stat row (registration counts, etc.) */
+.stat-row {
+	display: flex;
+	gap: 2rem;
+	flex-wrap: wrap;
+}
+
+.stat-value {
+	font-size: 1.5rem;
+}
