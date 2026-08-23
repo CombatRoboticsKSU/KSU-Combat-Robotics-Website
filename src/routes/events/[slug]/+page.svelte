@@ -69,45 +69,40 @@
 		<div class="container">
 			<div class="action-cards">
 				<!-- Competitor -->
+				{#snippet competitorMeta(showSpots: boolean)}
+					{#if data.event.competitorPrice}<span class="action-card-price">{data.event.competitorPrice}</span>{/if}
+					{#if data.event.competitorNote}<span class="action-card-note">{data.event.competitorNote}</span>{/if}
+					{#if showSpots && data.spotsLeft !== null}
+						<span class="action-card-spots">{data.spotsLeft} spot{data.spotsLeft === 1 ? '' : 's'} left</span>
+					{/if}
+				{/snippet}
 				{#if data.canRegister}
 					<a class="action-card primary" href="/events/{data.event.slug}/register">
 						{data.event.competitorLabel}
-						{#if data.event.competitorPrice}<span class="action-card-price">{data.event.competitorPrice}</span>{/if}
-						{#if data.event.competitorNote}<span class="action-card-note">{data.event.competitorNote}</span>{/if}
-						{#if data.spotsLeft !== null}
-							<span class="action-card-spots">{data.spotsLeft} spot{data.spotsLeft === 1 ? '' : 's'} left</span>
-						{/if}
+						{@render competitorMeta(true)}
 					</a>
 				{:else if data.event.competitorPriceId === ''}
 					<div class="action-card disabled">
 						Coming soon
-						{#if data.event.competitorPrice}<span class="action-card-price">{data.event.competitorPrice}</span>{/if}
-						{#if data.event.competitorNote}<span class="action-card-note">{data.event.competitorNote}</span>{/if}
-						{#if data.spotsLeft !== null}
-							<span class="action-card-spots">{data.spotsLeft} spot{data.spotsLeft === 1 ? '' : 's'} left</span>
-						{/if}
+						{@render competitorMeta(false)}
 					</div>
 				{:else if data.isFull}
 					<div class="action-card disabled">
 						Registration full
-						{#if data.event.competitorPrice}<span class="action-card-price">{data.event.competitorPrice}</span>{/if}
-						{#if data.event.competitorNote}<span class="action-card-note">{data.event.competitorNote}</span>{/if}
-						{#if data.spotsLeft !== null}
-							<span class="action-card-spots">{data.spotsLeft} spot{data.spotsLeft === 1 ? '' : 's'} left</span>
-						{/if}
+						{@render competitorMeta(true)}
 					</div>
 				{:else}
 					<div class="action-card disabled">
 						Registration closed
-						{#if data.event.competitorPrice}<span class="action-card-price">{data.event.competitorPrice}</span>{/if}
-						{#if data.event.competitorNote}<span class="action-card-note">{data.event.competitorNote}</span>{/if}
-						{#if data.spotsLeft !== null}
-							<span class="action-card-spots">{data.spotsLeft} spot{data.spotsLeft === 1 ? '' : 's'} left</span>
-						{/if}
+						{@render competitorMeta(true)}
 					</div>
 				{/if}
 
 				<!-- Spectator -->
+				{#snippet spectatorMeta()}
+					{#if data.event.spectatorPrice}<span class="action-card-price">{data.event.spectatorPrice}</span>{/if}
+					{#if data.event.spectatorNote}<span class="action-card-note">{data.event.spectatorNote}</span>{/if}
+				{/snippet}
 				{#if data.event.spectatorUrl}
 					<a
 						class="action-card"
@@ -116,14 +111,12 @@
 						rel="noopener noreferrer"
 					>
 						{data.event.spectatorLabel}
-						{#if data.event.spectatorPrice}<span class="action-card-price">{data.event.spectatorPrice}</span>{/if}
-						{#if data.event.spectatorNote}<span class="action-card-note">{data.event.spectatorNote}</span>{/if}
+						{@render spectatorMeta()}
 					</a>
 				{:else}
 					<div class="action-card disabled">
 						Coming soon
-						{#if data.event.spectatorPrice}<span class="action-card-price">{data.event.spectatorPrice}</span>{/if}
-						{#if data.event.spectatorNote}<span class="action-card-note">{data.event.spectatorNote}</span>{/if}
+						{@render spectatorMeta()}
 					</div>
 				{/if}
 			</div>
