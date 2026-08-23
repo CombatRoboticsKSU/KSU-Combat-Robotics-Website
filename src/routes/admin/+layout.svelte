@@ -4,6 +4,7 @@
 	import { authClient } from '$lib/auth-client';
 	import { goto } from '$app/navigation';
 	import { LayoutDashboard, Users, Bot, Wrench, FileText, Newspaper, Key, Globe, LogOut, Settings, ChevronDown, Star, Link } from 'lucide-svelte';
+	import '$lib/styles/admin.css';
 
 	let { data, children } = $props();
 
