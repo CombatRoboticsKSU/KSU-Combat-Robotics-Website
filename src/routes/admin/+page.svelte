@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Users, Bot, Wrench, FileText, Newspaper, Key, Settings, Star, Link } from 'lucide-svelte';
+	import { Users, Bot, Wrench, FileText, Newspaper, Key, Settings, Star, Link, CalendarDays } from 'lucide-svelte';
 	let { data } = $props();
 	const c = $derived(data.counts);
 </script>
@@ -48,6 +48,16 @@
 				<span class="stat-value">{c.projects}</span>
 				<p class="stat-label">Projects</p>
 				<span class="stat-desc">Ongoing developments</span>
+			</div>
+		</a>
+		<a href="/admin/events" class="stat-card">
+			<div class="stat-icon-wrapper blue">
+				<CalendarDays size={28} />
+			</div>
+			<div class="stat-info">
+				<span class="stat-value">{c.events}</span>
+				<p class="stat-label">Events</p>
+				<span class="stat-desc">Competitions & registration</span>
 			</div>
 		</a>
 		<a href="/admin/posts" class="stat-card">

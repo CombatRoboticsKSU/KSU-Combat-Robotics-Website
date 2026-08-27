@@ -29,6 +29,7 @@
 		"better-auth": "^1.5.5",
 		"drizzle-orm": "^0.45.1",
 		"lucide-svelte": "^1.0.1",
-		"mdsvex": "^0.12.7"
+		"mdsvex": "^0.12.7",
+		"stripe": "^22.5.0"
 	}
 }
