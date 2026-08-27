@@ -225,6 +225,10 @@ export const events = pgTable('events', {
 	overview: text('overview').notNull().default(''),
 	rulesPdfUrl: text('rules_pdf_url').notNull().default(''),
 	rulesLabel: text('rules_label').notNull().default('Download Rules (PDF)'),
+	// Plain text, rendered with white-space: pre-wrap on the register page. Never HTML:
+	// this is admin-authored and goes straight onto a public page. Blank falls back to
+	// DEFAULT_WAIVER_TEXT so events created before this field keep working.
+	waiverText: text('waiver_text').notNull().default(''),
 	registrationOpen: boolean('registration_open').notNull().default(false),
 	competitorPriceId: text('competitor_price_id').notNull().default(''),
 	competitorLabel: text('competitor_label').notNull().default('Register to Compete'),
@@ -258,6 +262,7 @@ export const registrations = pgTable('registrations', {
 	weaponType: text('weapon_type').notNull().default(''),
 	notes: text('notes').notNull().default(''),
 	waiverAck: boolean('waiver_ack').notNull().default(false),
+	ageAck: boolean('age_ack').notNull().default(false),
 	stripeSessionId: text('stripe_session_id').unique(),
 	stripePaymentIntentId: text('stripe_payment_intent_id'),
 	amountTotal: integer('amount_total'),
