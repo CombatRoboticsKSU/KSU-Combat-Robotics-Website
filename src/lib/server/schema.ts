@@ -225,10 +225,12 @@ export const events = pgTable('events', {
 	overview: text('overview').notNull().default(''),
 	rulesPdfUrl: text('rules_pdf_url').notNull().default(''),
 	rulesLabel: text('rules_label').notNull().default('Download Rules (PDF)'),
-	// Plain text, rendered with white-space: pre-wrap on the register page. Never HTML:
-	// this is admin-authored and goes straight onto a public page. Blank falls back to
-	// DEFAULT_WAIVER_TEXT so events created before this field keep working.
+	// The waiver shown at registration. waiverPdfUrl takes precedence when set; waiverText
+	// is the fallback and the only screen-reader-accessible path when a PDF is a scan, so
+	// it should stay filled in even when a PDF is uploaded.
+	// Plain text, never HTML: admin-authored content going onto a public page.
 	waiverText: text('waiver_text').notNull().default(''),
+	waiverPdfUrl: text('waiver_pdf_url').notNull().default(''),
 	registrationOpen: boolean('registration_open').notNull().default(false),
 	competitorPriceId: text('competitor_price_id').notNull().default(''),
 	competitorLabel: text('competitor_label').notNull().default('Register to Compete'),

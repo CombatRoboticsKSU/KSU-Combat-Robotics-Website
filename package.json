@@ -30,6 +30,7 @@
 		"drizzle-orm": "^0.45.1",
 		"lucide-svelte": "^1.0.1",
 		"mdsvex": "^0.12.7",
+		"pdfjs-dist": "^6.2.108",
 		"stripe": "^22.5.0"
 	}
 }

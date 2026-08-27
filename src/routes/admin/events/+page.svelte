@@ -12,6 +12,9 @@
 	let rulesPdfUrlValue = $state('');
 	let rulesUploading = $state(false);
 	let rulesUploadError = $state('');
+	let waiverPdfUrlValue = $state('');
+	let waiverUploading = $state(false);
+	let waiverUploadError = $state('');
 	let scheduleRows = $state<{ time: string; label: string }[]>([]);
 	let faqRows = $state<{ question: string; answer: string }[]>([]);
 
@@ -27,6 +30,8 @@
 		heroImage = '';
 		rulesPdfUrlValue = '';
 		rulesUploadError = '';
+		waiverPdfUrlValue = '';
+		waiverUploadError = '';
 		scheduleRows = [];
 		faqRows = [];
 		showForm = true;
@@ -37,6 +42,8 @@
 		heroImage = e.image;
 		rulesPdfUrlValue = e.rulesPdfUrl;
 		rulesUploadError = '';
+		waiverPdfUrlValue = e.waiverPdfUrl;
+		waiverUploadError = '';
 		scheduleRows = e.schedule ? e.schedule.map((r) => ({ ...r })) : [];
 		faqRows = e.faq ? e.faq.map((r) => ({ ...r })) : [];
 		showForm = true;
@@ -63,6 +70,20 @@
 		faqRows = faqRows.filter((_, i) => i !== index);
 	}
 
+	// Shared by both PDF fields. Returns the blob URL, or throws with the server's message.
+	async function uploadPdf(file: File): Promise<string> {
+		const fd = new FormData();
+		fd.append('file', file);
+		fd.append('folder', 'documents');
+		const res = await fetch('/api/upload', { method: 'POST', body: fd });
+		if (!res.ok) {
+			const err = await res.json();
+			throw new Error(err.message ?? 'Upload failed');
+		}
+		const { url } = await res.json();
+		return url;
+	}
+
 	async function uploadRulesPdf(e: Event) {
 		const input = e.target as HTMLInputElement;
 		const file = input.files?.[0];
@@ -71,20 +92,28 @@
 		rulesUploading = true;
 		rulesUploadError = '';
 		try {
-			const fd = new FormData();
-			fd.append('file', file);
-			fd.append('folder', 'documents');
-			const res = await fetch('/api/upload', { method: 'POST', body: fd });
-			if (!res.ok) {
-				const err = await res.json();
-				throw new Error(err.message ?? 'Upload failed');
-			}
-			const { url } = await res.json();
-			rulesPdfUrlValue = url;
+			rulesPdfUrlValue = await uploadPdf(file);
 		} catch (err: any) {
 			rulesUploadError = err.message;
 		} finally {
 			rulesUploading = false;
+			input.value = '';
+		}
+	}
+
+	async function uploadWaiverPdf(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		waiverUploading = true;
+		waiverUploadError = '';
+		try {
+			waiverPdfUrlValue = await uploadPdf(file);
+		} catch (err: any) {
+			waiverUploadError = err.message;
+		} finally {
+			waiverUploading = false;
 			input.value = '';
 		}
 	}
@@ -240,11 +269,45 @@
 				</div>
 
 				<div class="field-group">
-					<label class="field-label" for="eWaiverText">Competitor Waiver</label>
+					<label class="field-label" for="waiverFileInput">Competitor Waiver PDF</label>
 					<p class="help-text">
-						Shown on the registration form, which competitors must agree to before paying. Plain
-						text only, line breaks are preserved and HTML is not rendered. Leave blank to use the
-						default waiver text. This does not replace the paper waiver signed at check-in.
+						Shown in a modal on the registration form. Competitors must scroll to the last page
+						before they can agree. If set, this is used instead of the waiver text below.
+					</p>
+					{#if waiverPdfUrlValue}
+						<p class="help-text">
+							Current: <a href={waiverPdfUrlValue} target="_blank" rel="noopener noreferrer"
+								>{waiverPdfUrlValue}</a
+							>
+							<button type="button" class="btn-admin ghost sm" onclick={() => (waiverPdfUrlValue = '')}>
+								Remove
+							</button>
+						</p>
+					{/if}
+					{#if waiverUploadError}
+						<div class="alert-error">{waiverUploadError}</div>
+					{/if}
+					<input
+						id="waiverFileInput"
+						type="file"
+						accept="application/pdf"
+						onchange={uploadWaiverPdf}
+						disabled={waiverUploading}
+					/>
+					{#if waiverUploading}
+						<p class="help-text">Uploading...</p>
+					{/if}
+					<input type="hidden" name="waiverPdfUrl" value={waiverPdfUrlValue} />
+				</div>
+
+				<div class="field-group">
+					<label class="field-label" for="eWaiverText">Competitor Waiver Text</label>
+					<p class="help-text">
+						Used when no waiver PDF is uploaded, and left blank falls back to the site default.
+						Keep this filled in even when a PDF is set: a screen reader cannot read a scanned PDF,
+						and this text is the accessible version. Plain text only, line breaks are preserved
+						and HTML is not rendered. Neither this nor the PDF replaces the paper waiver signed at
+						check-in.
 					</p>
 					<textarea id="eWaiverText" name="waiverText" class="field-input" rows="10"
 						>{editing?.waiverText ?? ''}</textarea

@@ -27,3 +27,6 @@ vite.config.ts.timestamp-*
 
 # scripts
 scripts/
+
+# pdf.js assets copied from node_modules at build time
+/static/pdfjs
