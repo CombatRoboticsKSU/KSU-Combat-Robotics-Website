@@ -2,6 +2,7 @@ import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
 import { stripe } from '$lib/server/stripe';
 import { isEventFull, canRegister } from '$lib/utils/events';
+import { resolveWaiverText } from '$lib/utils/waiver';
 import { eq, and, or, count } from 'drizzle-orm';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -43,7 +44,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw redirect(303, `/events/${ev.slug}`);
 	}
 
-	return { event: ev };
+	return { event: ev, waiverText: resolveWaiverText(ev.waiverText) };
 };
 
 export const actions: Actions = {
@@ -57,7 +58,8 @@ export const actions: Actions = {
 			botName: readField(form, 'botName'),
 			weaponType: readField(form, 'weaponType'),
 			notes: readField(form, 'notes'),
-			waiverAck: form.get('waiverAck') === 'on'
+			waiverAck: form.get('waiverAck') === 'on',
+			ageAck: form.get('ageAck') === 'on'
 		};
 
 		if (!values.builderName) return fail(400, { error: 'Builder name is required', values });
@@ -66,7 +68,10 @@ export const actions: Actions = {
 		}
 		if (!values.botName) return fail(400, { error: 'Bot name is required', values });
 		if (!values.waiverAck) {
-			return fail(400, { error: 'You must acknowledge the safety rules to register', values });
+			return fail(400, { error: 'You must agree to the waiver to register', values });
+		}
+		if (!values.ageAck) {
+			return fail(400, { error: 'You must confirm you are 18 or older to register', values });
 		}
 
 		const { ev, isFull } = await loadOpenEvent(params.slug);

@@ -240,6 +240,18 @@
 				</div>
 
 				<div class="field-group">
+					<label class="field-label" for="eWaiverText">Competitor Waiver</label>
+					<p class="help-text">
+						Shown on the registration form, which competitors must agree to before paying. Plain
+						text only, line breaks are preserved and HTML is not rendered. Leave blank to use the
+						default waiver text. This does not replace the paper waiver signed at check-in.
+					</p>
+					<textarea id="eWaiverText" name="waiverText" class="field-input" rows="10"
+						>{editing?.waiverText ?? ''}</textarea
+					>
+				</div>
+
+				<div class="field-group">
 					<label class="field-label" for="eRegistrationOpen">
 						<input id="eRegistrationOpen" type="checkbox" name="registrationOpen" checked={editing?.registrationOpen ?? false} />
 						Registration Open

@@ -27,7 +27,8 @@ export const GET: RequestHandler = async ({ params }) => {
 			'Email',
 			'Phone',
 			'Notes',
-			'Waiver acknowledged',
+			'Waiver agreed',
+			'18+ confirmed',
 			'Paid at'
 		]),
 		...rows.map((r) =>
@@ -40,6 +41,7 @@ export const GET: RequestHandler = async ({ params }) => {
 				r.phone,
 				r.notes,
 				r.waiverAck ? 'yes' : 'no',
+				r.ageAck ? 'yes' : 'no',
 				r.paidAt ? r.paidAt.toISOString() : ''
 			])
 		)

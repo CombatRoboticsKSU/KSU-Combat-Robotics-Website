@@ -68,13 +68,39 @@
 					<textarea id="notes" name="notes" rows="4">{form?.values?.notes ?? ''}</textarea>
 				</div>
 
-				<label class="waiver-group">
-					<input type="checkbox" name="waiverAck" checked={form?.values?.waiverAck ?? false} required />
-					<span>
-						I have read the event rules and understand that combat robotics carries risk of injury
-						and equipment damage. A signed waiver is required at check-in.
-					</span>
-				</label>
+				<div class="waiver-block">
+					<h2 class="waiver-heading">Competitor Waiver</h2>
+					<!-- Rendered as text, never {@html}: this content is admin-authored and this is a
+					     public page. white-space: pre-wrap preserves the authored line breaks. -->
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<!-- tabindex is deliberate: this box scrolls, and without it a keyboard-only
+					     user cannot reach the bottom of the waiver they are being asked to accept. -->
+					<div
+						class="waiver-text"
+						role="region"
+						aria-label="Competitor waiver text"
+						tabindex="0"
+					>{data.waiverText}</div>
+
+					<label class="ack-row">
+						<input
+							type="checkbox"
+							name="waiverAck"
+							checked={form?.values?.waiverAck ?? false}
+							required
+						/>
+						<span>I have read and agree to the waiver above.</span>
+					</label>
+
+					<label class="ack-row">
+						<input type="checkbox" name="ageAck" checked={form?.values?.ageAck ?? false} required />
+						<span>I am 18 years of age or older.</span>
+					</label>
+
+					<p class="waiver-note">
+						You will still sign the full liability waiver in person at check-in.
+					</p>
+				</div>
 
 				<button type="submit" class="btn btn-primary submit-btn">
 					Continue to Payment
@@ -178,25 +204,55 @@
 		min-height: 100px;
 	}
 
-	.waiver-group {
-		display: flex;
-		align-items: flex-start;
-		gap: 0.625rem;
+	.waiver-block {
 		margin-bottom: 1.5rem;
-		padding: 0.875rem 1rem;
+		padding: 1rem;
 		background: var(--bg-secondary);
 		border: 1px solid var(--border-color);
 		border-radius: var(--radius-md);
+	}
+
+	.waiver-heading {
+		margin: 0 0 0.75rem;
+		font-size: 0.9375rem;
+		font-weight: 600;
+	}
+
+	.waiver-text {
+		max-height: 260px;
+		overflow-y: auto;
+		padding: 0.875rem 1rem;
+		background: var(--bg-primary);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-sm);
+		white-space: pre-wrap;
+		font-size: 0.8125rem;
+		line-height: 1.6;
+		color: var(--text-secondary);
+	}
+
+	.ack-row {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.625rem;
+		margin-top: 0.875rem;
 		cursor: pointer;
 	}
 
-	.waiver-group input {
+	.ack-row input {
 		margin-top: 0.2rem;
 		flex-shrink: 0;
 	}
 
-	.waiver-group span {
+	.ack-row span {
 		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--text-primary);
+	}
+
+	.waiver-note {
+		margin: 0.875rem 0 0;
+		font-size: 0.75rem;
 		line-height: 1.5;
 		color: var(--text-secondary);
 	}
