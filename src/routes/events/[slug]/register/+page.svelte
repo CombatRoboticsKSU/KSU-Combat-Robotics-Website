@@ -1,10 +1,45 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { ArrowRight, ShieldAlert } from 'lucide-svelte';
+	import { ArrowRight, ShieldAlert, FileText, Check } from 'lucide-svelte';
+	import WaiverModal from '$lib/components/WaiverModal.svelte';
+	import { onMount } from 'svelte';
 
 	let { data, form } = $props();
 
 	const canceled = $derived(page.url.searchParams.get('canceled') !== null);
+
+	let waiverModal: WaiverModal;
+	// Seeded from the failed-submit values so a server-side rejection on another field does
+	// not make the competitor read the waiver a second time. The initial read is deliberate:
+	// this form is a plain POST, so a rejected submit remounts the page with fresh values,
+	// and after that the modal owns this state.
+	// svelte-ignore state_referenced_locally
+	let waiverAgreed = $state(form?.values?.waiverAck ?? false);
+
+	// These have to be bound, not one-way `value={...}` attributes. Agreeing in the modal
+	// flips waiverAgreed, which re-runs the attribute effects and clobbers whatever the
+	// competitor had already typed. Same seeding rule as above: the initial read is the
+	// point, since a rejected POST remounts the page with the previous values.
+	// svelte-ignore state_referenced_locally
+	let values = $state({
+		builderName: form?.values?.builderName ?? '',
+		email: form?.values?.email ?? '',
+		phone: form?.values?.phone ?? '',
+		teamName: form?.values?.teamName ?? '',
+		botName: form?.values?.botName ?? '',
+		weaponType: form?.values?.weaponType ?? '',
+		notes: form?.values?.notes ?? ''
+	});
+	// svelte-ignore state_referenced_locally
+	let ageAgreed = $state(form?.values?.ageAck ?? false);
+
+	// Gating the submit button is a JS-only affordance. Rendering it disabled on the server
+	// would trap anyone without JS on a button that can never enable, so it only starts
+	// gating once the client has mounted and the modal is actually usable.
+	let jsReady = $state(false);
+	onMount(() => {
+		jsReady = true;
+	});
 </script>
 
 <svelte:head>
@@ -33,67 +68,87 @@
 						id="builderName"
 						name="builderName"
 						type="text"
-						value={form?.values?.builderName ?? ''}
+						bind:value={values.builderName}
 						required
 					/>
 				</div>
 
 				<div class="form-group">
 					<label for="email">Email</label>
-					<input id="email" name="email" type="email" value={form?.values?.email ?? ''} required />
+					<input id="email" name="email" type="email" bind:value={values.email} required />
 				</div>
 
 				<div class="form-group">
 					<label for="phone">Phone</label>
-					<input id="phone" name="phone" type="tel" value={form?.values?.phone ?? ''} />
+					<input id="phone" name="phone" type="tel" bind:value={values.phone} />
 				</div>
 
 				<div class="form-group">
 					<label for="teamName">Team or School</label>
-					<input id="teamName" name="teamName" type="text" value={form?.values?.teamName ?? ''} />
+					<input id="teamName" name="teamName" type="text" bind:value={values.teamName} />
 				</div>
 
 				<div class="form-group">
 					<label for="botName">Bot Name</label>
-					<input id="botName" name="botName" type="text" value={form?.values?.botName ?? ''} required />
+					<input id="botName" name="botName" type="text" bind:value={values.botName} required />
 				</div>
 
 				<div class="form-group">
 					<label for="weaponType">Weapon Type</label>
-					<input id="weaponType" name="weaponType" type="text" value={form?.values?.weaponType ?? ''} />
+					<input id="weaponType" name="weaponType" type="text" bind:value={values.weaponType} />
 				</div>
 
 				<div class="form-group">
 					<label for="notes">Notes</label>
-					<textarea id="notes" name="notes" rows="4">{form?.values?.notes ?? ''}</textarea>
+					<textarea id="notes" name="notes" rows="4" bind:value={values.notes}></textarea>
 				</div>
 
 				<div class="waiver-block">
 					<h2 class="waiver-heading">Competitor Waiver</h2>
-					<!-- Rendered as text, never {@html}: this content is admin-authored and this is a
-					     public page. white-space: pre-wrap preserves the authored line breaks. -->
-					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-					<!-- tabindex is deliberate: this box scrolls, and without it a keyboard-only
-					     user cannot reach the bottom of the waiver they are being asked to accept. -->
-					<div
-						class="waiver-text"
-						role="region"
-						aria-label="Competitor waiver text"
-						tabindex="0"
-					>{data.waiverText}</div>
+
+					{#if waiverAgreed}
+						<p class="waiver-agreed">
+							<Check size={16} />
+							<span>Waiver agreed.</span>
+							<button type="button" class="waiver-relink" onclick={() => waiverModal.open()}>
+								Review again
+							</button>
+						</p>
+						<!-- Set only once the modal's agree button has been used. The server
+						     re-checks this, so removing it by hand just fails the POST. -->
+						<input type="hidden" name="waiverAck" value="on" />
+					{:else}
+						<p class="waiver-prompt">
+							You must read and agree to the competitor waiver before registering.
+						</p>
+						<button type="button" class="btn btn-secondary waiver-open" onclick={() => waiverModal.open()}>
+							<FileText size={16} />
+							Read and Agree to the Waiver
+						</button>
+						<noscript>
+							<p class="waiver-prompt">
+								The waiver viewer needs JavaScript. The full text is below.
+								{#if data.waiverPdfUrl}
+									A PDF copy is also available.
+								{/if}
+							</p>
+							{#if data.waiverPdfUrl}
+								<p class="waiver-prompt">
+									<a href={data.waiverPdfUrl} target="_blank" rel="noopener noreferrer">
+										Download the waiver PDF
+									</a>
+								</p>
+							{/if}
+							<div class="waiver-text-fallback">{data.waiverText}</div>
+							<label class="ack-row">
+								<input type="checkbox" name="waiverAck" required />
+								<span>I have read and agree to the waiver above.</span>
+							</label>
+						</noscript>
+					{/if}
 
 					<label class="ack-row">
-						<input
-							type="checkbox"
-							name="waiverAck"
-							checked={form?.values?.waiverAck ?? false}
-							required
-						/>
-						<span>I have read and agree to the waiver above.</span>
-					</label>
-
-					<label class="ack-row">
-						<input type="checkbox" name="ageAck" checked={form?.values?.ageAck ?? false} required />
+						<input type="checkbox" name="ageAck" bind:checked={ageAgreed} required />
 						<span>I am 18 years of age or older.</span>
 					</label>
 
@@ -102,7 +157,7 @@
 					</p>
 				</div>
 
-				<button type="submit" class="btn btn-primary submit-btn">
+				<button type="submit" class="btn btn-primary submit-btn" disabled={jsReady && !waiverAgreed}>
 					Continue to Payment
 					<ArrowRight size={16} />
 				</button>
@@ -126,6 +181,13 @@
 		</div>
 	</div>
 </section>
+
+<WaiverModal
+	bind:this={waiverModal}
+	pdfUrl={data.waiverPdfUrl}
+	text={data.waiverText}
+	onagree={() => (waiverAgreed = true)}
+/>
 
 <style>
 	.register-layout {
@@ -218,9 +280,10 @@
 		font-weight: 600;
 	}
 
-	.waiver-text {
+	.waiver-text-fallback {
 		max-height: 260px;
 		overflow-y: auto;
+		margin-top: 0.75rem;
 		padding: 0.875rem 1rem;
 		background: var(--bg-primary);
 		border: 1px solid var(--border-color);
@@ -229,6 +292,49 @@
 		font-size: 0.8125rem;
 		line-height: 1.6;
 		color: var(--text-secondary);
+	}
+
+	.waiver-prompt {
+		margin: 0 0 0.75rem;
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--text-secondary);
+	}
+
+	.waiver-open {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.waiver-agreed {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin: 0;
+		font-size: 0.8125rem;
+		color: var(--text-primary);
+	}
+
+	.waiver-relink {
+		padding: 0;
+		border: none;
+		background: none;
+		font: inherit;
+		font-size: 0.75rem;
+		color: var(--text-secondary);
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	.waiver-relink:hover {
+		color: var(--text-primary);
+	}
+
+	.submit-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 
 	.ack-row {

@@ -44,7 +44,11 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw redirect(303, `/events/${ev.slug}`);
 	}
 
-	return { event: ev, waiverText: resolveWaiverText(ev.waiverText) };
+	return {
+		event: ev,
+		waiverText: resolveWaiverText(ev.waiverText),
+		waiverPdfUrl: ev.waiverPdfUrl
+	};
 };
 
 export const actions: Actions = {

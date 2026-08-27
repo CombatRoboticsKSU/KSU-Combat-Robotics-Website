@@ -46,6 +46,7 @@ function readEventFields(form: FormData) {
 		rulesPdfUrl: (form.get('rulesPdfUrl') as string) ?? '',
 		rulesLabel: (form.get('rulesLabel') as string) || 'Download Rules (PDF)',
 		waiverText: (form.get('waiverText') as string) ?? '',
+		waiverPdfUrl: (form.get('waiverPdfUrl') as string) ?? '',
 		registrationOpen: form.get('registrationOpen') === 'on',
 		competitorPriceId: (form.get('competitorPriceId') as string)?.trim() ?? '',
 		competitorLabel: (form.get('competitorLabel') as string) || 'Register to Compete',

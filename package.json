@@ -3,6 +3,9 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"engines": {
+		"node": ">=22.13.0"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -30,6 +33,7 @@
 		"drizzle-orm": "^0.45.1",
 		"lucide-svelte": "^1.0.1",
 		"mdsvex": "^0.12.7",
+		"pdfjs-dist": "^6.2.108",
 		"stripe": "^22.5.0"
 	}
 }
