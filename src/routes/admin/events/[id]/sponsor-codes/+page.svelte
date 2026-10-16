@@ -2,15 +2,13 @@
 	import { enhance } from '$app/forms';
 	import { Ticket, Ban } from 'lucide-svelte';
 	import type { PageProps } from './$types';
+	import { formatPrice } from './currency';
 
 	let { data, form }: PageProps = $props();
 	let creating = $state(false);
 	let deactivating = $state<number | null>(null);
 	const values = $derived(form && 'values' in form ? form.values : undefined);
 
-	function formatPrice(amount: number, currency: string) {
-		return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(amount / 100);
-	}
 </script>
 
 <svelte:head><title>{data.event.name} Sponsor Codes | Admin</title></svelte:head>

@@ -5,6 +5,7 @@ import { and, desc, eq } from 'drizzle-orm';
 import { error, fail } from '@sveltejs/kit';
 import Stripe from 'stripe';
 import type { Actions, PageServerLoad } from './$types';
+import { createSponsorCoupon, createSponsorPromotion } from './stripe-create.server';
 
 const missingLink = "Set the event's spectator ticket link to a Stripe Payment Link first.";
 
@@ -94,24 +95,21 @@ export const actions: Actions = {
 		let couponId: string | undefined;
 		let promotionId: string | undefined;
 		try {
+			const [existing] = await db.select({ id: sponsorCodes.id }).from(sponsorCodes)
+				.where(and(eq(sponsorCodes.eventId, event.id), eq(sponsorCodes.code, code))).limit(1);
+			if (existing) {
+				return fail(400, { error: `Sponsor code ${code} already exists for this event.`, values });
+			}
 			const { link, unitAmount, currency, productId } = await getTicketLink(event.spectatorUrl);
 			if (!link.allow_promotion_codes) {
 				await stripe.paymentLinks.update(link.id, { allow_promotion_codes: true });
 			}
-			const suffix = ` (${tickets} tickets)`;
-			const coupon = await stripe.coupons.create({
-				amount_off: tickets * unitAmount,
-				currency,
-				duration: 'once',
-				applies_to: { products: [productId] },
-				name: `Sponsor: ${sponsorName.slice(0, 40 - 'Sponsor: '.length - suffix.length)}${suffix}`
+			const coupon = await createSponsorCoupon(stripe, {
+				eventId: event.id, code, sponsorName, tickets, unitAmount, currency, productId
 			});
 			couponId = coupon.id;
-			const promotion = await stripe.promotionCodes.create({
-				promotion: { type: 'coupon', coupon: coupon.id },
-				code,
-				max_redemptions: 1,
-				metadata: { sponsor: sponsorName, tickets: String(tickets), eventId: String(event.id) }
+			const promotion = await createSponsorPromotion(stripe, {
+				eventId: event.id, code, sponsorName, tickets, couponId: coupon.id
 			});
 			promotionId = promotion.id;
 			await db.insert(sponsorCodes).values({
@@ -120,15 +118,24 @@ export const actions: Actions = {
 			});
 			return { success: `Sponsor code ${code} created.` };
 		} catch (cause) {
-			// Compensate only for Stripe objects created by this request.
+			// With both IDs known, compensate for a failed database insert.
 			if (promotionId) {
 				try { await stripe.promotionCodes.update(promotionId, { active: false }); }
 				catch { console.error('Unable to deactivate a sponsor code after creation failed.'); }
+				if (couponId) {
+					try { await stripe.coupons.del(couponId); }
+					catch { console.error('Unable to delete a sponsor coupon after creation failed.'); }
+				}
+			} else if (couponId && cause instanceof Stripe.errors.StripeInvalidRequestError && (
+				cause.code === 'resource_already_exists' || /already exists|already in use|already been used|duplicate/i.test(cause.message)
+			)) {
+				// A replayed coupon may already have a promotion. Never delete that coupon.
+				try {
+					const promotions = await stripe.promotionCodes.list({ coupon: couponId, limit: 1 });
+					if (promotions.data.length === 0) await stripe.coupons.del(couponId);
+				} catch { console.error('Unable to clean up a sponsor coupon after a duplicate code error.'); }
 			}
-			if (couponId) {
-				try { await stripe.coupons.del(couponId); }
-				catch { console.error('Unable to delete a sponsor coupon after creation failed.'); }
-			}
+			// Ambiguous Stripe failures retain objects so an identical retry can recover them.
 			return fail(400, { error: formError(cause), values });
 		}
 	},
