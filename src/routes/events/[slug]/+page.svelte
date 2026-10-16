@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Calendar, Clock, MapPin, Weight } from 'lucide-svelte';
+	import { Calendar, Clock, MapPin, Weight, FileText, ShieldAlert, Download } from 'lucide-svelte';
 	import { eventBadge } from '$lib/utils/events';
 
 	let { data } = $props();
@@ -58,10 +58,39 @@
 		     a place to render unsanitized public input. -->
 		{@html data.event.overview}
 
-		{#if data.event.rulesPdfUrl}
-			<a class="btn btn-secondary rules-btn" href={data.event.rulesPdfUrl} target="_blank" rel="noopener noreferrer">
-				{data.event.rulesLabel}
-			</a>
+	</div>
+</section>
+
+<section class="section documents-section">
+	<div class="container article-content">
+		<h2 class="section-title">Documents</h2>
+		<div class="document-links">
+			{#if data.event.rulesPdfUrl}
+				<a class="btn btn-secondary" href={data.event.rulesPdfUrl} target="_blank" rel="noopener noreferrer">
+					<FileText size={18} />
+					{data.event.rulesLabel}
+				</a>
+			{/if}
+			{#if data.event.waiverPdfUrl}
+				<a class="btn btn-secondary" href={data.event.waiverPdfUrl} target="_blank" rel="noopener noreferrer">
+					<Download size={18} />
+					Competitor Waiver
+				</a>
+			{:else}
+				<a class="btn btn-secondary" href="/events/{data.event.slug}/waiver">
+					<FileText size={18} />
+					Competitor Waiver
+				</a>
+			{/if}
+		</div>
+		{#if data.event.rulesPdfUrl || data.event.status === 'upcoming'}
+			<div class="hazard-note card">
+				<ShieldAlert size={22} />
+				<div>
+					<h3>Hazard Bots</h3>
+					<p>Pneumatic systems (150 psi max) and weapons over 50% of robot weight require written technical pre-approval. See section 2 of the rules. Upload documentation when you register.</p>
+				</div>
+			</div>
 		{/if}
 	</div>
 </section>
@@ -274,8 +303,40 @@
 		line-height: 1.8;
 	}
 
-	.rules-btn {
-		margin-top: 0.5rem;
+	.documents-section {
+		padding-top: 0;
+	}
+
+	.document-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.document-links :global(svg),
+	.hazard-note :global(svg) {
+		flex-shrink: 0;
+	}
+
+	.hazard-note {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+		padding: 1.25rem 1.5rem;
+		margin-top: 1.5rem;
+	}
+
+	.hazard-note :global(svg) {
+		color: var(--gold);
+	}
+
+	.hazard-note h3 {
+		font-size: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.hazard-note p {
+		margin-bottom: 0;
 	}
 
 	.action-cards {
