@@ -76,3 +76,20 @@ Status column already present; ensure new statuses export as-is. Add "Waiver Ack
 - Admin: add, edit (hazard flag transitions), every allowed and disallowed status transition, delete allowed and blocked cases, cross-event regId -> 404.
 - Event page shows the Documents block; `/events/1lb/waiver` renders.
 - All test rows, temp admin users, and scripts removed afterwards.
+
+## Sponsor codes (free spectator tickets)
+
+Spectator tickets are sold through a per-event Stripe Payment Link (`events.spectator_url`). Sponsor codes are Stripe promotion codes on that link, managed from the admin.
+
+- Page `/admin/events/[id]/sponsor-codes`, linked from the roster header. Admin guard covers it.
+- Table `sponsor_codes`: `id serial`, `event_id int not null references events`, `sponsor_name text not null`, `tickets int not null`, `code text not null`, `stripe_coupon_id text not null`, `stripe_promotion_code_id text not null unique`, `active boolean not null default true`, `created_at timestamp default now`. Recorded in `drizzle/sponsor-codes.manual.sql`.
+- Create action (sponsor name required; tickets integer 1-50; code required, uppercased, `^[A-Z0-9_-]{4,40}$`):
+  1. Resolve the event's Payment Link: list payment links (auto-paginate) and match `url === events.spectator_url`. No match -> error "Set the event's spectator ticket link to a Stripe Payment Link first."
+  2. Read its line items: exactly one line item expected; take its price (`unit_amount`, `currency`) and product id.
+  3. If `allow_promotion_codes` is false, update the link to true.
+  4. Create coupon: `amount_off = tickets * unit_amount`, `currency`, `duration: 'once'`, `applies_to.products = [productId]`, `name = "Sponsor: <name> (<n> tickets)"` (Stripe name max 40 chars; truncate the sponsor name to fit).
+  5. Create promotion code: `promotion: { type: 'coupon', coupon }` (match the installed `stripe` SDK version's API shape), `code`, `max_redemptions: 1`, metadata `{ sponsor, tickets, eventId }`.
+  6. Insert the row. Stripe errors (e.g. duplicate code) surface as a form error with Stripe's message for `StripeInvalidRequestError`, generic otherwise.
+- Load: rows for the event; for each active row fetch the promotion code from Stripe to show `times_redeemed` and `active` (parallel, tolerate individual failures with "unavailable").
+- Deactivate action: set the promotion code `active: false` in Stripe, then set `active = false` in the row (scoped by event id).
+- Page shows the ticket link, per-ticket price, and a note that codes are single-use and cover up to N tickets per order, and that test vs live follows the deployed Stripe key.
