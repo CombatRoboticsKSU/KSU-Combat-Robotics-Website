@@ -23,6 +23,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 		event: ev,
 		botName: reg.botName,
 		builderName: reg.builderName,
-		status: reg.status
+		status: reg.status,
+		hazardStatus: reg.hazardStatus
 	};
 };

@@ -5,7 +5,9 @@
 
 	const statusLabel = $derived(
 		data.status === 'paid'
-			? 'Confirmed'
+			? data.hazardStatus === 'pending_review'
+				? 'Awaiting Review'
+				: 'Confirmed'
 			: data.status === 'expired'
 				? 'Expired'
 				: data.status === 'refunded'
@@ -30,10 +32,17 @@
 				<div class="status-icon confirmed">
 					<CheckCircle2 size={40} />
 				</div>
-				<h2>You are registered.</h2>
-				<p class="status-detail">
-					<strong>{data.botName}</strong> for {data.builderName} is confirmed for {data.event.name}.
-				</p>
+				{#if data.hazardStatus === 'pending_review'}
+					<h2>Payment confirmed, technical approval pending.</h2>
+					<p class="status-detail">
+						<strong>{data.botName}</strong> for {data.builderName} requires technical approval from event staff before it can compete at {data.event.name}. Staff will contact you at your registered email.
+					</p>
+				{:else}
+					<h2>You are registered.</h2>
+					<p class="status-detail">
+						<strong>{data.botName}</strong> for {data.builderName} is confirmed for {data.event.name}.
+					</p>
+				{/if}
 				<div class="status-note">
 					<ShieldAlert size={18} />
 					<span>A signed waiver is required at check-in.</span>
@@ -60,11 +69,18 @@
 				<div class="status-icon pending">
 					<Clock size={40} />
 				</div>
-				<h2>Payment received, confirming your registration.</h2>
-				<p class="status-detail">
-					<strong>{data.botName}</strong> for {data.builderName} is being confirmed for {data.event.name}.
-					Show up on event day and check in with a signed waiver.
-				</p>
+				{#if data.hazardStatus === 'pending_review'}
+					<h2>Payment processing, technical approval pending.</h2>
+					<p class="status-detail">
+						Payment for <strong>{data.botName}</strong> for {data.builderName} is processing. Your entry will also need technical approval from event staff before it can compete at {data.event.name}. Staff will contact you at your registered email.
+					</p>
+				{:else}
+					<h2>Payment processing, confirming your registration.</h2>
+					<p class="status-detail">
+						<strong>{data.botName}</strong> for {data.builderName} is being confirmed for {data.event.name}.
+						Show up on event day and check in with a signed waiver.
+					</p>
+				{/if}
 			{/if}
 
 			<a href="/events/{data.event.slug}" class="btn btn-secondary back-link">

@@ -1,5 +1,7 @@
 <script lang="ts">
-	let { data } = $props();
+	import { ShieldAlert, FileText, Check, X } from 'lucide-svelte';
+
+	let { data, form } = $props();
 
 	function statusClass(status: string) {
 		return `status-pill ${status}`;
@@ -59,6 +61,8 @@
 	<div class="section-header">
 		<h2>Registrations</h2>
 	</div>
+	{#if form?.error}<div class="alert-error" role="alert">{form.error}</div>{/if}
+	{#if form?.success}<div class="alert-success" role="status">{form.success}</div>{/if}
 
 	{#if data.registrations.length === 0}
 		<div class="empty-state">No registrations yet.</div>
@@ -70,6 +74,7 @@
 						<th>Status</th>
 						<th>Builder</th>
 						<th>Bot</th>
+						<th>Hazard review</th>
 						<th>Weapon</th>
 						<th>Team</th>
 						<th>Email</th>
@@ -85,6 +90,33 @@
 							<td><span class={statusClass(r.status)}>{r.status}</span></td>
 							<td class="strong">{r.builderName}</td>
 							<td class="strong">{r.botName}</td>
+							<td>
+								<div class="hazard-review">
+									{#if r.hazardPneumatic || r.hazardHighMass}
+										<div class="hazard-types"><ShieldAlert size={16} /> { [r.hazardPneumatic ? 'Pneumatic' : '', r.hazardHighMass ? 'High-mass' : ''].filter(Boolean).join(' / ') }</div>
+									{/if}
+									<span class="status-pill {r.hazardStatus}">{r.hazardStatus.replaceAll('_', ' ')}</span>
+									{#each r.hazardDocs as doc}
+										<a class="hazard-document" href={doc.url} target="_blank" rel="noopener noreferrer"><FileText size={14} /> {doc.name}</a>
+									{/each}
+									{#if r.hazardReviewNote}<p class="hazard-note">{r.hazardReviewNote}</p>{/if}
+									{#if r.hazardReviewedAt}<div class="item-sub">Reviewed {formatDate(r.hazardReviewedAt)}</div>{/if}
+									{#if r.status === 'paid' && (r.hazardPneumatic || r.hazardHighMass) && r.hazardStatus !== 'not_required'}
+										<form method="POST" action="?/approveHazard" class="hazard-review-form">
+											<input type="hidden" name="registrationId" value={r.id} />
+											<div class="field-group">
+												<label class="field-label" for="hazard-note-{r.id}">Review note (required to reject)</label>
+												<textarea class="field-input" id="hazard-note-{r.id}" name="hazardReviewNote" rows="2" value={form && 'registrationId' in form && form.registrationId === r.id ? form.note : r.hazardReviewNote}></textarea>
+											</div>
+											<div class="hazard-review-actions">
+												<button class="btn-admin primary sm" type="submit"><Check size={14} /> Approve</button>
+												<button class="btn-admin danger sm" type="submit" formaction="?/rejectHazard"><X size={14} /> Reject</button>
+											</div>
+											<p class="item-sub">If rejecting, refund in Stripe if appropriate.</p>
+										</form>
+									{/if}
+								</div>
+							</td>
 							<td>{r.weaponType}</td>
 							<td>{r.teamName}</td>
 							<td>{r.email}</td>

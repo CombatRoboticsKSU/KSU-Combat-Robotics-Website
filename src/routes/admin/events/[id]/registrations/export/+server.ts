@@ -27,6 +27,10 @@ export const GET: RequestHandler = async ({ params }) => {
 			'Email',
 			'Phone',
 			'Notes',
+			'Hazard Types',
+			'Hazard Status',
+			'Hazard Docs',
+			'Hazard Review Note',
 			'Waiver agreed',
 			'18+ confirmed',
 			'Paid at'
@@ -40,6 +44,10 @@ export const GET: RequestHandler = async ({ params }) => {
 				r.email,
 				r.phone,
 				r.notes,
+				[r.hazardPneumatic ? 'Pneumatic' : '', r.hazardHighMass ? 'High-mass' : ''].filter(Boolean).join(' / '),
+				r.hazardStatus,
+				r.hazardDocs.map((doc) => doc.url).join(' '),
+				r.hazardReviewNote,
 				r.waiverAck ? 'yes' : 'no',
 				r.ageAck ? 'yes' : 'no',
 				r.paidAt ? r.paidAt.toISOString() : ''

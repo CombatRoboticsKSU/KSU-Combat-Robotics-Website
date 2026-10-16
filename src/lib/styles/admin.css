@@ -290,3 +290,55 @@
 .stat-value {
 	font-size: 1.5rem;
 }
+
+.status-pill.approved {
+	background: color-mix(in srgb, var(--gold) 15%, transparent);
+	color: var(--gold);
+}
+
+.status-pill.rejected {
+	background: rgba(239, 68, 68, 0.1);
+	color: #ef4444;
+}
+
+.hazard-review {
+	display: grid;
+	gap: 0.625rem;
+	min-width: 260px;
+	max-width: 360px;
+}
+
+.hazard-review .status-pill {
+	justify-self: start;
+}
+
+.hazard-types,
+.hazard-document,
+.hazard-review-actions {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.hazard-types {
+	color: var(--gold);
+}
+
+.hazard-document,
+.hazard-note {
+	overflow-wrap: anywhere;
+	white-space: pre-wrap;
+}
+
+.hazard-document svg {
+	flex-shrink: 0;
+}
+
+.hazard-review-form {
+	border-top: 1px solid var(--border-color);
+	padding-top: 0.75rem;
+}
+
+.hazard-review-form .item-sub {
+	margin-top: 0.625rem;
+}

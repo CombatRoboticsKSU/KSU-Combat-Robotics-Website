@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { ArrowRight, ShieldAlert, FileText, Check } from 'lucide-svelte';
+	import { ArrowRight, ShieldAlert, FileText, Check, Upload, X } from 'lucide-svelte';
+	import { upload } from '@vercel/blob/client';
 	import WaiverModal from '$lib/components/WaiverModal.svelte';
 	import { onMount } from 'svelte';
 
@@ -32,6 +33,58 @@
 	});
 	// svelte-ignore state_referenced_locally
 	let ageAgreed = $state(form?.values?.ageAck ?? false);
+	// svelte-ignore state_referenced_locally
+	let hazardPneumatic = $state(form?.values?.hazardPneumatic ?? false);
+	// svelte-ignore state_referenced_locally
+	let hazardHighMass = $state(form?.values?.hazardHighMass ?? false);
+	// svelte-ignore state_referenced_locally
+	let hazardDocs = $state<{ name: string; url: string }[]>(restoreDocs(form?.values?.hazardDocs));
+	let uploading = $state(false);
+	let uploadError = $state('');
+	const isHazard = $derived(hazardPneumatic || hazardHighMass);
+
+	function restoreDocs(raw: string | undefined): { name: string; url: string }[] {
+		try {
+			const docs = JSON.parse(raw || '[]');
+			return Array.isArray(docs)
+				? docs.filter((doc) => doc && typeof doc.name === 'string' && typeof doc.url === 'string')
+				: [];
+		} catch {
+			return [];
+		}
+	}
+
+	async function uploadDocuments(event: Event) {
+		const input = event.currentTarget as HTMLInputElement;
+		const files = Array.from(input.files ?? []);
+		uploadError = '';
+		if (hazardDocs.length + files.length > 5) {
+			uploadError = 'Upload no more than 5 documents.';
+			input.value = '';
+			return;
+		}
+		uploading = true;
+		try {
+			for (const file of files) {
+				if (!['application/pdf', 'image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 10 * 1024 * 1024) {
+					throw new Error('Choose PDF, PNG, JPEG, or WebP files up to 10 MB each.');
+				}
+				const name = file.name.replace(/[^a-zA-Z0-9._-]/g, '_') || 'document';
+				const extension = name.match(/\.[A-Za-z0-9]{1,10}$/)?.[0] ?? '';
+				const safeName = name.slice(0, name.length - extension.length).slice(0, 80 - extension.length) + extension;
+				const blob = await upload(`hazard-docs/${crypto.randomUUID()}-${safeName}`, file, {
+					access: 'public',
+					handleUploadUrl: '/api/upload/hazard'
+				});
+				hazardDocs = [...hazardDocs, { name: file.name.trim().slice(0, 200), url: blob.url }];
+			}
+		} catch (e) {
+			uploadError = e instanceof Error ? e.message : 'Could not upload document. Please try again.';
+		} finally {
+			uploading = false;
+			input.value = '';
+		}
+	}
 
 	// Gating the submit button is a JS-only affordance. Rendering it disabled on the server
 	// would trap anyone without JS on a button that can never enable, so it only starts
@@ -103,6 +156,42 @@
 					<textarea id="notes" name="notes" rows="4" bind:value={values.notes}></textarea>
 				</div>
 
+				<fieldset class="hazard-block">
+					<legend class="waiver-heading">Hazard Bot</legend>
+					<p class="waiver-prompt">
+						Declare these systems so event staff can review the required technical documentation before your bot competes.
+						{#if data.event.rulesPdfUrl}
+							<a href={data.event.rulesPdfUrl} target="_blank" rel="noopener noreferrer">Read the event rules (PDF).</a>
+						{/if}
+					</p>
+					<label class="ack-row">
+						<input type="checkbox" name="hazardPneumatic" bind:checked={hazardPneumatic} />
+						<span><strong>Pneumatics (&le;150 psi):</strong> Full documentation required: component datasheets for all reservoirs, lines, regulators, and valves, plus schematics showing relief valves and safety pressure factors. Must have an accessible manual bleed/vent valve.</span>
+					</label>
+					<label class="ack-row">
+						<input type="checkbox" name="hazardHighMass" bind:checked={hazardHighMass} />
+						<span><strong>High-mass inertia weapon (&gt;50% of bot weight):</strong> Engineering documentation required: retention shaft verification, bearing load margins, and FEA/burst containment calculations at full operational RPM.</span>
+					</label>
+					{#if isHazard}
+						<div class="form-group hazard-upload">
+							<label for="hazardFiles"><Upload size={16} /> Technical documents</label>
+							<p class="waiver-prompt">At least one document is required. Up to 5 PDF, PNG, JPEG, or WebP files, 10 MB each.</p>
+							<input id="hazardFiles" type="file" accept="application/pdf,image/png,image/jpeg,image/webp" multiple disabled={uploading || hazardDocs.length >= 5} onchange={uploadDocuments} />
+						</div>
+						<ul class="hazard-docs">
+							{#each hazardDocs as doc, i}
+								<li>
+									<FileText size={16} /><span>{doc.name}</span>
+									<button type="button" class="remove-doc" aria-label={`Remove ${doc.name}`} disabled={uploading} onclick={() => (hazardDocs = hazardDocs.filter((_, index) => index !== i))}><X size={16} /></button>
+								</li>
+							{/each}
+						</ul>
+						{#if uploading}<p class="waiver-prompt" role="status">Uploading documents...</p>{/if}
+						{#if uploadError}<p class="form-error" role="alert">{uploadError}</p>{/if}
+					{/if}
+					<input type="hidden" name="hazardDocs" value={JSON.stringify(hazardDocs)} />
+				</fieldset>
+
 				<div class="waiver-block">
 					<h2 class="waiver-heading">Competitor Waiver</h2>
 
@@ -157,7 +246,7 @@
 					</p>
 				</div>
 
-				<button type="submit" class="btn btn-primary submit-btn" disabled={jsReady && !waiverAgreed}>
+				<button type="submit" class="btn btn-primary submit-btn" disabled={uploading || (jsReady && (!waiverAgreed || (isHazard && hazardDocs.length === 0)))}>
 					Continue to Payment
 					<ArrowRight size={16} />
 				</button>
@@ -190,6 +279,49 @@
 />
 
 <style>
+	.hazard-block {
+		min-width: 0;
+		margin: 0 0 1.5rem;
+		padding: 1rem;
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-md);
+	}
+
+	.hazard-upload {
+		margin-top: 1rem;
+	}
+
+	.hazard-upload label,
+	.hazard-docs li {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.hazard-docs {
+		list-style: none;
+		padding: 0;
+		font-size: 0.8125rem;
+	}
+
+	.hazard-docs li {
+		margin-top: 0.5rem;
+	}
+
+	.hazard-docs span {
+		overflow-wrap: anywhere;
+		flex: 1;
+	}
+
+	.remove-doc {
+		display: inline-flex;
+		padding: 0.25rem;
+		border: none;
+		background: none;
+		color: var(--text-secondary);
+		cursor: pointer;
+	}
+
 	.register-layout {
 		display: grid;
 		grid-template-columns: 1.5fr 1fr;

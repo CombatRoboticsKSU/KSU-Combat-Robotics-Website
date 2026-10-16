@@ -1,4 +1,5 @@
 import { db } from '$lib/server/db';
+import { blobStoreOrigin, hazardDocumentPathname } from '$lib/server/blob';
 import { events, registrations } from '$lib/server/schema';
 import { stripe } from '$lib/server/stripe';
 import { isEventFull, canRegister } from '$lib/utils/events';
@@ -61,6 +62,9 @@ export const actions: Actions = {
 			teamName: readField(form, 'teamName'),
 			botName: readField(form, 'botName'),
 			weaponType: readField(form, 'weaponType'),
+			hazardPneumatic: form.get('hazardPneumatic') === 'on',
+			hazardHighMass: form.get('hazardHighMass') === 'on',
+			hazardDocs: readField(form, 'hazardDocs'),
 			notes: readField(form, 'notes'),
 			waiverAck: form.get('waiverAck') === 'on',
 			ageAck: form.get('ageAck') === 'on'
@@ -78,6 +82,37 @@ export const actions: Actions = {
 			return fail(400, { error: 'You must confirm you are 18 or older to register', values });
 		}
 
+		const isHazard = values.hazardPneumatic || values.hazardHighMass;
+		const hazardDocs: { name: string; url: string }[] = [];
+		if (isHazard) {
+			try {
+				const docs: unknown = JSON.parse(values.hazardDocs || '[]');
+				if (!Array.isArray(docs) || docs.length > 5) throw new Error();
+				for (const doc of docs) {
+					if (
+						!doc || typeof doc !== 'object' ||
+						typeof doc.name !== 'string' || typeof doc.url !== 'string'
+					) {
+						throw new Error();
+					}
+					const name = doc.name.trim().slice(0, 200);
+					const url = new URL(doc.url);
+					if (
+						!name || url.origin !== blobStoreOrigin ||
+						!hazardDocumentPathname.test(url.pathname.slice(1))
+					) {
+						throw new Error();
+					}
+					hazardDocs.push({ name, url: url.href });
+				}
+			} catch {
+				return fail(400, { error: 'Upload up to 5 valid Hazard Bot documents (PDF or images).', values });
+			}
+			if (hazardDocs.length === 0) {
+				return fail(400, { error: 'At least one technical document is required for a Hazard Bot.', values });
+			}
+		}
+
 		const { ev, isFull } = await loadOpenEvent(params.slug);
 
 		// isFull is checked separately below so it can carry its own message; pass isFull: false
@@ -91,7 +126,13 @@ export const actions: Actions = {
 
 		const [row] = await db
 			.insert(registrations)
-			.values({ ...values, eventId: ev.id, status: 'pending' })
+			.values({
+				...values,
+				hazardDocs,
+				hazardStatus: isHazard ? 'pending_review' : 'not_required',
+				eventId: ev.id,
+				status: 'pending'
+			})
 			.returning({ id: registrations.id });
 
 		let checkoutUrl: string;
