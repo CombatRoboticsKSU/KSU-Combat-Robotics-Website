@@ -39,6 +39,7 @@
 	let hazardHighMass = $state(form?.values?.hazardHighMass ?? false);
 	// svelte-ignore state_referenced_locally
 	let hazardDocs = $state<{ name: string; url: string }[]>(restoreDocs(form?.values?.hazardDocs));
+	let memberCode = $state('');
 	let uploading = $state(false);
 	let uploadError = $state('');
 	const isHazard = $derived(hazardPneumatic || hazardHighMass);
@@ -192,6 +193,14 @@
 					<input type="hidden" name="hazardDocs" value={JSON.stringify(hazardDocs)} />
 				</fieldset>
 
+				{#if data.memberCodeEnabled}
+					<div class="form-group">
+						<label for="memberCode">Member Access Code</label>
+						<input id="memberCode" name="memberCode" type="text" bind:value={memberCode} autocomplete="off" />
+						<p class="waiver-prompt">Club members: enter the code from Discord to register without paying.</p>
+					</div>
+				{/if}
+
 				<div class="waiver-block">
 					<h2 class="waiver-heading">Competitor Waiver</h2>
 
@@ -247,7 +256,7 @@
 				</div>
 
 				<button type="submit" class="btn btn-primary submit-btn" disabled={uploading || (jsReady && (!waiverAgreed || (isHazard && hazardDocs.length === 0)))}>
-					Continue to Payment
+					{memberCode.trim() ? 'Register as a Member' : 'Continue to Payment'}
 					<ArrowRight size={16} />
 				</button>
 			</form>
@@ -263,7 +272,7 @@
 					{/if}
 					<div class="sidebar-warning">
 						<ShieldAlert size={18} />
-						<span>You will be redirected to Stripe to complete payment.</span>
+						<span>{memberCode.trim() ? 'Member registrations do not require payment.' : 'You will be redirected to Stripe to complete payment.'}</span>
 					</div>
 				</div>
 			</div>

@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
-import { eq, and, or, asc, count } from 'drizzle-orm';
+import { eq, asc, count, sql } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -48,6 +48,7 @@ function readEventFields(form: FormData) {
 		waiverText: (form.get('waiverText') as string) ?? '',
 		waiverPdfUrl: (form.get('waiverPdfUrl') as string) ?? '',
 		registrationOpen: form.get('registrationOpen') === 'on',
+		memberCode: typeof form.get('memberCode') === 'string' ? String(form.get('memberCode')).trim() : '',
 		competitorPriceId: (form.get('competitorPriceId') as string)?.trim() ?? '',
 		competitorLabel: (form.get('competitorLabel') as string) || 'Register to Compete',
 		competitorPrice: (form.get('competitorPrice') as string) ?? '',
@@ -140,33 +141,26 @@ export const actions: Actions = {
 		const id = parseInt(form.get('id') as string);
 		if (!Number.isFinite(id)) return fail(400, { error: 'Invalid event id' });
 
-		// Paid and refunded rows are financial records and may never be destroyed here.
-		// Pending rows must also be protected: a pending row can be someone on the Stripe
-		// checkout page right now. Deleting the event out from under them lets the payment
-		// complete with no registration left for the webhook to mark paid. Only rows that
-		// have resolved to 'expired' (or no rows at all) may be deleted.
-		const [{ value: protectedRows }] = await db
-			.select({ value: count() })
-			.from(registrations)
-			.where(
-				and(
-					eq(registrations.eventId, id),
-					or(
-						eq(registrations.status, 'pending'),
-						eq(registrations.status, 'paid'),
-						eq(registrations.status, 'refunded')
-					)
+		// Keep the event guard and registration delete permissions in the same statement.
+		const result = await db.execute(sql`
+			WITH eligible AS (
+				SELECT id FROM events WHERE id = ${id}
+				AND NOT EXISTS (
+					SELECT 1 FROM registrations WHERE event_id = ${id}
+					AND (status IN ('pending', 'paid', 'refunded', 'member', 'paid_offline')
+						OR stripe_payment_intent_id IS NOT NULL)
 				)
-			);
-
-		if (protectedRows > 0) {
-			return fail(400, {
-				error: `This event has ${protectedRows} pending, paid, or refunded registration(s) and cannot be deleted. A pending registration may just be an in-flight checkout that will resolve itself shortly; wait for it to complete or expire, or mark the event past instead.`
-			});
+			), removed AS (
+				DELETE FROM registrations WHERE event_id IN (SELECT id FROM eligible)
+				AND status NOT IN ('pending', 'paid', 'refunded', 'member', 'paid_offline')
+				AND stripe_payment_intent_id IS NULL RETURNING id
+			)
+			DELETE FROM events WHERE id IN (SELECT id FROM eligible)
+			AND (SELECT count(*) FROM removed) >= 0 RETURNING id
+		`);
+		if (result.rows.length === 0) {
+			return fail(400, { error: 'Event not found or it has active registrations or payment records and cannot be deleted. Wait for pending checkouts to resolve, or mark the event past instead.' });
 		}
-
-		await db.delete(registrations).where(eq(registrations.eventId, id));
-		await db.delete(events).where(eq(events.id, id));
 		return { success: true };
 	}
 };

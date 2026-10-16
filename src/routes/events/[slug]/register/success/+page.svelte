@@ -3,17 +3,15 @@
 
 	let { data } = $props();
 
-	const statusLabel = $derived(
-		data.status === 'paid'
-			? data.hazardStatus === 'pending_review'
-				? 'Awaiting Review'
-				: 'Confirmed'
-			: data.status === 'expired'
-				? 'Expired'
-				: data.status === 'refunded'
-					? 'Refunded'
-					: 'Received'
-	);
+	const statusLabel = $derived.by(() => {
+		if (data.status === 'cancelled') return 'Cancelled';
+		if (data.member || ['paid', 'member', 'paid_offline'].includes(data.status)) {
+			return data.hazardStatus === 'pending_review' ? 'Awaiting Review' : 'Confirmed';
+		}
+		if (data.status === 'expired') return 'Expired';
+		if (data.status === 'refunded') return 'Refunded';
+		return 'Received';
+	});
 </script>
 
 <svelte:head>
@@ -28,7 +26,38 @@
 <section class="section">
 	<div class="container">
 		<div class="status-card card">
-			{#if data.status === 'paid'}
+			{#if data.member}
+				<div class="status-icon confirmed"><CheckCircle2 size={40} /></div>
+				<h2>You are registered as a club member. No payment needed.</h2>
+				{#if data.hazardStatus === 'pending_review'}
+					<p class="status-detail">Your entry is a Hazard Bot and requires technical approval from event staff before it can compete. Staff will contact you at your registered email.</p>
+				{/if}
+				<div class="status-note"><ShieldAlert size={18} /><span>A signed waiver is required at check-in.</span></div>
+			{:else if data.status === 'cancelled'}
+				<div class="status-icon warning"><Ban size={40} /></div>
+				<h2>This registration has been cancelled.</h2>
+				<p class="status-detail">Contact the event organizers if you think this is a mistake.</p>
+			{:else if data.status === 'member'}
+				<div class="status-icon confirmed"><CheckCircle2 size={40} /></div>
+				<h2>You are registered as a club member. No payment needed.</h2>
+				<p class="status-detail">
+					<strong>{data.botName}</strong> for {data.builderName} is registered for {data.event.name}.
+				</p>
+				{#if data.hazardStatus === 'pending_review'}
+					<p class="status-detail">Your entry is a Hazard Bot and requires technical approval from event staff before it can compete. Staff will contact you at your registered email.</p>
+				{/if}
+				<div class="status-note"><ShieldAlert size={18} /><span>A signed waiver is required at check-in.</span></div>
+			{:else if data.status === 'paid_offline'}
+				<div class="status-icon confirmed"><CheckCircle2 size={40} /></div>
+				<h2>You are registered. Payment recorded.</h2>
+				<p class="status-detail">
+					<strong>{data.botName}</strong> for {data.builderName} is registered for {data.event.name}.
+				</p>
+				{#if data.hazardStatus === 'pending_review'}
+					<p class="status-detail">Your entry is a Hazard Bot and requires technical approval from event staff before it can compete. Staff will contact you at your registered email.</p>
+				{/if}
+				<div class="status-note"><ShieldAlert size={18} /><span>A signed waiver is required at check-in.</span></div>
+			{:else if data.status === 'paid'}
 				<div class="status-icon confirmed">
 					<CheckCircle2 size={40} />
 				</div>

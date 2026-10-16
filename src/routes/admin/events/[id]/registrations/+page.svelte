@@ -25,9 +25,10 @@
 			<h1>{data.event.name} &middot; Roster</h1>
 			<a href="/admin/events" class="item-sub">&larr; Back to Events</a>
 		</div>
-		<a class="btn-admin primary" href="/admin/events/{data.event.id}/registrations/export" download>
-			Download CSV
-		</a>
+		<div class="item-actions">
+			<a class="btn-admin primary" href="/admin/events/{data.event.id}/registrations/new">Add Registration</a>
+			<a class="btn-admin ghost" href="/admin/events/{data.event.id}/registrations/export" download>Download CSV</a>
+		</div>
 	</div>
 
 	<div class="section-header">
@@ -50,6 +51,9 @@
 			<div class="item-sub">Refunded</div>
 			<div class="item-name stat-value">{data.counts.refunded}</div>
 		</div>
+		{#each [['Member', data.counts.member], ['Paid offline', data.counts.paid_offline], ['Cancelled', data.counts.cancelled]] as [label, value]}
+			<div><div class="item-sub">{label}</div><div class="item-name stat-value">{value}</div></div>
+		{/each}
 		{#if data.event.capacity > 0}
 			<div>
 				<div class="item-sub">Capacity</div>
@@ -82,12 +86,14 @@
 						<th>Notes</th>
 						<th>Created</th>
 						<th>Paid</th>
+						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 					{#each data.registrations as r}
 						<tr>
-							<td><span class={statusClass(r.status)}>{r.status}</span></td>
+							<td><span class={statusClass(r.status)}>{r.status.replaceAll('_', ' ')}</span>
+								{#if !r.waiverAck}<div class="item-sub">Waiver at check-in</div>{/if}</td>
 							<td class="strong">{r.builderName}</td>
 							<td class="strong">{r.botName}</td>
 							<td>
@@ -101,7 +107,7 @@
 									{/each}
 									{#if r.hazardReviewNote}<p class="hazard-note">{r.hazardReviewNote}</p>{/if}
 									{#if r.hazardReviewedAt}<div class="item-sub">Reviewed {formatDate(r.hazardReviewedAt)}</div>{/if}
-									{#if r.status === 'paid' && (r.hazardPneumatic || r.hazardHighMass) && r.hazardStatus !== 'not_required'}
+									{#if ['paid', 'member', 'paid_offline'].includes(r.status) && (r.hazardPneumatic || r.hazardHighMass) && r.hazardStatus !== 'not_required'}
 										<form method="POST" action="?/approveHazard" class="hazard-review-form">
 											<input type="hidden" name="registrationId" value={r.id} />
 											<div class="field-group">
@@ -124,6 +130,7 @@
 							<td>{r.notes}</td>
 							<td>{formatDate(r.createdAt)}</td>
 							<td>{formatDate(r.paidAt)}</td>
+							<td><a class="btn-admin ghost sm" href="/admin/events/{data.event.id}/registrations/{r.id}">Edit</a></td>
 						</tr>
 					{/each}
 				</tbody>

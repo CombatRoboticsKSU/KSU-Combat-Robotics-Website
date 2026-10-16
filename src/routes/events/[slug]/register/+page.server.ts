@@ -1,10 +1,11 @@
+import { timingSafeEqual } from 'node:crypto';
 import { db } from '$lib/server/db';
 import { blobStoreOrigin, hazardDocumentPathname } from '$lib/server/blob';
 import { events, registrations } from '$lib/server/schema';
 import { stripe } from '$lib/server/stripe';
-import { isEventFull, canRegister } from '$lib/utils/events';
+import { ACTIVE_REGISTRATION_STATUSES, isEventFull, canRegister } from '$lib/utils/events';
 import { resolveWaiverText } from '$lib/utils/waiver';
-import { eq, and, or, count } from 'drizzle-orm';
+import { eq, and, inArray, count, sql } from 'drizzle-orm';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -30,7 +31,7 @@ async function loadOpenEvent(slug: string) {
 		.where(
 			and(
 				eq(registrations.eventId, ev.id),
-				or(eq(registrations.status, 'pending'), eq(registrations.status, 'paid'))
+				inArray(registrations.status, ACTIVE_REGISTRATION_STATUSES)
 			)
 		);
 
@@ -41,12 +42,14 @@ async function loadOpenEvent(slug: string) {
 export const load: PageServerLoad = async ({ params }) => {
 	const { ev, isFull } = await loadOpenEvent(params.slug);
 
-	if (!canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull)) {
+	if (!canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull, ev.memberCode.trim() !== '')) {
 		throw redirect(303, `/events/${ev.slug}`);
 	}
 
+	const { memberCode, ...event } = ev;
 	return {
-		event: ev,
+		event,
+		memberCodeEnabled: memberCode.trim() !== '',
 		waiverText: resolveWaiverText(ev.waiverText),
 		waiverPdfUrl: ev.waiverPdfUrl
 	};
@@ -115,25 +118,61 @@ export const actions: Actions = {
 
 		const { ev, isFull } = await loadOpenEvent(params.slug);
 
+		const enteredCode = readField(form, 'memberCode');
+		let isMember = false;
+		if (enteredCode) {
+			const entered = Buffer.from(enteredCode.toLowerCase());
+			const expected = Buffer.from(ev.memberCode.trim().toLowerCase());
+			isMember = expected.length > 0 && entered.length === expected.length && timingSafeEqual(entered, expected);
+			if (!isMember) {
+				return fail(400, { error: 'That member access code is not valid for this event.', values });
+			}
+		}
+
 		// isFull is checked separately below so it can carry its own message; pass isFull: false
 		// here so this call only covers the "closed" reasons canRegister otherwise folds together.
-		if (!canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, false)) {
+		if (!canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, false, isMember)) {
 			return fail(400, { error: 'Registration is closed for this event.', values });
 		}
 		if (isFull) {
 			return fail(400, { error: 'This event is full.', values });
 		}
 
-		const [row] = await db
-			.insert(registrations)
-			.values({
-				...values,
-				hazardDocs,
-				hazardStatus: isHazard ? 'pending_review' : 'not_required',
-				eventId: ev.id,
-				status: 'pending'
-			})
-			.returning({ id: registrations.id });
+		// neon-http batches run in one transaction. Lock the event before the insert's
+		// capacity check so concurrent member and Stripe requests cannot take the same spot.
+		const [, inserted] = await db.batch([
+			db.execute(sql`select pg_advisory_xact_lock(${7301}, ${ev.id})`),
+			db.execute<{ id: number }>(sql`
+				insert into ${registrations} (
+					event_id, status, builder_name, email, phone, team_name, bot_name,
+					weapon_type, hazard_pneumatic, hazard_high_mass, hazard_docs,
+					hazard_status, notes, waiver_ack, age_ack
+				)
+				select ${ev.id}, ${isMember ? 'member' : 'pending'},
+					${values.builderName}, ${values.email}, ${values.phone}, ${values.teamName},
+					${values.botName}, ${values.weaponType}, ${values.hazardPneumatic},
+					${values.hazardHighMass}, ${JSON.stringify(hazardDocs)}::json,
+					${isHazard ? 'pending_review' : 'not_required'}, ${values.notes},
+					${values.waiverAck}, ${values.ageAck}
+				from ${events}
+				where ${events.id} = ${ev.id} and (
+					${events.capacity} = 0 or (
+						select count(*) from ${registrations}
+						where ${registrations.eventId} = ${ev.id}
+							and ${inArray(registrations.status, ACTIVE_REGISTRATION_STATUSES)}
+					) < ${events.capacity}
+				)
+				returning ${registrations.id}
+			`)
+		]);
+		const [row] = inserted.rows;
+		if (!row) {
+			return fail(400, { error: 'This event is full.', values });
+		}
+
+		if (isMember) {
+			throw redirect(303, `/events/${ev.slug}/register/success?member=1${isHazard ? '&hazard=1' : ''}`);
+		}
 
 		let checkoutUrl: string;
 		try {

@@ -232,6 +232,7 @@ export const events = pgTable('events', {
 	waiverText: text('waiver_text').notNull().default(''),
 	waiverPdfUrl: text('waiver_pdf_url').notNull().default(''),
 	registrationOpen: boolean('registration_open').notNull().default(false),
+	memberCode: text('member_code').notNull().default(''),
 	competitorPriceId: text('competitor_price_id').notNull().default(''),
 	competitorLabel: text('competitor_label').notNull().default('Register to Compete'),
 	competitorPrice: text('competitor_price').notNull().default(''),
@@ -254,7 +255,7 @@ export const events = pgTable('events', {
 export const registrations = pgTable('registrations', {
 	id: serial('id').primaryKey(),
 	eventId: integer('event_id').notNull().references(() => events.id),
-	// 'pending' | 'paid' | 'expired' | 'refunded'
+	// 'pending' | 'paid' | 'expired' | 'refunded' | 'member' | 'paid_offline' | 'cancelled'
 	status: text('status').notNull().default('pending'),
 	builderName: text('builder_name').notNull(),
 	email: text('email').notNull(),

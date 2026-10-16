@@ -5,7 +5,7 @@
 	let { data } = $props();
 
 	const badge = $derived(
-		eventBadge(data.event.status, data.event.registrationOpen, data.isFull, data.event.competitorPriceId !== '')
+		eventBadge(data.event.status, data.event.registrationOpen, data.isFull, data.event.competitorPriceId !== '' || data.memberCodeEnabled)
 	);
 </script>
 
@@ -101,7 +101,11 @@
 			<div class="action-cards">
 				<!-- Competitor -->
 				{#snippet competitorMeta(showSpots: boolean)}
-					{#if data.event.competitorPrice}<span class="action-card-price">{data.event.competitorPrice}</span>{/if}
+					{#if data.event.competitorPriceId === '' && data.memberCodeEnabled}
+						<span class="action-card-note">Members register with the code from Discord.</span>
+					{:else if data.event.competitorPrice}
+						<span class="action-card-price">{data.event.competitorPrice}</span>
+					{/if}
 					{#if data.event.competitorNote}<span class="action-card-note">{data.event.competitorNote}</span>{/if}
 					{#if showSpots && data.spotsLeft !== null}
 						<span class="action-card-spots">{data.spotsLeft} spot{data.spotsLeft === 1 ? '' : 's'} left</span>
@@ -112,7 +116,7 @@
 						{data.event.competitorLabel}
 						{@render competitorMeta(true)}
 					</a>
-				{:else if data.event.competitorPriceId === ''}
+				{:else if data.event.competitorPriceId === '' && !data.memberCodeEnabled}
 					<div class="action-card disabled">
 						Coming soon
 						{@render competitorMeta(false)}

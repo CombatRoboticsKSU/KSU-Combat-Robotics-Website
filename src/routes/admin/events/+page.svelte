@@ -322,6 +322,12 @@
 				</div>
 
 				<div class="field-group">
+					<label class="field-label" for="eMemberCode">Member Access Code</label>
+					<input id="eMemberCode" name="memberCode" type="text" class="field-input" value={editing?.memberCode ?? ''} autocomplete="off" />
+					<p class="help-text">Share with club members in Discord. Members who enter it register without paying. Use 8+ characters and change it for each event. Leave blank to disable.</p>
+				</div>
+
+				<div class="field-group">
 					<label class="field-label" for="eCompetitorPriceId">Competitor Stripe Price ID</label>
 					<input
 						id="eCompetitorPriceId"
