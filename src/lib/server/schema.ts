@@ -250,6 +250,18 @@ export const events = pgTable('events', {
 	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
 
+export const sponsorCodes = pgTable('sponsor_codes', {
+	id: serial('id').primaryKey(),
+	eventId: integer('event_id').notNull().references(() => events.id),
+	sponsorName: text('sponsor_name').notNull(),
+	tickets: integer('tickets').notNull(),
+	code: text('code').notNull(),
+	stripeCouponId: text('stripe_coupon_id').notNull(),
+	stripePromotionCodeId: text('stripe_promotion_code_id').notNull().unique(),
+	active: boolean('active').notNull().default(true),
+	createdAt: timestamp('created_at').defaultNow()
+});
+
 // ─── Event Registrations ─────────────────────────────────────────
 
 export const registrations = pgTable('registrations', {

@@ -26,6 +26,7 @@
 			<a href="/admin/events" class="item-sub">&larr; Back to Events</a>
 		</div>
 		<div class="item-actions">
+			<a class="btn-admin ghost" href="/admin/events/{data.event.id}/sponsor-codes">Sponsor Codes</a>
 			<a class="btn-admin primary" href="/admin/events/{data.event.id}/registrations/new">Add Registration</a>
 			<a class="btn-admin ghost" href="/admin/events/{data.event.id}/registrations/export" download>Download CSV</a>
 		</div>
