@@ -268,8 +268,8 @@
 	}
 
 	.status-badge {
-		font-size: 0.8125rem;
-		font-weight: 600;
+		font-size: 1.0625rem;
+		font-weight: 700;
 		white-space: nowrap;
 		color: var(--text-secondary);
 	}
