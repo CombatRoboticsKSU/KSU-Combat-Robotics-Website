@@ -189,4 +189,11 @@
 		align-items: center;
 		gap: 0.5rem;
 	}
+
+	.status-card.card:hover {
+		background: var(--bg-card);
+		border-color: var(--border-color);
+		transform: none;
+		box-shadow: none;
+	}
 </style>
