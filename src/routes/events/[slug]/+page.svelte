@@ -11,7 +11,8 @@
 		ExternalLink,
 		ChevronRight,
 		Swords,
-		Ticket
+		Ticket,
+		Navigation
 	} from 'lucide-svelte';
 	import { eventBadge } from '$lib/utils/events';
 
@@ -30,10 +31,26 @@
 		};
 	});
 
+	// Events without an uploaded photo fall back to the schema default placeholder, which looks broken as a hero.
+	const hasPhoto = $derived(data.event.image.trim() !== '' && !data.event.image.endsWith('/placeholder.png'));
+
 	// Some events store the full "Doors 9:00 AM" string, so only add the prefix when it is missing.
 	const doorsText = $derived(
 		/^doors\b/i.test(data.event.doorsTime) ? data.event.doorsTime : `Doors ${data.event.doorsTime}`
 	);
+
+	const venueName = $derived(data.event.location.split(',')[0].trim());
+	const fullAddress = $derived([data.event.location, data.event.address].filter((s) => s.trim() !== '').join(', '));
+	// Everything after the venue name, so the info panel does not print the venue twice.
+	const venueRest = $derived(
+		[...data.event.location.split(',').slice(1), data.event.address]
+			.map((s) => s.trim())
+			.filter((s) => s !== '')
+			.join(', ')
+	);
+	const mapsUrl =$derived(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`);
+
+	const showRail = $derived(data.event.status !== 'past');
 
 	const filledPercent = $derived(
 		data.spotsLeft !== null && data.event.capacity > 0
@@ -46,10 +63,14 @@
 	<title>{data.event.name} | KSU Combat Robotics</title>
 </svelte:head>
 
-<section class="event-hero">
-	<div class="hero-image-wrap" aria-hidden="true">
-		<img src={data.event.image} alt="" class="hero-image" />
-	</div>
+<section class="event-hero" class:with-photo={hasPhoto}>
+	{#if hasPhoto}
+		<div class="hero-image-wrap" aria-hidden="true">
+			<img src={data.event.image} alt="" class="hero-image" />
+		</div>
+	{:else}
+		<div class="hero-pattern" aria-hidden="true"></div>
+	{/if}
 	<div class="container hero-inner">
 		<a href="/events" class="back-link"><ArrowLeft size={16} /> All events</a>
 		<div class="hero-heading">
@@ -66,34 +87,30 @@
 			</div>
 		</div>
 		<ul class="facts">
-			<li><Calendar size={18} /><span>{data.event.eventDate}</span></li>
-			{#if data.event.doorsTime}
-				<li>
-					<Clock size={18} />
-					<span>{doorsText}</span>
-				</li>
+			<li><Calendar size={17} /><span>{data.event.eventDate}</span></li>
+			{#if venueName}
+				<li><MapPin size={17} /><span>{venueName}</span></li>
 			{/if}
-			<li>
-				<MapPin size={18} />
-				<span>{data.event.location}{#if data.event.address}, {data.event.address}{/if}</span>
-			</li>
 			{#if data.event.weightClass}
-				<li><Weight size={18} /><span>{data.event.weightClass}</span></li>
+				<li><Weight size={17} /><span>{data.event.weightClass}</span></li>
 			{/if}
 		</ul>
 	</div>
 </section>
 
-<div class="container event-layout">
-	<aside class="event-rail">
-		{#if data.event.status !== 'past'}
+<div class="container event-layout" class:no-rail={!showRail}>
+	{#if showRail}
+		<aside class="event-rail">
 			<div class="panel actions-panel">
 				<!-- Competitor -->
 				{#snippet competitorMeta(showSpots: boolean)}
 					{#if data.event.competitorPriceId === '' && data.memberCodeEnabled}
 						<p class="action-note">Members register with the code from Discord.</p>
 					{:else if data.event.competitorPrice}
-						<p class="action-price">{data.event.competitorPrice}</p>
+						<div class="price">
+							<span class="price-value">{data.event.competitorPrice}</span>
+							<span class="price-label">Entry fee, per robot</span>
+						</div>
 					{/if}
 					{#if data.event.competitorNote}<p class="action-note">{data.event.competitorNote}</p>{/if}
 					{#if showSpots && data.spotsLeft !== null}
@@ -131,7 +148,12 @@
 				<!-- Spectator -->
 				<div class="action-block">
 					<h2 class="action-heading"><Ticket size={18} /> Watch</h2>
-					{#if data.event.spectatorPrice}<p class="action-price">{data.event.spectatorPrice}</p>{/if}
+					{#if data.event.spectatorPrice}
+						<div class="price">
+							<span class="price-value">{data.event.spectatorPrice}</span>
+							<span class="price-label">Spectator ticket</span>
+						</div>
+					{/if}
 					{#if data.event.spectatorNote}<p class="action-note">{data.event.spectatorNote}</p>{/if}
 					{#if data.event.spectatorUrl}
 						<a
@@ -148,18 +170,78 @@
 					{/if}
 				</div>
 			</div>
+		</aside>
+	{/if}
+
+	<div class="event-main">
+		<section class="main-section">
+			<h2 class="main-heading">At a glance</h2>
+			<div class="glance">
+				<div class="glance-row">
+					<div class="glance-item">
+						<span class="glance-icon"><Calendar size={18} /></span>
+						<div>
+							<span class="glance-label">Date</span>
+							<span class="glance-value">{data.event.eventDate}</span>
+						</div>
+					</div>
+					{#if data.event.doorsTime}
+						<div class="glance-item">
+							<span class="glance-icon"><Clock size={18} /></span>
+							<div>
+								<span class="glance-label">Time</span>
+								<span class="glance-value">{doorsText}</span>
+							</div>
+						</div>
+					{/if}
+					{#if data.event.weightClass}
+						<div class="glance-item">
+							<span class="glance-icon"><Weight size={18} /></span>
+							<div>
+								<span class="glance-label">Weight class</span>
+								<span class="glance-value">{data.event.weightClass}</span>
+							</div>
+						</div>
+					{/if}
+				</div>
+				{#if fullAddress}
+					<div class="glance-item glance-venue">
+						<span class="glance-icon"><MapPin size={18} /></span>
+						<div>
+							<span class="glance-label">Venue</span>
+							{#if venueName}<span class="glance-value">{venueName}</span>{/if}
+							{#if venueRest}<span class="venue-address">{venueRest}</span>{/if}
+							<a class="maps-link" href={mapsUrl} target="_blank" rel="noopener noreferrer">
+								<Navigation size={14} /> Open in Google Maps
+							</a>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</section>
+
+		{#if data.event.overview}
+			<section class="main-section">
+				<h2 class="main-heading">About this event</h2>
+				<!-- Admin-authored HTML, same trust model as projects.about and posts.content: this content
+				     is only ever written through the /admin routes, which src/hooks.server.ts guards. Not
+				     a place to render unsanitized public input. -->
+				<div class="article-content">
+					{@html data.event.overview}
+				</div>
+			</section>
 		{/if}
 
-		<div class="panel docs-panel">
-			<h2 class="panel-heading">Documents</h2>
+		<section class="main-section">
+			<h2 class="main-heading">Documents</h2>
 			<ul class="doc-list">
 				{#if data.event.rulesPdfUrl}
 					<li>
 						<a class="doc-link" href={data.event.rulesPdfUrl} target="_blank" rel="noopener noreferrer">
-							<span class="doc-icon"><FileText size={18} /></span>
+							<span class="doc-icon"><FileText size={20} /></span>
 							<span class="doc-text">
 								<span class="doc-title">{data.event.rulesLabel}</span>
-								<span class="doc-sub">PDF, opens in a new tab</span>
+								<span class="doc-sub">Opens in a new tab</span>
 							</span>
 							<ExternalLink size={16} />
 						</a>
@@ -168,7 +250,7 @@
 				<li>
 					{#if data.event.waiverPdfUrl}
 						<a class="doc-link" href={data.event.waiverPdfUrl} target="_blank" rel="noopener noreferrer">
-							<span class="doc-icon"><Download size={18} /></span>
+							<span class="doc-icon"><Download size={20} /></span>
 							<span class="doc-text">
 								<span class="doc-title">Competitor Waiver</span>
 								<span class="doc-sub">PDF, opens in a new tab</span>
@@ -177,7 +259,7 @@
 						</a>
 					{:else}
 						<a class="doc-link" href="/events/{data.event.slug}/waiver">
-							<span class="doc-icon"><FileText size={18} /></span>
+							<span class="doc-icon"><FileText size={20} /></span>
 							<span class="doc-text">
 								<span class="doc-title">Competitor Waiver</span>
 								<span class="doc-sub">Read online</span>
@@ -196,18 +278,7 @@
 					</div>
 				</div>
 			{/if}
-		</div>
-	</aside>
-
-	<div class="event-main">
-		{#if data.event.overview}
-			<!-- Admin-authored HTML, same trust model as projects.about and posts.content: this content
-			     is only ever written through the /admin routes, which src/hooks.server.ts guards. Not
-			     a place to render unsanitized public input. -->
-			<div class="article-content">
-				{@html data.event.overview}
-			</div>
-		{/if}
+		</section>
 
 		{#if data.event.schedule.length > 0}
 			<section class="main-section">
@@ -244,8 +315,22 @@
 	.event-hero {
 		position: relative;
 		overflow: hidden;
-		background: linear-gradient(160deg, var(--navy-dark) 0%, var(--navy) 70%, #01325e 100%);
-		border-bottom: 1px solid rgba(235, 171, 33, 0.2);
+		background:
+			radial-gradient(ellipse 60% 90% at 85% 10%, rgba(235, 171, 33, 0.1) 0%, transparent 60%),
+			radial-gradient(ellipse 70% 80% at 0% 100%, rgba(0, 120, 212, 0.18) 0%, transparent 60%),
+			linear-gradient(160deg, var(--navy-dark) 0%, var(--navy) 65%, #01325e 100%);
+		border-bottom: 1px solid rgba(235, 171, 33, 0.25);
+	}
+
+	.hero-pattern {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+		background-size: 48px 48px;
+		-webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 70%);
+		mask-image: linear-gradient(90deg, transparent 0%, #000 70%);
 	}
 
 	.hero-image-wrap {
@@ -368,8 +453,8 @@
 		list-style: none;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.75rem 2rem;
-		margin-top: 2rem;
+		gap: 0.625rem 1.75rem;
+		margin-top: 1.75rem;
 		padding-top: 1.25rem;
 		border-top: 1px solid rgba(255, 255, 255, 0.1);
 	}
@@ -379,6 +464,7 @@
 		align-items: center;
 		gap: 0.5rem;
 		font-size: 0.9375rem;
+		font-weight: 500;
 		color: var(--text-primary);
 	}
 
@@ -397,46 +483,55 @@
 		padding-bottom: 4rem;
 	}
 
+	.event-layout.no-rail {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
 	.event-rail {
 		grid-column: 2;
 		grid-row: 1;
 		position: sticky;
 		top: 5rem;
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
 	}
 
 	.event-main {
 		grid-column: 1;
 		grid-row: 1;
 		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 2.75rem;
 	}
 
-	/* Rail panels */
+	.no-rail .event-main {
+		max-width: 52rem;
+	}
+
+	.main-heading {
+		font-size: 1.25rem;
+		letter-spacing: -0.01em;
+		margin-bottom: 1rem;
+	}
+
+	/* Rail */
 	.panel {
 		background: var(--bg-card);
-		border: 1px solid var(--border-color);
+		border: 1px solid rgba(235, 171, 33, 0.25);
 		border-radius: var(--radius-md);
-	}
-
-	.actions-panel {
-		border-color: rgba(235, 171, 33, 0.25);
 	}
 
 	.action-block {
 		padding: 1.25rem 1.375rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.625rem;
 	}
 
 	.action-block + .action-block {
 		border-top: 1px solid var(--border-color);
 	}
 
-	.action-heading,
-	.panel-heading {
+	.action-heading {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -448,11 +543,24 @@
 		color: var(--gold);
 	}
 
-	.action-price {
-		font-size: 1.5rem;
+	.price {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 0.25rem 0.625rem;
+	}
+
+	.price-value {
+		font-size: 1.625rem;
 		font-weight: 800;
 		letter-spacing: -0.01em;
+		line-height: 1.1;
 		font-variant-numeric: tabular-nums;
+	}
+
+	.price-label {
+		font-size: 0.875rem;
+		color: var(--text-secondary);
 	}
 
 	.action-note {
@@ -464,14 +572,14 @@
 	.action-btn {
 		justify-content: center;
 		width: 100%;
-		margin-top: 0.5rem;
+		margin-top: 0.25rem;
 		padding: 0.75rem 1rem;
 		font-size: 0.9375rem;
 		text-align: center;
 	}
 
 	.action-disabled {
-		margin-top: 0.5rem;
+		margin-top: 0.25rem;
 		padding: 0.75rem 1rem;
 		border-radius: var(--radius-sm);
 		border: 1px dashed var(--border-color);
@@ -486,7 +594,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.375rem;
-		margin-top: 0.25rem;
 	}
 
 	.spots-text {
@@ -515,26 +622,146 @@
 		background: linear-gradient(90deg, var(--gold-dark), var(--gold));
 	}
 
-	.docs-panel {
-		padding: 1.25rem 1.375rem;
+	/* At a glance */
+	.glance {
+		background: var(--bg-card);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius-md);
+		overflow: hidden;
 	}
 
-	.doc-list {
-		list-style: none;
+	/* 1px gaps over a border-colored backdrop act as dividers that stay correct however the items wrap. */
+	.glance-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1px;
+		background: var(--border-color);
+	}
+
+	.glance-item {
+		flex: 1 1 12rem;
+		display: flex;
+		align-items: flex-start;
+		gap: 0.875rem;
+		padding: 1.125rem 1.25rem;
+		background: var(--bg-card);
+	}
+
+	.glance-item > div {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
-		margin-top: 0.875rem;
+		align-items: flex-start;
+		gap: 0.125rem;
+		min-width: 0;
+	}
+
+	.glance-venue {
+		border-top: 1px solid var(--border-color);
+	}
+
+	.glance-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-radius: var(--radius-sm);
+		background: rgba(235, 171, 33, 0.1);
+		color: var(--gold);
+	}
+
+	.glance-label {
+		font-size: 0.8125rem;
+		color: var(--text-muted);
+	}
+
+	.glance-value {
+		font-size: 0.9375rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		line-height: 1.45;
+	}
+
+	.venue-address {
+		font-size: 0.9375rem;
+		color: var(--text-secondary);
+		line-height: 1.45;
+	}
+
+	.maps-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		margin-top: 0.375rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+
+	/* Overview */
+	.article-content :global(h2) {
+		font-size: 1.125rem;
+		margin: 1.75rem 0 0.75rem;
+	}
+
+	.article-content :global(h3) {
+		font-size: 1rem;
+		margin: 1.5rem 0 0.5rem;
+	}
+
+	.article-content :global(:first-child) {
+		margin-top: 0;
+	}
+
+	.article-content :global(p) {
+		color: var(--text-secondary);
+		line-height: 1.75;
+		margin-bottom: 1rem;
+		font-size: 1rem;
+	}
+
+	.article-content :global(p:last-child) {
+		margin-bottom: 0;
+	}
+
+	.article-content :global(ul),
+	.article-content :global(ol) {
+		color: var(--text-secondary);
+		padding-left: 1.5rem;
+		margin-bottom: 1rem;
+		line-height: 1.75;
+	}
+
+	.article-content :global(li::marker) {
+		color: var(--gold);
+	}
+
+	.article-content :global(a) {
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	.article-content :global(strong) {
+		color: var(--text-primary);
+	}
+
+	/* Documents */
+	.doc-list {
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+		gap: 0.75rem;
 	}
 
 	.doc-link {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
-		padding: 0.75rem;
-		border-radius: var(--radius-sm);
+		gap: 0.875rem;
+		height: 100%;
+		padding: 0.875rem 1rem;
+		border-radius: var(--radius-md);
 		border: 1px solid var(--border-color);
-		background: var(--bg-secondary);
+		background: var(--bg-card);
 		color: var(--text-secondary);
 		transition:
 			border-color var(--transition),
@@ -551,8 +778,8 @@
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		width: 2.25rem;
-		height: 2.25rem;
+		width: 2.5rem;
+		height: 2.5rem;
 		border-radius: var(--radius-sm);
 		background: rgba(235, 171, 33, 0.1);
 		color: var(--gold);
@@ -563,17 +790,18 @@
 		min-width: 0;
 		display: flex;
 		flex-direction: column;
+		gap: 0.125rem;
 	}
 
 	.doc-title {
-		font-size: 0.9rem;
+		font-size: 0.9375rem;
 		font-weight: 600;
 		color: var(--text-primary);
 		line-height: 1.3;
 	}
 
 	.doc-sub {
-		font-size: 0.75rem;
+		font-size: 0.8125rem;
 		color: var(--text-muted);
 	}
 
@@ -584,10 +812,11 @@
 	.hazard-note {
 		display: flex;
 		align-items: flex-start;
-		gap: 0.75rem;
-		margin-top: 1rem;
-		padding: 0.875rem 1rem;
-		border-radius: var(--radius-sm);
+		gap: 0.875rem;
+		margin-top: 0.75rem;
+		padding: 1rem 1.25rem;
+		border-radius: var(--radius-md);
+		border: 1px solid rgba(235, 171, 33, 0.2);
 		border-left: 3px solid var(--gold);
 		background: rgba(235, 171, 33, 0.06);
 	}
@@ -599,83 +828,19 @@
 	}
 
 	.hazard-note h3 {
-		font-size: 0.9rem;
+		font-size: 0.9375rem;
 		margin-bottom: 0.25rem;
 	}
 
 	.hazard-note p {
-		font-size: 0.8125rem;
-		line-height: 1.55;
+		font-size: 0.875rem;
+		line-height: 1.6;
 		color: var(--text-secondary);
 	}
 
-	/* Main column */
-	.article-content {
-		max-width: 46rem;
-	}
-
-	.article-content :global(h2) {
-		font-size: 1.375rem;
-		margin: 2rem 0 0.875rem;
-		letter-spacing: -0.01em;
-	}
-
-	.article-content :global(h2:first-child),
-	.article-content :global(p:first-child) {
-		margin-top: 0;
-	}
-
-	.article-content :global(h3) {
-		font-size: 1.0625rem;
-		margin: 1.5rem 0 0.625rem;
-	}
-
-	.article-content :global(p) {
-		color: var(--text-secondary);
-		line-height: 1.8;
-		margin-bottom: 1.25rem;
-		font-size: 1rem;
-	}
-
-	.article-content :global(ul),
-	.article-content :global(ol) {
-		color: var(--text-secondary);
-		padding-left: 1.5rem;
-		margin-bottom: 1.25rem;
-		line-height: 1.8;
-	}
-
-	.article-content :global(li::marker) {
-		color: var(--gold);
-	}
-
-	.article-content :global(a) {
-		text-decoration: underline;
-		text-underline-offset: 2px;
-	}
-
-	.article-content :global(strong) {
-		color: var(--text-primary);
-	}
-
-	.main-section {
-		margin-top: 3rem;
-		max-width: 46rem;
-	}
-
-	.event-main > .main-section:first-child {
-		margin-top: 0;
-	}
-
-	.main-heading {
-		font-size: 1.375rem;
-		letter-spacing: -0.01em;
-		margin-bottom: 1.25rem;
-	}
-
+	/* Schedule */
 	.schedule-list {
 		list-style: none;
-		position: relative;
 		border-left: 2px solid rgba(235, 171, 33, 0.3);
 		margin-left: 0.375rem;
 	}
@@ -710,11 +875,7 @@
 		color: var(--text-secondary);
 	}
 
-	.faq-list {
-		display: flex;
-		flex-direction: column;
-	}
-
+	/* FAQ */
 	.faq-item {
 		padding: 1.125rem 0;
 		border-top: 1px solid var(--border-color);
@@ -738,7 +899,7 @@
 
 	@media (max-width: 960px) {
 		.event-layout {
-			grid-template-columns: 1fr;
+			grid-template-columns: minmax(0, 1fr);
 			gap: 2.5rem;
 			padding-top: 2rem;
 		}
@@ -751,9 +912,6 @@
 
 		.event-rail {
 			position: static;
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-			align-items: start;
 		}
 	}
 
@@ -788,11 +946,6 @@
 
 		.date-day {
 			font-size: 1.875rem;
-		}
-
-		.facts {
-			flex-direction: column;
-			gap: 0.625rem;
 		}
 
 		.schedule-item {
