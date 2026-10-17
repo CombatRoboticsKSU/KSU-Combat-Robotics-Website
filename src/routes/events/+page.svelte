@@ -169,7 +169,6 @@
 		justify-content: center;
 		padding: 1rem 0.5rem;
 		background: linear-gradient(180deg, var(--navy) 0%, var(--navy-dark) 100%);
-		border-right: 3px solid var(--gold);
 		font-variant-numeric: tabular-nums;
 		line-height: 1;
 	}
@@ -269,31 +268,14 @@
 	}
 
 	.status-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
 		font-size: 0.8125rem;
 		font-weight: 600;
-		padding: 0.25rem 0.7rem;
-		border-radius: 999px;
 		white-space: nowrap;
-		border: 1px solid rgba(148, 163, 184, 0.25);
-		background: rgba(148, 163, 184, 0.08);
 		color: var(--text-secondary);
-	}
-
-	.status-badge::before {
-		content: '';
-		width: 0.45rem;
-		height: 0.45rem;
-		border-radius: 50%;
-		background: currentColor;
 	}
 
 	.status-badge[data-tone='open'] {
 		color: var(--gold);
-		border-color: rgba(235, 171, 33, 0.4);
-		background: rgba(235, 171, 33, 0.1);
 	}
 
 	/* Past events */

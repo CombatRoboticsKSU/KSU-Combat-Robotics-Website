@@ -14,13 +14,8 @@
 		Ticket,
 		Navigation
 	} from 'lucide-svelte';
-	import { eventBadge } from '$lib/utils/events';
 
 	let { data } = $props();
-
-	const badge = $derived(
-		eventBadge(data.event.status, data.event.registrationOpen, data.isFull, data.event.competitorPriceId !== '' || data.memberCodeEnabled)
-	);
 
 	// sortDate is stored from a date input as UTC midnight, so read it back in UTC to avoid an off-by-one day.
 	const date = $derived.by(() => {
@@ -79,7 +74,6 @@
 				<span class="date-day">{date.day}</span>
 			</div>
 			<div class="hero-title">
-				<span class="status-badge" data-tone={badge.tone}>{badge.text}</span>
 				<h1>{data.event.name}</h1>
 				{#if data.event.tagline}
 					<p class="hero-tagline">{data.event.tagline}</p>
@@ -384,7 +378,6 @@
 		padding: 0.875rem 0.5rem;
 		background: rgba(1, 37, 80, 0.85);
 		border: 1px solid rgba(235, 171, 33, 0.35);
-		border-top: 4px solid var(--gold);
 		border-radius: var(--radius-sm);
 		font-variant-numeric: tabular-nums;
 		line-height: 1;
@@ -412,7 +405,7 @@
 		font-weight: 800;
 		letter-spacing: -0.025em;
 		line-height: 1.05;
-		margin: 0.625rem 0 0.5rem;
+		margin: 0 0 0.5rem;
 		text-wrap: balance;
 	}
 
@@ -420,33 +413,6 @@
 		font-size: clamp(1rem, 1.8vw, 1.125rem);
 		color: var(--text-secondary);
 		max-width: 38rem;
-	}
-
-	.status-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
-		font-size: 0.8125rem;
-		font-weight: 600;
-		padding: 0.25rem 0.7rem;
-		border-radius: 999px;
-		border: 1px solid rgba(148, 163, 184, 0.3);
-		background: rgba(10, 15, 26, 0.5);
-		color: var(--text-secondary);
-	}
-
-	.status-badge::before {
-		content: '';
-		width: 0.45rem;
-		height: 0.45rem;
-		border-radius: 50%;
-		background: currentColor;
-	}
-
-	.status-badge[data-tone='open'] {
-		color: var(--gold);
-		border-color: rgba(235, 171, 33, 0.45);
-		background: rgba(235, 171, 33, 0.12);
 	}
 
 	.facts {
@@ -817,7 +783,6 @@
 		padding: 1rem 1.25rem;
 		border-radius: var(--radius-md);
 		border: 1px solid rgba(235, 171, 33, 0.2);
-		border-left: 3px solid var(--gold);
 		background: rgba(235, 171, 33, 0.06);
 	}
 
