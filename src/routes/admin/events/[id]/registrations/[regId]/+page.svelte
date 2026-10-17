@@ -3,7 +3,7 @@
 	import RegistrationFields from '$lib/components/admin/RegistrationFields.svelte';
 	let { data, form } = $props();
 	const registration = $derived(data.registration);
-	const canSetStatus = $derived(['expired', 'member', 'paid_offline', 'cancelled', 'paid'].includes(registration.status));
+	const canSetStatus = $derived(['pending', 'expired', 'member', 'paid_offline', 'cancelled', 'paid'].includes(registration.status));
 	const canDelete = $derived(registration.stripePaymentIntentId === null && !['pending', 'paid', 'refunded'].includes(registration.status));
 </script>
 
@@ -25,6 +25,12 @@
 		<div class="form-actions"><button class="btn-admin primary" type="submit">Save Changes</button></div>
 	</form>
 	<div class="form-card">
+		<h3>Bot Photo</h3>
+		{#if registration.botPhotoUrl}
+			<a href={registration.botPhotoUrl} target="_blank" rel="noopener noreferrer"><img class="bot-photo-large" src={registration.botPhotoUrl} alt="{registration.botName} bot" /></a>
+		{:else}<p class="help-text">No photo uploaded.</p>{/if}
+	</div>
+	<div class="form-card">
 		<h3>Hazard Documents</h3>
 		<div class="hazard-review">
 			<span class="status-pill {registration.hazardStatus}">{registration.hazardStatus.replaceAll('_', ' ')}</span>
@@ -40,16 +46,18 @@
 			<form method="POST" action="?/setStatus">
 				<div class="field-group">
 					<label class="field-label" for="status">Status</label>
-					<select class="field-input" id="status" name="status" value={registration.status === 'paid' ? 'cancelled' : registration.status === 'expired' ? 'member' : registration.status}>
+					<select class="field-input" id="status" name="status" value={registration.status === 'paid' ? 'cancelled' : ['expired', 'pending'].includes(registration.status) ? 'member' : registration.status}>
 						{#if registration.status !== 'paid'}<option value="member">Member</option><option value="paid_offline">Paid offline</option>{/if}
 						<option value="cancelled">Cancelled</option>
 					</select>
 				</div>
-				<p class="help-text">Cancelling does not refund a payment. Refund in the Stripe dashboard if appropriate.</p>
+				{#if registration.status === 'pending'}
+					<p class="help-text">This registration has not paid yet. Changing its status closes the open Stripe checkout so the builder can no longer pay online.</p>
+				{:else}
+					<p class="help-text">Cancelling does not refund a payment. Refund in the Stripe dashboard if appropriate.</p>
+				{/if}
 				<div class="form-actions"><button class="btn-admin primary" type="submit">Update Status</button></div>
 			</form>
-		{:else if registration.status === 'pending'}
-			<p class="help-text">Pending registrations may be mid-checkout and cannot be changed manually.</p>
 		{:else if registration.status === 'refunded'}
 			<p class="help-text">Refunded registrations are final and cannot be changed manually.</p>
 		{/if}

@@ -275,6 +275,7 @@ export const registrations = pgTable('registrations', {
 	teamName: text('team_name').notNull().default(''),
 	botName: text('bot_name').notNull(),
 	weaponType: text('weapon_type').notNull().default(''),
+	botPhotoUrl: text('bot_photo_url').notNull().default(''),
 	hazardPneumatic: boolean('hazard_pneumatic').notNull().default(false),
 	hazardHighMass: boolean('hazard_high_mass').notNull().default(false),
 	hazardDocs: json('hazard_docs').$type<{ name: string; url: string }[]>().notNull().default([]),

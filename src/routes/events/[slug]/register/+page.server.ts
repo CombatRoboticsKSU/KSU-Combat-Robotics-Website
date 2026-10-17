@@ -1,6 +1,6 @@
 import { timingSafeEqual } from 'node:crypto';
 import { db } from '$lib/server/db';
-import { blobStoreOrigin, hazardDocumentPathname } from '$lib/server/blob';
+import { blobStoreOrigin, botPhotoPathname, hazardDocumentPathname } from '$lib/server/blob';
 import { events, registrations } from '$lib/server/schema';
 import { stripe } from '$lib/server/stripe';
 import { ACTIVE_REGISTRATION_STATUSES, isEventFull, canRegister } from '$lib/utils/events';
@@ -65,6 +65,7 @@ export const actions: Actions = {
 			teamName: readField(form, 'teamName'),
 			botName: readField(form, 'botName'),
 			weaponType: readField(form, 'weaponType'),
+			botPhotoUrl: readField(form, 'botPhotoUrl'),
 			hazardPneumatic: form.get('hazardPneumatic') === 'on',
 			hazardHighMass: form.get('hazardHighMass') === 'on',
 			hazardDocs: readField(form, 'hazardDocs'),
@@ -78,6 +79,14 @@ export const actions: Actions = {
 			return fail(400, { error: 'A valid email is required', values });
 		}
 		if (!values.botName) return fail(400, { error: 'Bot name is required', values });
+		let botPhotoUrl = '';
+		try {
+			const photo = new URL(values.botPhotoUrl);
+			if (photo.origin !== blobStoreOrigin || !botPhotoPathname.test(photo.pathname.slice(1))) throw new Error();
+			botPhotoUrl = photo.href;
+		} catch {
+			return fail(400, { error: 'Upload a photo of your bot.', values });
+		}
 		if (!values.waiverAck) {
 			return fail(400, { error: 'You must agree to the waiver to register', values });
 		}
@@ -145,12 +154,12 @@ export const actions: Actions = {
 			db.execute<{ id: number }>(sql`
 				insert into ${registrations} (
 					event_id, status, builder_name, email, phone, team_name, bot_name,
-					weapon_type, hazard_pneumatic, hazard_high_mass, hazard_docs,
+					weapon_type, bot_photo_url, hazard_pneumatic, hazard_high_mass, hazard_docs,
 					hazard_status, notes, waiver_ack, age_ack
 				)
 				select ${ev.id}, ${isMember ? 'member' : 'pending'},
 					${values.builderName}, ${values.email}, ${values.phone}, ${values.teamName},
-					${values.botName}, ${values.weaponType}, ${values.hazardPneumatic},
+					${values.botName}, ${values.weaponType}, ${botPhotoUrl}, ${values.hazardPneumatic},
 					${values.hazardHighMass}, ${JSON.stringify(hazardDocs)}::json,
 					${isHazard ? 'pending_review' : 'not_required'}, ${values.notes},
 					${values.waiverAck}, ${values.ageAck}

@@ -375,3 +375,50 @@
 
 .page-header .item-actions,
 .form-actions { flex-wrap: wrap; }
+
+/* Roster filters and bot photos */
+.roster-filters {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+	gap: 0 1rem;
+	align-items: end;
+}
+
+.roster-email-actions {
+	grid-column: 1 / -1;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+}
+
+.roster-email-list {
+	grid-column: 1 / -1;
+	margin-top: 0.75rem;
+	font-size: 0.8125rem;
+	resize: vertical;
+}
+
+.btn-admin.disabled,
+.btn-admin:disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.bot-photo-thumb {
+	display: block;
+	width: 3.5rem;
+	max-width: none;
+	height: 3.5rem;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 1px solid var(--border-color);
+}
+
+.bot-photo-large {
+	display: block;
+	max-width: 100%;
+	max-height: 22rem;
+	border-radius: 8px;
+	border: 1px solid var(--border-color);
+}
