@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
-import { eq, desc, or, count } from 'drizzle-orm';
-import { isEventFull } from '$lib/utils/events';
+import { eq, desc, inArray, count } from 'drizzle-orm';
+import { ACTIVE_REGISTRATION_STATUSES, isEventFull } from '$lib/utils/events';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -15,14 +15,15 @@ export const load: PageServerLoad = async () => {
 	const takenCounts = await db
 		.select({ eventId: registrations.eventId, value: count() })
 		.from(registrations)
-		.where(or(eq(registrations.status, 'pending'), eq(registrations.status, 'paid')))
+		.where(inArray(registrations.status, ACTIVE_REGISTRATION_STATUSES))
 		.groupBy(registrations.eventId);
 
 	const takenByEvent: Record<number, number> = {};
 	for (const row of takenCounts) takenByEvent[row.eventId] = row.value;
 
-	const withFull = all.map((e) => ({
+	const withFull = all.map(({ memberCode, ...e }) => ({
 		...e,
+		memberCodeEnabled: memberCode.trim() !== '',
 		isFull: isEventFull(e.capacity, takenByEvent[e.id] ?? 0)
 	}));
 

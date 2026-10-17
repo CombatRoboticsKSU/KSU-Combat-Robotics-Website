@@ -1,8 +1,8 @@
 import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
-import { eq, and, or, count } from 'drizzle-orm';
+import { eq, and, inArray, count } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
-import { isEventFull, canRegister } from '$lib/utils/events';
+import { ACTIVE_REGISTRATION_STATUSES, isEventFull, canRegister } from '$lib/utils/events';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -20,16 +20,19 @@ export const load: PageServerLoad = async ({ params }) => {
 		.where(
 			and(
 				eq(registrations.eventId, ev.id),
-				or(eq(registrations.status, 'pending'), eq(registrations.status, 'paid'))
+				inArray(registrations.status, ACTIVE_REGISTRATION_STATUSES)
 			)
 		);
 
 	const isFull = isEventFull(ev.capacity, taken);
 
+	const { memberCode, ...event } = ev;
+	const memberCodeEnabled = memberCode.trim() !== '';
 	return {
-		event: ev,
+		event,
+		memberCodeEnabled,
 		isFull,
 		spotsLeft: ev.capacity > 0 ? Math.max(0, ev.capacity - taken) : null,
-		canRegister: canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull)
+		canRegister: canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull, memberCodeEnabled)
 	};
 };

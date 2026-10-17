@@ -27,17 +27,24 @@ function logMalformedPayload(event: Stripe.Event) {
 async function warnIfRegistrationUpdateMissed(
 	updated: { id: number }[],
 	event: Stripe.Event,
-	registrationId: number
+	registrationId: number,
+	sessionId: string
 ) {
 	if (updated.length > 0) return;
 	const [row] = await db
-		.select({ status: registrations.status })
+		.select({ status: registrations.status, stripeSessionId: registrations.stripeSessionId })
 		.from(registrations)
 		.where(eq(registrations.id, registrationId))
 		.limit(1);
 
 	if (!row) {
 		console.error(`Stripe webhook ${event.type} (${event.id}): no registration found with id=${registrationId}`);
+		return;
+	}
+	if (row.stripeSessionId !== sessionId) {
+		console.warn(
+			`Stripe webhook ${event.type} (${event.id}): session ${sessionId} does not belong to registration ${registrationId}; ignored`
+		);
 		return;
 	}
 	console.info(
@@ -56,10 +63,19 @@ async function markPaid(session: Stripe.Checkout.Session, registrationId: number
 			stripePaymentIntentId:
 				typeof session.payment_intent === 'string' ? session.payment_intent : null
 		})
-		.where(and(eq(registrations.id, registrationId), eq(registrations.status, 'pending')))
+		.where(
+			and(
+				eq(registrations.id, registrationId),
+				// client_reference_id can be set by anyone on a Payment Link URL, so the id alone
+				// is not proof this session belongs to the registration. Spectator Payment Link
+				// sessions never match a registration's stored session id.
+				eq(registrations.stripeSessionId, session.id),
+				eq(registrations.status, 'pending')
+			)
+		)
 		.returning({ id: registrations.id });
 
-	await warnIfRegistrationUpdateMissed(updated, event, registrationId);
+	await warnIfRegistrationUpdateMissed(updated, event, registrationId, session.id);
 }
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -123,15 +139,21 @@ export const POST: RequestHandler = async ({ request }) => {
 			if (registrationId === null) break;
 
 			// 'expired' is also used for a failed delayed payment: it stops the row from
-			// holding a capacity slot. register/+page.server.ts only counts 'pending' and
-			// 'paid' as consuming.
+			// holding a capacity slot, since 'expired' is not an active registration status.
+			// Matched on the stored session id for the same reason as markPaid.
 			const updated = await db
 				.update(registrations)
 				.set({ status: 'expired' })
-				.where(and(eq(registrations.id, registrationId), eq(registrations.status, 'pending')))
+				.where(
+					and(
+						eq(registrations.id, registrationId),
+						eq(registrations.stripeSessionId, session.id),
+						eq(registrations.status, 'pending')
+					)
+				)
 				.returning({ id: registrations.id });
 
-			await warnIfRegistrationUpdateMissed(updated, event, registrationId);
+			await warnIfRegistrationUpdateMissed(updated, event, registrationId, session.id);
 			break;
 		}
 

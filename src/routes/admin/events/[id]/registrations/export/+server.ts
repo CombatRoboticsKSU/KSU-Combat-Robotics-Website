@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { toCsvRow } from '$lib/utils/csv';
 import type { RequestHandler } from './$types';
@@ -15,11 +15,12 @@ export const GET: RequestHandler = async ({ params }) => {
 	const rows = await db
 		.select()
 		.from(registrations)
-		.where(and(eq(registrations.eventId, eventId), eq(registrations.status, 'paid')))
-		.orderBy(desc(registrations.paidAt));
+		.where(eq(registrations.eventId, eventId))
+		.orderBy(desc(registrations.createdAt));
 
 	const lines = [
 		toCsvRow([
+			'Status',
 			'Builder',
 			'Bot',
 			'Weapon',
@@ -27,12 +28,17 @@ export const GET: RequestHandler = async ({ params }) => {
 			'Email',
 			'Phone',
 			'Notes',
-			'Waiver agreed',
+			'Hazard Types',
+			'Hazard Status',
+			'Hazard Docs',
+			'Hazard Review Note',
+			'Waiver Acknowledged Online',
 			'18+ confirmed',
 			'Paid at'
 		]),
 		...rows.map((r) =>
 			toCsvRow([
+				r.status,
 				r.builderName,
 				r.botName,
 				r.weaponType,
@@ -40,7 +46,11 @@ export const GET: RequestHandler = async ({ params }) => {
 				r.email,
 				r.phone,
 				r.notes,
-				r.waiverAck ? 'yes' : 'no',
+				[r.hazardPneumatic ? 'Pneumatic' : '', r.hazardHighMass ? 'High-mass' : ''].filter(Boolean).join(' / '),
+				r.hazardStatus,
+				r.hazardDocs.map((doc) => doc.url).join(' '),
+				r.hazardReviewNote,
+				r.waiverAck ? 'Yes' : 'No',
 				r.ageAck ? 'yes' : 'no',
 				r.paidAt ? r.paidAt.toISOString() : ''
 			])

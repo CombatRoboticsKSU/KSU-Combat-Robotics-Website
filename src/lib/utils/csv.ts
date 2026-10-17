@@ -2,7 +2,8 @@
 export function toCsvRow(fields: (string | number | null | undefined)[]): string {
 	return fields
 		.map((field) => {
-			const value = field === null || field === undefined ? '' : String(field);
+			const raw = field === null || field === undefined ? '' : String(field);
+			const value = /^[=+\-@\t\r]/.test(raw) ? `'${raw}` : raw;
 			return `"${value.replace(/"/g, '""')}"`;
 		})
 		.join(',');

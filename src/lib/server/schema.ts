@@ -232,6 +232,7 @@ export const events = pgTable('events', {
 	waiverText: text('waiver_text').notNull().default(''),
 	waiverPdfUrl: text('waiver_pdf_url').notNull().default(''),
 	registrationOpen: boolean('registration_open').notNull().default(false),
+	memberCode: text('member_code').notNull().default(''),
 	competitorPriceId: text('competitor_price_id').notNull().default(''),
 	competitorLabel: text('competitor_label').notNull().default('Register to Compete'),
 	competitorPrice: text('competitor_price').notNull().default(''),
@@ -249,12 +250,24 @@ export const events = pgTable('events', {
 	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
 
+export const sponsorCodes = pgTable('sponsor_codes', {
+	id: serial('id').primaryKey(),
+	eventId: integer('event_id').notNull().references(() => events.id),
+	sponsorName: text('sponsor_name').notNull(),
+	tickets: integer('tickets').notNull(),
+	code: text('code').notNull(),
+	stripeCouponId: text('stripe_coupon_id').notNull(),
+	stripePromotionCodeId: text('stripe_promotion_code_id').notNull().unique(),
+	active: boolean('active').notNull().default(true),
+	createdAt: timestamp('created_at').defaultNow()
+});
+
 // ─── Event Registrations ─────────────────────────────────────────
 
 export const registrations = pgTable('registrations', {
 	id: serial('id').primaryKey(),
 	eventId: integer('event_id').notNull().references(() => events.id),
-	// 'pending' | 'paid' | 'expired' | 'refunded'
+	// 'pending' | 'paid' | 'expired' | 'refunded' | 'member' | 'paid_offline' | 'cancelled'
 	status: text('status').notNull().default('pending'),
 	builderName: text('builder_name').notNull(),
 	email: text('email').notNull(),
@@ -262,6 +275,12 @@ export const registrations = pgTable('registrations', {
 	teamName: text('team_name').notNull().default(''),
 	botName: text('bot_name').notNull(),
 	weaponType: text('weapon_type').notNull().default(''),
+	hazardPneumatic: boolean('hazard_pneumatic').notNull().default(false),
+	hazardHighMass: boolean('hazard_high_mass').notNull().default(false),
+	hazardDocs: json('hazard_docs').$type<{ name: string; url: string }[]>().notNull().default([]),
+	hazardStatus: text('hazard_status').notNull().default('not_required'),
+	hazardReviewNote: text('hazard_review_note').notNull().default(''),
+	hazardReviewedAt: timestamp('hazard_reviewed_at'),
 	notes: text('notes').notNull().default(''),
 	waiverAck: boolean('waiver_ack').notNull().default(false),
 	ageAck: boolean('age_ack').notNull().default(false),
