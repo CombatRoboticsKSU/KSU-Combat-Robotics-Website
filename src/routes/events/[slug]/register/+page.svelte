@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { ArrowLeft, ArrowRight, Calendar, Check, FileText, MapPin, ShieldAlert, Upload, Weight, X } from 'lucide-svelte';
+	import { ArrowLeft, ArrowRight, Calendar, Check, FileText, MapPin, ShieldAlert, Upload, Weight, X, Camera } from 'lucide-svelte';
 	import { upload } from '@vercel/blob/client';
 	import WaiverModal from '$lib/components/WaiverModal.svelte';
 	import { onMount } from 'svelte';
@@ -39,6 +39,10 @@
 	let hazardHighMass = $state(form?.values?.hazardHighMass ?? false);
 	// svelte-ignore state_referenced_locally
 	let hazardDocs = $state<{ name: string; url: string }[]>(restoreDocs(form?.values?.hazardDocs));
+	// svelte-ignore state_referenced_locally
+	let botPhotoUrl = $state(form?.values?.botPhotoUrl ?? '');
+	let photoUploading = $state(false);
+	let photoError = $state('');
 	let memberCode = $state('');
 	let uploading = $state(false);
 	let uploadError = $state('');
@@ -87,6 +91,34 @@
 		}
 	}
 
+	async function uploadBotPhoto(event: Event) {
+		const input = event.currentTarget as HTMLInputElement;
+		const file = input.files?.[0];
+		photoError = '';
+		if (!file) return;
+		if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 10 * 1024 * 1024) {
+			photoError = 'Choose a PNG, JPEG, or WebP image up to 10 MB.';
+			input.value = '';
+			return;
+		}
+		photoUploading = true;
+		try {
+			const name = file.name.replace(/[^a-zA-Z0-9._-]/g, '_') || 'photo';
+			const extension = name.match(/\.[A-Za-z0-9]{1,10}$/)?.[0] ?? '';
+			const safeName = name.slice(0, name.length - extension.length).slice(0, 80 - extension.length) + extension;
+			const blob = await upload(`bot-photos/${crypto.randomUUID()}-${safeName}`, file, {
+				access: 'public',
+				handleUploadUrl: '/api/upload/hazard'
+			});
+			botPhotoUrl = blob.url;
+		} catch (e) {
+			photoError = e instanceof Error ? e.message : 'Could not upload photo. Please try again.';
+		} finally {
+			photoUploading = false;
+			input.value = '';
+		}
+	}
+
 	// Gating the submit button is a JS-only affordance. Rendering it disabled on the server
 	// would trap anyone without JS on a button that can never enable, so it only starts
 	// gating once the client has mounted and the modal is actually usable.
@@ -95,18 +127,17 @@
 		jsReady = true;
 	});
 
-	const submitBlocked = $derived(uploading || (jsReady && (!waiverAgreed || (isHazard && hazardDocs.length === 0))));
-	const submitHint = $derived(
-		!jsReady
-			? ''
-			: uploading
-				? 'Waiting for uploads to finish.'
-				: !waiverAgreed
-					? 'Agree to the waiver to continue.'
-					: isHazard && hazardDocs.length === 0
-						? 'Upload at least one hazard bot document to continue.'
-						: ''
+	const submitBlocked = $derived(
+		uploading || photoUploading || (jsReady && (!botPhotoUrl || !waiverAgreed || (isHazard && hazardDocs.length === 0)))
 	);
+	const submitHint = $derived.by(() => {
+		if (!jsReady) return '';
+		if (uploading || photoUploading) return 'Waiting for uploads to finish.';
+		if (!botPhotoUrl) return 'Upload a photo of your bot to continue.';
+		if (!waiverAgreed) return 'Agree to the waiver to continue.';
+		if (isHazard && hazardDocs.length === 0) return 'Upload at least one hazard bot document to continue.';
+		return '';
+	});
 
 	const venueName = $derived(data.event.location.split(',')[0].trim());
 </script>
@@ -199,6 +230,23 @@
 				<div class="form-group">
 					<label for="weaponType">Weapon type</label>
 					<input id="weaponType" name="weaponType" type="text" placeholder="Vertical spinner, hammer, wedge..." bind:value={values.weaponType} />
+				</div>
+				<div class="form-group span-2">
+					<label for="botPhoto">Bot photo <span class="req" aria-hidden="true">*</span></label>
+					<div class="photo-field">
+						{#if botPhotoUrl}
+							<img class="photo-preview" src={botPhotoUrl} alt="Your bot" />
+						{:else}
+							<div class="photo-placeholder" aria-hidden="true"><Camera size={22} /></div>
+						{/if}
+						<div class="photo-controls">
+							<p class="section-intro">A clear photo of the bot you are entering. PNG, JPEG, or WebP up to 10 MB.</p>
+							<input id="botPhoto" type="file" accept="image/png,image/jpeg,image/webp" disabled={photoUploading} onchange={uploadBotPhoto} />
+							{#if photoUploading}<p class="section-intro" role="status">Uploading photo...</p>{/if}
+							{#if photoError}<p class="form-error" role="alert">{photoError}</p>{/if}
+						</div>
+					</div>
+					<input type="hidden" name="botPhotoUrl" value={botPhotoUrl} />
 				</div>
 				<div class="form-group span-2">
 					<label for="notes">Notes</label>
@@ -604,6 +652,52 @@
 
 	.form-section > .form-group + .section-intro {
 		margin: 0.5rem 0 0;
+	}
+
+	.photo-field {
+		display: flex;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+
+	.photo-preview,
+	.photo-placeholder {
+		flex-shrink: 0;
+		width: 6rem;
+		height: 6rem;
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--border-color);
+	}
+
+	.photo-preview {
+		object-fit: cover;
+	}
+
+	.photo-placeholder {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--bg-secondary);
+		color: var(--text-muted);
+	}
+
+	.photo-controls {
+		min-width: 0;
+		flex: 1;
+	}
+
+	.photo-controls .section-intro {
+		margin-bottom: 0.5rem;
+	}
+
+	.photo-controls input[type='file'] {
+		width: 100%;
+		font-size: 0.875rem;
+		color: var(--text-secondary);
+	}
+
+	.photo-controls .form-error {
+		margin-top: 0.5rem;
 	}
 
 	/* Hazard options */
