@@ -487,6 +487,7 @@
 					</div>
 					<div class="item-actions">
 						<a href="/admin/events/{e.id}/registrations" class="btn-admin ghost sm">View roster</a>
+						<a href="/admin/events/{e.id}/spectators" class="btn-admin ghost sm">Spectator tickets</a>
 						<button class="btn-admin ghost sm" onclick={() => openEdit(e)}>Edit</button>
 						<form method="POST" action="?/deleteEvent" use:enhance>
 							<input type="hidden" name="id" value={e.id} />

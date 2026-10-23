@@ -18,6 +18,7 @@
 		<div>
 			<h1>{data.event.name} &middot; Sponsor Codes</h1>
 			<a class="item-sub" href="/admin/events/{data.event.id}/registrations">&larr; Back to roster</a>
+			<a class="btn-admin ghost" href="/admin/events/{data.event.id}/spectators">Spectator tickets</a>
 		</div>
 	</div>
 

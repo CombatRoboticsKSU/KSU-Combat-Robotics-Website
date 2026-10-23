@@ -5,6 +5,7 @@ import { STRIPE_WEBHOOK_SECRET } from '$env/static/private';
 import { eq, and, ne } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 import type Stripe from 'stripe';
+import { fulfillSpectatorSession, refundSpectatorOrder } from '$lib/server/spectators';
 
 // Accepts only a string/number that is a bare positive integer. Number(null) is 0 and
 // Number('1.5') is 1.5, so a plain Number.isFinite check would let both slip through.
@@ -102,6 +103,10 @@ export const POST: RequestHandler = async ({ request }) => {
 			}
 
 			const registrationId = parsePositiveInt(session.metadata?.registrationId ?? session.client_reference_id);
+			if (session.payment_link) {
+				await fulfillSpectatorSession(session.id);
+				break;
+			}
 			if (registrationId === null) break;
 
 			// Delayed-notification payment methods fire this event before the payment has
@@ -120,6 +125,10 @@ export const POST: RequestHandler = async ({ request }) => {
 				break;
 			}
 
+			if (session.payment_link) {
+				await fulfillSpectatorSession(session.id);
+				break;
+			}
 			const registrationId = parsePositiveInt(session.metadata?.registrationId ?? session.client_reference_id);
 			if (registrationId === null) break;
 
@@ -167,6 +176,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			const paymentIntentId =
 				typeof charge.payment_intent === 'string' ? charge.payment_intent : null;
 			if (!paymentIntentId) break;
+			if (await refundSpectatorOrder(charge)) break;
 
 			const updated = await db
 				.update(registrations)

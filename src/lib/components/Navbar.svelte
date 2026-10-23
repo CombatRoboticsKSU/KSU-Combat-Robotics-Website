@@ -38,7 +38,7 @@
 
 	const rightLinks = $derived([
 		{ href: '/calendar', label: 'Calendar', external: false },
-		...socialLinks.map(s => ({ href: s.url, label: s.label, external: true }))
+		...socialLinks.map((s: { label: string; url: string }) => ({ href: s.url, label: s.label, external: true }))
 	]);
 
 	function isActive(href: string): boolean {

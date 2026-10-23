@@ -1,4 +1,4 @@
-import { pgTable, text, integer, boolean, timestamp, json, serial, index } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, boolean, timestamp, json, serial, index, uniqueIndex } from 'drizzle-orm/pg-core';
 
 // ─── Better Auth tables ───────────────────────────────────────────
 
@@ -261,6 +261,30 @@ export const sponsorCodes = pgTable('sponsor_codes', {
 	active: boolean('active').notNull().default(true),
 	createdAt: timestamp('created_at').defaultNow()
 });
+
+export const spectatorOrders = pgTable('spectator_orders', {
+	id: serial('id').primaryKey(),
+	eventId: integer('event_id').notNull().references(() => events.id),
+	stripeSessionId: text('stripe_session_id').notNull().unique(),
+	stripePaymentIntentId: text('stripe_payment_intent_id'),
+	buyerName: text('buyer_name').notNull().default(''),
+	email: text('email').notNull().default(''),
+	quantity: integer('quantity').notNull(),
+	amountTotal: integer('amount_total').notNull(),
+	currency: text('currency').notNull(),
+	// confirmed | refunded | refund_review (partial refund: staff must review)
+	status: text('status').notNull().default('confirmed'),
+	createdAt: timestamp('created_at').notNull().defaultNow()
+}, (t) => [index('spectator_orders_event_idx').on(t.eventId), index('spectator_orders_payment_idx').on(t.stripePaymentIntentId)]);
+
+export const spectatorTickets = pgTable('spectator_tickets', {
+	id: serial('id').primaryKey(),
+	orderId: integer('order_id').notNull().references(() => spectatorOrders.id),
+	ordinal: integer('ordinal').notNull(),
+	token: text('token').notNull().unique(),
+	checkedInAt: timestamp('checked_in_at'),
+	checkedInBy: text('checked_in_by')
+}, (t) => [uniqueIndex('spectator_tickets_order_ordinal_idx').on(t.orderId, t.ordinal)]);
 
 // ─── Event Registrations ─────────────────────────────────────────
 

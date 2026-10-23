@@ -145,6 +145,7 @@ export const actions: Actions = {
 		const result = await db.execute(sql`
 			WITH eligible AS (
 				SELECT id FROM events WHERE id = ${id}
+				AND NOT EXISTS (SELECT 1 FROM spectator_orders WHERE event_id = ${id})
 				AND NOT EXISTS (
 					SELECT 1 FROM registrations WHERE event_id = ${id}
 					AND (status IN ('pending', 'paid', 'refunded', 'member', 'paid_offline')
@@ -159,7 +160,7 @@ export const actions: Actions = {
 			AND (SELECT count(*) FROM removed) >= 0 RETURNING id
 		`);
 		if (result.rows.length === 0) {
-			return fail(400, { error: 'Event not found or it has active registrations or payment records and cannot be deleted. Wait for pending checkouts to resolve, or mark the event past instead.' });
+			return fail(400, { error: 'Event not found or it has active registrations, spectator orders, or payment records and cannot be deleted. Wait for pending checkouts to resolve, or mark the event past instead.' });
 		}
 		return { success: true };
 	}
