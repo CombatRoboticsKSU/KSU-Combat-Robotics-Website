@@ -17,9 +17,10 @@ function emailConfig() {
 		privateKey: env.EMAILJS_PRIVATE_KEY
 	};
 }
+const registrationSiteUrl = () => env.REGISTRATION_SITE_URL || env.BETTER_AUTH_URL;
 export const emailDeliveryReady = () => {
 	const config = emailConfig();
-	return !!(config.serviceId && config.publicKey && config.templateId && config.privateKey && env.REGISTRATION_SITE_URL);
+	return !!(config.serviceId && config.publicKey && config.templateId && config.privateKey && registrationSiteUrl());
 };
 
 // Persistent atomic buckets shared across serverless instances. Keys contain no raw PII.
@@ -47,7 +48,7 @@ export async function sendRegistrationAccess(event: { id: number; slug: string; 
 	const token = privateToken();
 	await db.insert(registrationAccess).values({ tokenHash: accessHash(token), eventId: event.id, email, expiresAt: new Date(Date.now() + 30 * 60_000) });
 	// Never construct emailed links from untrusted Host/request headers.
-	const origin = new URL(env.REGISTRATION_SITE_URL!).origin;
+	const origin = new URL(registrationSiteUrl()!).origin;
 	const link = `${origin}/events/${event.slug}/manage?token=${token}`;
 	try {
 		const config = emailConfig();

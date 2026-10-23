@@ -20,8 +20,10 @@ The additive migration was applied to development and production on October 23,
    - `EMAILJS_SERVICE_ID` and `EMAILJS_PUBLIC_KEY`: optionally override the existing
      contact form service and public key. By default these reuse
      `PUBLIC_EMAILJS_SERVICE_ID` and `PUBLIC_EMAILJS_USER_ID`.
-   - `REGISTRATION_SITE_URL`: canonical site origin, for example
-     `https://www.ksucombat.club` in production or `https://dev.ksucombat.club` in preview.
+   - The site address reuses `BETTER_AUTH_URL`. Check it points to
+     `https://www.ksucombat.club` in production and `https://dev.ksucombat.club` in preview.
+     `REGISTRATION_SITE_URL` is an optional override only if the email links need
+     a different canonical origin.
 3. Rebuild the deployment after saving environment variables.
 4. Request an edit link using a real confirmed registration. Confirm delivery,
    link verification, saving, logout, and requesting a replacement link.
