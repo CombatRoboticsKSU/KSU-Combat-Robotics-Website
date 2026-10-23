@@ -6,7 +6,7 @@
 	let sending = $state(false);
 </script>
 
-<svelte:head><title>Manage registration | {data.event.name}</title><meta name="robots" content="noindex,nofollow" /><meta name="referrer" content="no-referrer" /></svelte:head>
+<svelte:head><title>Manage registration | {data.event.name}</title><meta name="robots" content="noindex,nofollow" /><meta name="referrer" content="same-origin" /></svelte:head>
 <section class="hero"><h1>Manage your registration</h1><p>{data.event.name}</p></section>
 <section class="section"><div class="container manage">
 	<a href="/events/{data.event.slug}">← Back to event</a>

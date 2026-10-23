@@ -16,7 +16,9 @@ async function getEvent(slug: string) {
 }
 const cookieName = (id: number) => `registration_edit_${id}`;
 const cookiePath = (slug: string) => `/events/${slug}/manage`;
-const responseHeaders = { 'cache-control': 'private, no-store', 'referrer-policy': 'no-referrer', 'x-robots-tag': 'noindex, nofollow' };
+// Keep Origin on native same-site POSTs for SvelteKit's CSRF check, while
+// preventing private email-link URLs from being sent to external sites.
+const responseHeaders = { 'cache-control': 'private, no-store', 'referrer-policy': 'same-origin', 'x-robots-tag': 'noindex, nofollow' };
 
 export const load: PageServerLoad = async ({ params, cookies, url, setHeaders }) => {
 	setHeaders(responseHeaders);

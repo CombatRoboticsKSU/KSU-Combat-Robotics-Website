@@ -7,7 +7,7 @@ import { error, fail, type RequestEvent } from '@sveltejs/kit';
 
 // Shared by the event page and the private registration management page.
 export async function requestRegistrationLink({ params, request, getClientAddress, setHeaders }: Pick<RequestEvent, 'params' | 'request' | 'getClientAddress' | 'setHeaders'>) {
-	setHeaders({ 'cache-control': 'private, no-store', 'referrer-policy': 'no-referrer' });
+	setHeaders({ 'cache-control': 'private, no-store', 'referrer-policy': 'same-origin' });
 	const [event] = await db.select().from(events).where(and(eq(events.slug, params.slug ?? ''), eq(events.published, true))).limit(1);
 	if (!event) error(404, 'Event not found');
 	if (!registrationEditsOpen(event)) return fail(403, { error: 'Editing is closed. Contact event staff for help.' });
