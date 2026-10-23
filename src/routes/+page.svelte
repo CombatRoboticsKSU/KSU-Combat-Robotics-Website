@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { CalendarDays, ArrowRight } from 'lucide-svelte';
 	let { data } = $props();
 	
 	const bots = $derived(data.featuredBots.map(b => ({
@@ -35,6 +36,16 @@
 		<p class="hero-tagline">
 			KSU Combat Robotics is a student organization at Kent State University that designs, builds, and competes in combat robotics events at a variety of weight classes.
 		</p>
+		{#if data.upcomingEvent}
+			<aside class="hero-event" aria-label="Upcoming event">
+				<div class="hero-event-copy">
+					<span class="hero-event-label"><CalendarDays size={16} aria-hidden="true" /> Upcoming event</span>
+					<h2>{data.upcomingEvent.name}</h2>
+					<p>{data.upcomingEvent.eventDate}{#if data.upcomingEvent.eventDate && data.upcomingEvent.location}<span aria-hidden="true"> · </span>{/if}{data.upcomingEvent.location}</p>
+				</div>
+				<a class="hero-event-link" href="/events/{data.upcomingEvent.slug}">View event <ArrowRight size={18} aria-hidden="true" /></a>
+			</aside>
+		{/if}
 		<div class="hero-info">
 			<div class="info-badge">
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -217,6 +228,31 @@
 		margin-bottom: 1rem;
 		flex-wrap: wrap;
 		animation: fadeInUp 0.6s ease 0.2s both;
+	}
+
+	.hero-event {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.25rem;
+		margin: 1.5rem 0;
+		padding: 1.25rem 1.5rem;
+		text-align: left;
+		background: rgba(235,171,33,0.1);
+		border: 1px solid rgba(235,171,33,0.4);
+		border-radius: var(--radius-lg);
+	}
+
+	.hero-event-copy { min-width: 0; }
+	.hero-event-label { display: flex; align-items: center; gap: 0.5rem; color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+	.hero-event h2 { margin: 0.5rem 0 0.375rem; font-size: 1.25rem; line-height: 1.3; overflow-wrap: anywhere; }
+	.hero-event p { margin: 0; color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5; }
+	.hero-event p span { margin: 0 0.35em; }
+	.hero-event-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; flex-shrink: 0; padding: 0.75rem 1rem; border-radius: var(--radius-md); background: var(--gold); color: var(--navy-dark); font-weight: 700; text-decoration: none; }
+	.hero-event-link:hover { background: var(--gold-light, #f4c658); }
+	.hero-event-link:focus-visible { outline: 3px solid white; outline-offset: 4px; }
+	@media (max-width: 600px) {
+		.hero-event { flex-direction: column; align-items: stretch; padding: 1.125rem; gap: 1rem; }
 	}
 
 	.info-badge {
