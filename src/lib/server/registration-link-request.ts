@@ -18,7 +18,7 @@ export async function requestRegistrationLink({ params, request, getClientAddres
 	const success = 'If that email has a confirmed registration, a private link will arrive shortly. Check your spam folder. Please wait before requesting another.';
 	if (!await allowAccessRequest(event.id, email, getClientAddress())) {
 		console.info('Registration access request skipped', { eventId: event.id, code: 'request_rate_limited' });
-		return { success };
+		return fail(429, { error: 'Too many edit-link requests. Please wait up to an hour before trying again, or contact event staff.' });
 	}
 	try {
 		const sent = await sendRegistrationAccess(event, email);

@@ -140,6 +140,12 @@ try {
 	assert.equal(policy.registrationEditsOpen(day, new Date('2035-05-10T04:00:00Z')), false, 'Deadline uses Kent local midnight');
 	const limits = await Promise.all(Array.from({ length: 8 }, () => access.allowAccessRequest(eventId, owner, ip)));
 	assert.equal(limits.filter(Boolean).length, 3, 'Email rate limit holds under concurrency');
+	await q`update events set registration_edit_deadline='' where id=${eventId}`;
+	const resend = new FormData(); resend.set('email', owner);
+	const beforeLimitedRequest = messages.length;
+	const limited = await eventPage.actions.requestEditLink({ ...base, request: new Request(base.url, { method: 'POST', body: resend }), getClientAddress: () => ip });
+	assert.equal(limited.status, 429, 'Rate-limited resends report a visible error instead of claiming a link will arrive');
+	assert.equal(messages.length, beforeLimitedRequest);
 	await q`update registration_access set session_expires_at=now()-interval '1 minute' where session_hash=${access.accessHash(session)}`;
 	assert.equal(await access.accessSession(eventId, session), null);
 	console.log('PASS: email delivery interception, hashed single-use links, concurrent redemption, event/email ownership, expired sessions, forged payment fields, stale edits, safety review, audit history, refund/deadline races, Eastern midnight, and persistent concurrent rate limits');
