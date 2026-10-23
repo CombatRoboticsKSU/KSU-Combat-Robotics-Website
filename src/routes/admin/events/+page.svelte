@@ -322,6 +322,11 @@
 				</div>
 
 				<div class="field-group">
+					<label class="field-label" for="eEditDeadline">Last day competitors can edit (Eastern time)</label>
+					<input id="eEditDeadline" name="registrationEditDeadline" type="date" class="field-input" value={editing?.registrationEditDeadline ?? ''} />
+					<p class="help-text">Leave blank to allow edits through the day before the event. Edits always close on event day. This does not affect new registrations or staff editing.</p>
+				</div>
+				<div class="field-group">
 					<label class="field-label" for="eMemberCode">Member Access Code</label>
 					<input id="eMemberCode" name="memberCode" type="text" class="field-input" value={editing?.memberCode ?? ''} autocomplete="off" />
 					<p class="help-text">Share with club members in Discord. Members who enter it register without paying. Use 8+ characters and change it for each event. Leave blank to disable.</p>

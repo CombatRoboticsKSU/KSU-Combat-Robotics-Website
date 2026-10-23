@@ -232,6 +232,7 @@ export const events = pgTable('events', {
 	waiverText: text('waiver_text').notNull().default(''),
 	waiverPdfUrl: text('waiver_pdf_url').notNull().default(''),
 	registrationOpen: boolean('registration_open').notNull().default(false),
+	registrationEditDeadline: text('registration_edit_deadline').notNull().default(''),
 	memberCode: text('member_code').notNull().default(''),
 	competitorPriceId: text('competitor_price_id').notNull().default(''),
 	competitorLabel: text('competitor_label').notNull().default('Register to Compete'),
@@ -317,3 +318,22 @@ export const registrations = pgTable('registrations', {
 }, (table) => [
 	index('registrations_event_id_idx').on(table.eventId)
 ]);
+
+// Store hashes of email links and browser sessions, never their bearer tokens.
+export const registrationAccess = pgTable('registration_access', {
+	tokenHash: text('token_hash').primaryKey(),
+	eventId: integer('event_id').notNull().references(() => events.id, { onDelete: 'cascade' }),
+	email: text('email').notNull(),
+	expiresAt: timestamp('expires_at').notNull(),
+	sessionHash: text('session_hash').unique(),
+	sessionExpiresAt: timestamp('session_expires_at'),
+	usedAt: timestamp('used_at')
+}, (table) => [index('registration_access_expiry_idx').on(table.expiresAt)]);
+
+export const registrationEditAudit = pgTable('registration_edit_audit', {
+	id: serial('id').primaryKey(),
+	registrationId: integer('registration_id').notNull().references(() => registrations.id, { onDelete: 'cascade' }),
+	before: json('before').notNull(),
+	after: json('after').notNull(),
+	createdAt: timestamp('created_at').notNull().defaultNow()
+}, (table) => [index('registration_edit_audit_registration_idx').on(table.registrationId)]);

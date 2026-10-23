@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
-import { eq, ne, and, or, desc, inArray } from 'drizzle-orm';
+import { eq, ne, and, desc, inArray } from 'drizzle-orm';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -23,8 +23,7 @@ async function reviewHazard(request: Request, eventId: string, status: 'approved
 			eq(registrations.id, registrationId),
 			eq(registrations.eventId, id),
 			inArray(registrations.status, ['paid', 'member', 'paid_offline']),
-			ne(registrations.hazardStatus, 'not_required'),
-			or(eq(registrations.hazardPneumatic, true), eq(registrations.hazardHighMass, true))
+			ne(registrations.hazardStatus, 'not_required')
 		))
 		.returning({ id: registrations.id });
 	if (!row) return fail(400, { error: 'Active hazard registration not found for this event.', registrationId, note });

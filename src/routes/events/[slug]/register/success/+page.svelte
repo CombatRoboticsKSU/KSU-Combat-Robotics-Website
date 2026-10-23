@@ -25,6 +25,7 @@
 
 <section class="section">
 	<div class="container">
+		<p style="text-align:center; margin-bottom:1.5rem"><a class="btn btn-secondary" href="/events/{data.event.slug}/manage">Manage registration</a></p>
 		<div class="status-card card">
 			{#if data.member}
 				<div class="status-icon confirmed"><CheckCircle2 size={40} /></div>

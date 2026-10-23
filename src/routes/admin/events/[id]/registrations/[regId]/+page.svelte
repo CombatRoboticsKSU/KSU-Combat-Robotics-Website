@@ -19,6 +19,12 @@
 	</div>
 	{#if form?.error}<div class="alert-error" role="alert">{form.error}</div>{/if}
 	{#if form?.success}<div class="alert-success" role="status">{form.success}</div>{/if}
+	{#if data.editHistory.length}
+		<div class="form-card"><h3>Competitor edit history</h3><p class="help-text">Most recent 20 saves made through verified email access.</p>
+		{#each data.editHistory as edit}<details><summary>{new Date(edit.createdAt).toLocaleString()}</summary>
+			{#each edit.changes as change}<p style="overflow-wrap:anywhere"><strong>{change.field}</strong><br />Before: {change.before}<br />After: {change.after}</p>{/each}
+		</details>{/each}</div>
+	{/if}
 	<form class="form-card" method="POST" action="?/edit">
 		<RegistrationFields values={form && 'values' in form ? form.values : registration} />
 		<p class="help-text">{registration.waiverAck ? 'Waiver acknowledged online.' : 'Waiver at check-in'} {registration.ageAck ? 'Age confirmed online.' : 'Confirm age at check-in.'}</p>

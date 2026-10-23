@@ -1,15 +1,22 @@
 import { db } from '$lib/server/db';
-import { registrations } from '$lib/server/schema';
+import { registrations, registrationEditAudit } from '$lib/server/schema';
 import { stripe } from '$lib/server/stripe';
 import { loadAdminEvent, loadAdminRegistration, readRegistrationFields, registrationFieldError, registrationWhere } from '$lib/server/registration-admin';
-import { and, inArray, isNull, notInArray, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, isNull, notInArray, sql } from 'drizzle-orm';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
+	const registration = await loadAdminRegistration(params.id, params.regId);
+	const history = await db.select().from(registrationEditAudit).where(eq(registrationEditAudit.registrationId, registration.id)).orderBy(desc(registrationEditAudit.createdAt)).limit(20);
 	return {
 		event: await loadAdminEvent(params.id),
-		registration: await loadAdminRegistration(params.id, params.regId)
+		registration,
+		editHistory: history.map(row => {
+			const before = row.before as Record<string, unknown>;
+			const after = row.after as Record<string, unknown>;
+			return { id: row.id, createdAt: row.createdAt, changes: Object.keys(after).filter(key => JSON.stringify(before[key]) !== JSON.stringify(after[key])).map(key => ({ field: key.replaceAll('_', ' '), before: JSON.stringify(before[key]), after: JSON.stringify(after[key]) })) };
+		})
 	};
 };
 

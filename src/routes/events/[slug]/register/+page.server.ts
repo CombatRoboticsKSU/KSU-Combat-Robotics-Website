@@ -3,6 +3,7 @@ import { db } from '$lib/server/db';
 import { blobStoreOrigin, botPhotoPathname, hazardDocumentPathname } from '$lib/server/blob';
 import { events, registrations } from '$lib/server/schema';
 import { stripe } from '$lib/server/stripe';
+import { notifyRegistrationAccess } from '$lib/server/registration-access';
 import { ACTIVE_REGISTRATION_STATUSES, isEventFull, canRegister } from '$lib/utils/events';
 import { resolveWaiverText } from '$lib/utils/waiver';
 import { eq, and, inArray, count, sql } from 'drizzle-orm';
@@ -180,6 +181,7 @@ export const actions: Actions = {
 		}
 
 		if (isMember) {
+			await notifyRegistrationAccess(row.id);
 			throw redirect(303, `/events/${ev.slug}/register/success?member=1${isHazard ? '&hazard=1' : ''}`);
 		}
 

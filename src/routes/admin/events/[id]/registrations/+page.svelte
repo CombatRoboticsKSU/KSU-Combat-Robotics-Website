@@ -20,13 +20,13 @@
 
 	const typeFilters: Record<string, { label: string; match: (r: Registration) => boolean }> = {
 		all: { label: 'All entries', match: () => true },
-		hazard: { label: 'Hazard bots', match: (r) => r.hazardPneumatic || r.hazardHighMass },
+		hazard: { label: 'Hazard bots', match: (r) => r.hazardPneumatic || r.hazardHighMass || r.hazardStatus !== 'not_required' },
 		pneumatic: { label: 'Pneumatic', match: (r) => r.hazardPneumatic },
 		high_mass: { label: 'High-mass weapon', match: (r) => r.hazardHighMass },
 		pending_review: { label: 'Hazard pending review', match: (r) => r.hazardStatus === 'pending_review' },
 		approved: { label: 'Hazard approved', match: (r) => r.hazardStatus === 'approved' },
 		rejected: { label: 'Hazard rejected', match: (r) => r.hazardStatus === 'rejected' },
-		not_hazard: { label: 'Not a hazard bot', match: (r) => !r.hazardPneumatic && !r.hazardHighMass },
+		not_hazard: { label: 'Not a hazard bot', match: (r) => !r.hazardPneumatic && !r.hazardHighMass && r.hazardStatus === 'not_required' },
 		no_photo: { label: 'Missing bot photo', match: (r) => !r.botPhotoUrl },
 		waiver_checkin: { label: 'Waiver at check-in', match: (r) => !r.waiverAck }
 	};
@@ -197,7 +197,7 @@
 									{/each}
 									{#if r.hazardReviewNote}<p class="hazard-note">{r.hazardReviewNote}</p>{/if}
 									{#if r.hazardReviewedAt}<div class="item-sub">Reviewed {formatDate(r.hazardReviewedAt)}</div>{/if}
-									{#if ['paid', 'member', 'paid_offline'].includes(r.status) && (r.hazardPneumatic || r.hazardHighMass) && r.hazardStatus !== 'not_required'}
+									{#if ['paid', 'member', 'paid_offline'].includes(r.status) && r.hazardStatus !== 'not_required'}
 										<form method="POST" action="?/approveHazard" class="hazard-review-form">
 											<input type="hidden" name="registrationId" value={r.id} />
 											<div class="field-group">

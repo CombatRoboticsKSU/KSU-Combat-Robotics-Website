@@ -107,6 +107,7 @@
 						</div>
 					{/if}
 					{#if data.event.competitorNote}<p class="action-note">{data.event.competitorNote}</p>{/if}
+					<p class="action-note">Already registered? <a href="/events/{data.event.slug}/manage">Manage your registration</a></p>
 					{#if showSpots && data.spotsLeft !== null}
 						<div class="spots">
 							<div class="spots-text">

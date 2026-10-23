@@ -48,6 +48,7 @@ function readEventFields(form: FormData) {
 		waiverText: (form.get('waiverText') as string) ?? '',
 		waiverPdfUrl: (form.get('waiverPdfUrl') as string) ?? '',
 		registrationOpen: form.get('registrationOpen') === 'on',
+		registrationEditDeadline: typeof form.get('registrationEditDeadline') === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(String(form.get('registrationEditDeadline'))) ? String(form.get('registrationEditDeadline')) : '',
 		memberCode: typeof form.get('memberCode') === 'string' ? String(form.get('memberCode')).trim() : '',
 		competitorPriceId: (form.get('competitorPriceId') as string)?.trim() ?? '',
 		competitorLabel: (form.get('competitorLabel') as string) || 'Register to Compete',

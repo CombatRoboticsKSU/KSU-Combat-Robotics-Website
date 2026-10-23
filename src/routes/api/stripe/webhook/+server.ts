@@ -6,6 +6,7 @@ import { eq, and, ne } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 import type Stripe from 'stripe';
 import { fulfillSpectatorSession, refundSpectatorOrder } from '$lib/server/spectators';
+import { notifyRegistrationAccess } from '$lib/server/registration-access';
 
 // Accepts only a string/number that is a bare positive integer. Number(null) is 0 and
 // Number('1.5') is 1.5, so a plain Number.isFinite check would let both slip through.
@@ -77,6 +78,7 @@ async function markPaid(session: Stripe.Checkout.Session, registrationId: number
 		.returning({ id: registrations.id });
 
 	await warnIfRegistrationUpdateMissed(updated, event, registrationId, session.id);
+	if (updated.length) await notifyRegistrationAccess(registrationId);
 }
 
 export const POST: RequestHandler = async ({ request }) => {
