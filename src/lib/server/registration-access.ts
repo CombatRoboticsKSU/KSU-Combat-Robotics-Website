@@ -9,6 +9,29 @@ import { EDITABLE_REGISTRATION_STATUSES, registrationEditsOpen } from '$lib/util
 export const accessHash = (value: string) => createHash('sha256').update(value).digest('hex');
 export const privateToken = () => randomBytes(32).toString('hex');
 export const validAccessToken = (value: string) => /^[a-f0-9]{64}$/.test(value);
+class EmailDeliveryError extends Error {
+	constructor(public status: number, public code: string) { super('Registration email delivery failed'); }
+}
+
+// Classify provider errors without logging its response, which may echo private data.
+export function emailProviderErrorCode(message: string) {
+	const text = message.toLowerCase();
+	if (/non.browser|browser applications|server.side.*disabled/.test(text)) return 'non_browser_requests_disabled';
+	if (/private.key|access.?token/.test(text)) return 'private_key_rejected';
+	if (/public.key|user_id/.test(text)) return 'public_key_rejected';
+	if (/template/.test(text)) return 'template_configuration';
+	if (/service/.test(text)) return 'service_configuration';
+	if (/captcha/.test(text)) return 'template_captcha_required';
+	if (/quota|limit|too many/.test(text)) return 'provider_limit';
+	if (/recipient|to_email|address/.test(text)) return 'recipient_configuration';
+	return 'provider_rejected';
+}
+
+export function registrationEmailFailure(error: unknown) {
+	return error instanceof EmailDeliveryError
+		? { provider: 'EmailJS', status: error.status, code: error.code }
+		: { provider: 'EmailJS', code: error instanceof Error && ['TimeoutError', 'AbortError'].includes(error.name) ? 'request_timeout' : 'unexpected_failure' };
+}
 function emailConfig() {
 	return {
 		serviceId: env.EMAILJS_SERVICE_ID || publicEnv.PUBLIC_EMAILJS_SERVICE_ID,
@@ -41,14 +64,15 @@ export async function allowAccessRequest(eventId: number, email: string, ip: str
 }
 
 export async function sendRegistrationAccess(event: { id: number; slug: string; name: string }, email: string) {
-	if (!emailDeliveryReady()) throw new Error('Registration email delivery is not configured');
+	if (!emailDeliveryReady()) throw new EmailDeliveryError(0, 'not_configured');
 	const [registration] = await db.select({ id: registrations.id }).from(registrations)
 		.where(and(eq(registrations.eventId, event.id), sql`lower(${registrations.email}) = ${email}`, inArray(registrations.status, EDITABLE_REGISTRATION_STATUSES))).limit(1);
-	if (!registration) return;
+	if (!registration) return false;
+	// Validate configuration before storing a token.
+	const origin = new URL(registrationSiteUrl()!).origin;
 	const token = privateToken();
 	await db.insert(registrationAccess).values({ tokenHash: accessHash(token), eventId: event.id, email, expiresAt: new Date(Date.now() + 30 * 60_000) });
 	// Never construct emailed links from untrusted Host/request headers.
-	const origin = new URL(registrationSiteUrl()!).origin;
 	const link = `${origin}/events/${event.slug}/manage?token=${token}`;
 	try {
 		const config = emailConfig();
@@ -67,8 +91,8 @@ export async function sendRegistrationAccess(event: { id: number; slug: string; 
 				method: 'POST', signal: AbortSignal.timeout(10_000),
 				headers: { 'Content-Type': 'application/json' }, body
 			});
-			if (response.ok) return;
-			if (response.status !== 429 || attempt === 2) throw new Error(`Registration email delivery failed (${response.status})`);
+			if (response.ok) return true;
+			if (response.status !== 429 || attempt === 2) throw new EmailDeliveryError(response.status, emailProviderErrorCode((await response.text()).slice(0, 2000)));
 			await new Promise(resolve => setTimeout(resolve, 1100 * (attempt + 1)));
 		}
 	} catch (error) {
@@ -101,5 +125,5 @@ export async function notifyRegistrationAccess(registrationId: number) {
 		const [row] = await db.select({ event: events, email: registrations.email }).from(registrations)
 			.innerJoin(events, eq(events.id, registrations.eventId)).where(eq(registrations.id, registrationId)).limit(1);
 		if (row && registrationEditsOpen(row.event)) await sendRegistrationAccess(row.event, row.email.trim().toLowerCase());
-	} catch { console.error('Registration access notification failed; competitor can request another link'); }
+	} catch (error) { console.error('Registration access notification failed', registrationEmailFailure(error)); }
 }

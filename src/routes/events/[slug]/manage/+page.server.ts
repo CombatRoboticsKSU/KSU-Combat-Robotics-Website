@@ -1,7 +1,7 @@
 import { dev } from '$app/environment';
 import { db } from '$lib/server/db';
 import { events, registrations, registrationAccess } from '$lib/server/schema';
-import { accessHash, accessSession, allowAccessRequest, emailDeliveryReady, exchangeAccessToken, sendRegistrationAccess, validAccessToken } from '$lib/server/registration-access';
+import { accessHash, accessSession, allowAccessRequest, emailDeliveryReady, exchangeAccessToken, registrationEmailFailure, sendRegistrationAccess, validAccessToken } from '$lib/server/registration-access';
 import { readCompetitorEdits } from '$lib/server/registration-edit-fields';
 import { EDITABLE_REGISTRATION_STATUSES, registrationEditsOpen } from '$lib/utils/registration-editing';
 import { and, eq, inArray, sql } from 'drizzle-orm';
@@ -47,9 +47,15 @@ export const actions: Actions = {
 		const email = String(form.get('email') ?? '').trim().toLowerCase();
 		if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail(400, { error: 'Enter a valid email address.' });
 		const success = 'If that email has a confirmed registration, a private link will arrive shortly. Check your spam folder. Please wait before requesting another.';
-		if (!await allowAccessRequest(event.id, email, getClientAddress())) return { success };
-		try { await sendRegistrationAccess(event, email); }
-		catch { console.error('Registration access email could not be delivered'); }
+		if (!await allowAccessRequest(event.id, email, getClientAddress())) {
+			console.info('Registration access request skipped', { eventId: event.id, code: 'request_rate_limited' });
+			return { success };
+		}
+		try {
+			const sent = await sendRegistrationAccess(event, email);
+			console.info('Registration access email request', { eventId: event.id, code: sent ? 'provider_accepted' : 'no_confirmed_registration' });
+		}
+		catch (error) { console.error('Registration access email could not be delivered', registrationEmailFailure(error)); }
 		return { success };
 	},
 	verify: async ({ params, request, cookies }) => {

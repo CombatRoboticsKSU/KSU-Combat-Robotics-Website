@@ -33,6 +33,9 @@ const owner = `${suffix}@example.invalid`;
 const ip = `test-${suffix}`;
 try {
 	const access = await server.ssrLoadModule('/src/lib/server/registration-access.ts');
+	assert.equal(access.emailProviderErrorCode('API calls are disabled for non-browser applications'), 'non_browser_requests_disabled');
+	assert.equal(access.emailProviderErrorCode('Invalid accessToken: private@example.invalid'), 'private_key_rejected');
+	assert.deepEqual(access.registrationEmailFailure(new Error('Do not log this token or address')), { provider: 'EmailJS', code: 'unexpected_failure' });
 	const policy = await server.ssrLoadModule('/src/lib/utils/registration-editing.ts');
 	const { blobStoreOrigin } = await server.ssrLoadModule('/src/lib/server/blob.ts');
 	const route = await server.ssrLoadModule('/src/routes/events/[slug]/manage/+page.server.ts');
