@@ -38,6 +38,9 @@
 		</p>
 		{#if data.upcomingEvent}
 			<aside class="hero-event" aria-label="Upcoming event">
+				{#if data.upcomingEvent.image.trim() && !data.upcomingEvent.image.endsWith('/placeholder.png')}
+					<img class="hero-event-image" src={data.upcomingEvent.image} alt="" width="128" height="104" />
+				{/if}
 				<div class="hero-event-copy">
 					<span class="hero-event-label"><CalendarDays size={16} aria-hidden="true" /> Upcoming event</span>
 					<h2>{data.upcomingEvent.name}</h2>
@@ -243,7 +246,8 @@
 		border-radius: var(--radius-lg);
 	}
 
-	.hero-event-copy { min-width: 0; }
+	.hero-event-image { width: 128px; height: 104px; flex-shrink: 0; object-fit: cover; border-radius: 8px; }
+	.hero-event-copy { min-width: 0; flex: 1; }
 	.hero-event-label { display: flex; align-items: center; gap: 0.5rem; color: var(--gold); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
 	.hero-event h2 { margin: 0.5rem 0 0.375rem; font-size: 1.25rem; line-height: 1.3; overflow-wrap: anywhere; }
 	.hero-event p { margin: 0; color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5; }
@@ -253,6 +257,7 @@
 	.hero-event-link:focus-visible { outline: 3px solid white; outline-offset: 4px; }
 	@media (max-width: 600px) {
 		.hero-event { flex-direction: column; align-items: stretch; padding: 1.125rem; gap: 1rem; }
+		.hero-event-image { width: 100%; height: auto; aspect-ratio: 16 / 9; }
 	}
 
 	.info-badge {

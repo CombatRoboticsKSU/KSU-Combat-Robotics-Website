@@ -10,7 +10,7 @@ export const load: PageServerLoad = async () => {
         const [settings, featuredBots, upcomingEvents] = await Promise.all([
             db.select().from(siteSettings),
             db.select().from(bots).where(eq(bots.isFeatured, true)).orderBy(bots.sortOrder),
-            db.select({ name: events.name, slug: events.slug, eventDate: events.eventDate, location: events.location })
+            db.select({ name: events.name, slug: events.slug, image: events.image, eventDate: events.eventDate, location: events.location })
                 .from(events)
                 .where(and(eq(events.published, true), eq(events.status, 'upcoming'), gte(events.sortDate, new Date(`${today}T00:00:00Z`))))
                 .orderBy(asc(events.sortDate), asc(events.id))
