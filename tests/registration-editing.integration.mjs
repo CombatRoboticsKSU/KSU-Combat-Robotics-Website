@@ -1,4 +1,4 @@
-// Development database only. Uses temporary rows and intercepts every Resend call.
+// Development database only. Uses temporary rows and intercepts every EmailJS call.
 // node --env-file=.env tests/registration-editing.integration.mjs
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
@@ -6,18 +6,23 @@ import { neon } from '@neondatabase/serverless';
 import { createServer } from 'vite';
 
 assert(process.env.DATABASE_URL && process.env.DATABASE_URL !== process.env.PROD_DATABASE_URL, 'Use a separate dev database');
-process.env.RESEND_API_KEY = 'test-key-never-sent';
-process.env.REGISTRATION_EMAIL_FROM = 'Club <club@example.invalid>';
+delete process.env.EMAILJS_SERVICE_ID;
+delete process.env.EMAILJS_PUBLIC_KEY;
+process.env.PUBLIC_EMAILJS_SERVICE_ID = 'test-service';
+process.env.PUBLIC_EMAILJS_USER_ID = 'test-public-key';
+process.env.EMAILJS_REGISTRATION_TEMPLATE_ID = 'test-registration-template';
+process.env.EMAILJS_PRIVATE_KEY = 'test-private-key-never-sent';
 process.env.REGISTRATION_SITE_URL = 'https://club.example.invalid';
 const q = neon(process.env.DATABASE_URL);
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom' });
 const suffix = randomUUID().replaceAll('-', '');
 const originalFetch = globalThis.fetch;
 const messages = [];
+const providerResponses = [];
 globalThis.fetch = async (input, options) => {
-	if (String(input) === 'https://api.resend.com/emails') {
+	if (String(input) === 'https://api.emailjs.com/api/v1.0/email/send') {
 		messages.push(JSON.parse(options.body));
-		return new Response(JSON.stringify({ id: 'mock-email' }), { status: 200 });
+		return new Response('Mock EmailJS response', { status: providerResponses.shift() ?? 200 });
 	}
 	return originalFetch(input, options);
 };
@@ -40,11 +45,23 @@ try {
 	const [stranger] = await q`insert into registrations (event_id,status,builder_name,email,bot_name,bot_photo_url) values (${eventId},'paid','Other','other@example.invalid','Other Bot',${photo}) returning id`;
 	await access.sendRegistrationAccess(event, owner);
 	assert.equal(messages.length, 1);
-	assert.equal(messages[0].to[0], owner);
-	const link = messages[0].text.match(/https:\/\/\S+/)[0];
+	assert.equal(messages[0].service_id, 'test-service');
+	assert.equal(messages[0].template_id, 'test-registration-template');
+	assert.equal(messages[0].user_id, 'test-public-key');
+	assert.equal(messages[0].accessToken, 'test-private-key-never-sent');
+	assert.equal(messages[0].template_params.to_email, owner);
+	const link = messages[0].template_params.edit_link;
 	assert(link.startsWith('https://club.example.invalid/'));
 	const token = new URL(link).searchParams.get('token');
 	assert(access.validAccessToken(token));
+	providerResponses.push(429, 200);
+	await access.sendRegistrationAccess(event, owner);
+	assert.equal(messages.length, 3, 'Explicit EmailJS throttling is retried');
+	assert.equal(messages[1].template_params.edit_link, messages[2].template_params.edit_link, 'Retry uses the same private link');
+	providerResponses.push(400);
+	await assert.rejects(access.sendRegistrationAccess(event, owner));
+	const failedToken = new URL(messages.at(-1).template_params.edit_link).searchParams.get('token');
+	assert.equal(Number((await q`select count(*) as n from registration_access where token_hash=${access.accessHash(failedToken)}`)[0].n), 0, 'Failed delivery revokes its link');
 	assert.equal(await access.exchangeAccessToken(otherEventId, token), null, 'Email link is event-scoped');
 	const exchanges = await Promise.all([access.exchangeAccessToken(eventId, token), access.exchangeAccessToken(eventId, token)]);
 	assert.equal(exchanges.filter(Boolean).length, 1, 'Single-use link consumed atomically');

@@ -14,17 +14,43 @@ The additive migration was applied to development and production on October 23,
 
 1. Apply `drizzle/registration-editing.manual.sql` before deploying this version.
 2. Configure these server-only environment variables separately for each environment:
-   - `RESEND_API_KEY`: a Resend key allowed to send email.
-   - `REGISTRATION_EMAIL_FROM`: a sender on a verified Resend domain, such as
-     `KSU Combat Robotics <events@ksucombat.club>`.
+   - `EMAILJS_REGISTRATION_TEMPLATE_ID`: a dedicated registration email template.
+     Do not reuse the contact form template, which sends messages to staff.
+   - `EMAILJS_PRIVATE_KEY`: the account's private API key, kept server-only.
+   - `EMAILJS_SERVICE_ID` and `EMAILJS_PUBLIC_KEY`: optionally override the existing
+     contact form service and public key. By default these reuse
+     `PUBLIC_EMAILJS_SERVICE_ID` and `PUBLIC_EMAILJS_USER_ID`.
    - `REGISTRATION_SITE_URL`: canonical site origin, for example
      `https://www.ksucombat.club` in production or `https://dev.ksucombat.club` in preview.
 3. Rebuild the deployment after saving environment variables.
 4. Request an edit link using a real confirmed registration. Confirm delivery,
    link verification, saving, logout, and requesting a replacement link.
 
-Email uses the [Resend Send Email API](https://resend.com/docs/api-reference/emails/send-email).
-No new npm package is needed. Missing email configuration leaves the recovery page
+Email uses the [EmailJS REST Send API](https://www.emailjs.com/docs/rest-api/send/).
+No Resend account or new npm package is needed. In EmailJS account settings,
+allow non-browser API requests and enable private-key authorization for those
+requests. Keep the private key out of all `PUBLIC_` variables and browser code.
+The existing browser-based contact form remains unchanged. Check that it still
+works after adjusting account settings; do not disable its browser access.
+
+Create the registration template with:
+
+- **To Email:** `{{to_email}}`
+- **Subject:** `Manage your registration — {{event_name}}`
+- **From Name:** `KSU Combat Robotics`
+- **From Email:** the connected service's default sender
+- **Body:** `{{message}}` (plain text, preserving line breaks), or an HTML template
+  with a link to `{{edit_link}}`, event name `{{event_name}}`, and an expiry note
+  saying the link works once and expires in `{{expires_minutes}}` minutes.
+
+Use normal escaped template variables, not unescaped HTML substitutions. Turn off
+template-level CAPTCHA for this server-driven template only. Keep any existing
+contact form CAPTCHA rules unchanged. EmailJS's one-send-per-second limit is handled
+with bounded retries on explicit HTTP 429 responses. Requests that time out are
+not automatically retried to avoid duplicate sends. EmailJS account/service quotas
+still apply.
+
+Missing email configuration leaves the recovery page
 available with a contact-staff message. Payment processing continues normally.
 Automatic edit emails are attempted when Stripe first confirms a payment and when
 a member registers. Failures do not reverse payment; the competitor can request
@@ -77,7 +103,8 @@ npm run build
 ```
 
 The integration test requires a separate development database. It creates and
-removes only temporary fixtures and intercepts Resend requests, sending no email.
+removes only temporary fixtures and intercepts EmailJS requests, sending no email.
 It covers concurrent token redemption/rate limits, cross-event/owner access,
 expired links/sessions, protected payment fields, stale saves, safety review,
-audit history, refund/deadline races, and Eastern-time midnight boundaries.
+audit history, refund/deadline races, Eastern-time midnight boundaries, EmailJS
+request parameters, throttling retries, and failed-delivery link revocation.

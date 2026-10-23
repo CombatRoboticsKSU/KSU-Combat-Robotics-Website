@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { env } from '$env/dynamic/private';
+import { env as publicEnv } from '$env/dynamic/public';
 import { and, eq, gt, inArray, isNull, sql } from 'drizzle-orm';
 import { db } from './db';
 import { events, registrationAccess, registrations } from './schema';
@@ -8,7 +9,18 @@ import { EDITABLE_REGISTRATION_STATUSES, registrationEditsOpen } from '$lib/util
 export const accessHash = (value: string) => createHash('sha256').update(value).digest('hex');
 export const privateToken = () => randomBytes(32).toString('hex');
 export const validAccessToken = (value: string) => /^[a-f0-9]{64}$/.test(value);
-export const emailDeliveryReady = () => !!(env.RESEND_API_KEY && env.REGISTRATION_EMAIL_FROM && env.REGISTRATION_SITE_URL);
+function emailConfig() {
+	return {
+		serviceId: env.EMAILJS_SERVICE_ID || publicEnv.PUBLIC_EMAILJS_SERVICE_ID,
+		publicKey: env.EMAILJS_PUBLIC_KEY || publicEnv.PUBLIC_EMAILJS_USER_ID,
+		templateId: env.EMAILJS_REGISTRATION_TEMPLATE_ID,
+		privateKey: env.EMAILJS_PRIVATE_KEY
+	};
+}
+export const emailDeliveryReady = () => {
+	const config = emailConfig();
+	return !!(config.serviceId && config.publicKey && config.templateId && config.privateKey && env.REGISTRATION_SITE_URL);
+};
 
 // Persistent atomic buckets shared across serverless instances. Keys contain no raw PII.
 export async function allowAccessRequest(eventId: number, email: string, ip: string) {
@@ -38,12 +50,26 @@ export async function sendRegistrationAccess(event: { id: number; slug: string; 
 	const origin = new URL(env.REGISTRATION_SITE_URL!).origin;
 	const link = `${origin}/events/${event.slug}/manage?token=${token}`;
 	try {
-		const response = await fetch('https://api.resend.com/emails', {
-			method: 'POST', signal: AbortSignal.timeout(10_000),
-			headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-			body: JSON.stringify({ from: env.REGISTRATION_EMAIL_FROM, to: [email], subject: `Manage your registration — ${event.name}`, text: `Use this private link to edit your confirmed entries for ${event.name}:\n\n${link}\n\nThis link expires in 30 minutes and can be used once. After opening it, press Continue to verify your email. Never share this link. If you did not request it, ignore this email. Request another link from the event page when needed.` })
+		const config = emailConfig();
+		const body = JSON.stringify({
+			service_id: config.serviceId, template_id: config.templateId, user_id: config.publicKey,
+			accessToken: config.privateKey,
+			template_params: {
+				to_email: email, event_name: event.name, edit_link: link, expires_minutes: '30',
+				message: `Use this private link to edit your confirmed entries for ${event.name}:\n\n${link}\n\nThis link expires in 30 minutes and can be used once. After opening it, press Continue to verify your email. Never share this link. If you did not request it, ignore this email. Request another link from the event page when needed.`
+			}
 		});
-		if (!response.ok) throw new Error(`Registration email delivery failed (${response.status})`);
+		// EmailJS limits sends to one per second. Retry only explicit throttling;
+		// retrying ambiguous timeouts could send duplicate emails.
+		for (let attempt = 0; attempt < 3; attempt++) {
+			const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+				method: 'POST', signal: AbortSignal.timeout(10_000),
+				headers: { 'Content-Type': 'application/json' }, body
+			});
+			if (response.ok) return;
+			if (response.status !== 429 || attempt === 2) throw new Error(`Registration email delivery failed (${response.status})`);
+			await new Promise(resolve => setTimeout(resolve, 1100 * (attempt + 1)));
+		}
 	} catch (error) {
 		// Do not log response bodies, addresses, or private links.
 		await db.delete(registrationAccess).where(eq(registrationAccess.tokenHash, accessHash(token)));
