@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import {
 		Calendar,
 		Clock,
@@ -15,7 +16,8 @@
 		Navigation
 	} from 'lucide-svelte';
 
-	let { data } = $props();
+	let { data, form } = $props();
+	let sendingEditLink = $state(false);
 
 	// sortDate is stored from a date input as UTC midnight, so read it back in UTC to avoid an off-by-one day.
 	const date = $derived.by(() => {
@@ -107,7 +109,6 @@
 						</div>
 					{/if}
 					{#if data.event.competitorNote}<p class="action-note">{data.event.competitorNote}</p>{/if}
-					<p class="action-note">Already registered? <a href="/events/{data.event.slug}/manage">Manage your registration</a></p>
 					{#if showSpots && data.spotsLeft !== null}
 						<div class="spots">
 							<div class="spots-text">
@@ -138,6 +139,24 @@
 						{@render competitorMeta(true)}
 						<p class="action-disabled">Registration closed</p>
 					{/if}
+				</div>
+
+				<div class="action-block edit-link-block">
+					<h2 class="action-heading">Already registered?</h2>
+					<p class="action-note">We email a private edit link when your entry is confirmed. If it didn’t arrive or has expired, request another here.</p>
+					{#if data.registrationEditsOpen}
+						<form method="POST" action="?/requestEditLink" use:enhance={() => {
+							sendingEditLink = true;
+							return async ({ update }) => { try { await update(); } finally { sendingEditLink = false; } };
+						}}>
+							<label for="registration-edit-email">Registration email</label>
+							<input id="registration-edit-email" name="email" type="email" autocomplete="email" required maxlength="254" />
+							<button class="btn btn-secondary action-btn" disabled={sendingEditLink}>{sendingEditLink ? 'Requesting…' : 'Send registration edit link'}</button>
+						</form>
+					{:else}<p class="action-note">Editing is closed. Contact event staff for changes.</p>{/if}
+					{#if form?.error}<p class="edit-link-result" role="alert">{form.error}</p>{/if}
+					{#if form?.success}<p class="edit-link-result" role="status">{form.success}</p>{/if}
+					<a class="action-note" href="/events/{data.event.slug}/manage">Open registration management</a>
 				</div>
 
 				<!-- Spectator -->
@@ -306,6 +325,11 @@
 </div>
 
 <style>
+	.edit-link-block form { display: grid; gap: .75rem; margin: 1rem 0; }
+	.edit-link-block label { font-size: .875rem; font-weight: 600; }
+	.edit-link-block input { min-width: 0; width: 100%; box-sizing: border-box; padding: .75rem; border: 1px solid var(--border-color, #475569); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); font: inherit; }
+	.edit-link-block input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+	.edit-link-result { margin: .75rem 0; padding: .75rem; border: 1px solid var(--gold); border-radius: 8px; font-size: .875rem; line-height: 1.6; }
 	/* Hero */
 	.event-hero {
 		position: relative;

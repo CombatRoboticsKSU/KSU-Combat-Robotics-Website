@@ -66,6 +66,18 @@ try {
 	await assert.rejects(access.sendRegistrationAccess(event, owner));
 	const failedToken = new URL(messages.at(-1).template_params.edit_link).searchParams.get('token');
 	assert.equal(Number((await q`select count(*) as n from registration_access where token_hash=${access.accessHash(failedToken)}`)[0].n), 0, 'Failed delivery revokes its link');
+	const beforeAutomatic = messages.length;
+	await access.notifyRegistrationAccess(reg.id);
+	assert.equal(messages.length, beforeAutomatic + 1, 'Confirmed paid entries automatically receive their edit link');
+	await q`update registrations set status='member' where id=${reg.id}`;
+	await access.notifyRegistrationAccess(reg.id);
+	assert.equal(messages.length, beforeAutomatic + 2, 'Member entries automatically receive their edit link');
+	await q`update registrations set status='pending' where id=${reg.id}`;
+	await access.notifyRegistrationAccess(reg.id);
+	assert.equal(messages.length, beforeAutomatic + 2, 'Unconfirmed payments do not grant edit access');
+	await q`update registrations set status='paid' where id=${reg.id}`;
+	const eventPage = await server.ssrLoadModule('/src/routes/events/[slug]/+page.server.ts');
+	assert.equal(eventPage.actions.requestEditLink, route.actions.requestLink, 'Event and management pages use the same protected resend action');
 	assert.equal(await access.exchangeAccessToken(otherEventId, token), null, 'Email link is event-scoped');
 	const exchanges = await Promise.all([access.exchangeAccessToken(eventId, token), access.exchangeAccessToken(eventId, token)]);
 	assert.equal(exchanges.filter(Boolean).length, 1, 'Single-use link consumed atomically');

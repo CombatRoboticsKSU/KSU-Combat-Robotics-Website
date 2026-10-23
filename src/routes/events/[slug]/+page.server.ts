@@ -3,7 +3,9 @@ import { events, registrations } from '$lib/server/schema';
 import { eq, and, inArray, count } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { ACTIVE_REGISTRATION_STATUSES, isEventFull, canRegister } from '$lib/utils/events';
-import type { PageServerLoad } from './$types';
+import { registrationEditsOpen } from '$lib/utils/registration-editing';
+import { requestRegistrationLink } from '$lib/server/registration-link-request';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const [ev] = await db
@@ -30,9 +32,12 @@ export const load: PageServerLoad = async ({ params }) => {
 	const memberCodeEnabled = memberCode.trim() !== '';
 	return {
 		event,
+		registrationEditsOpen: registrationEditsOpen(ev),
 		memberCodeEnabled,
 		isFull,
 		spotsLeft: ev.capacity > 0 ? Math.max(0, ev.capacity - taken) : null,
 		canRegister: canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull, memberCodeEnabled)
 	};
 };
+
+export const actions: Actions = { requestEditLink: requestRegistrationLink };

@@ -120,7 +120,10 @@ export async function accessSession(eventId: number, session: string) {
 
 // Email failures must never undo a successful payment or a member registration.
 export async function notifyRegistrationAccess(registrationId: number) {
-	if (!emailDeliveryReady()) return;
+	if (!emailDeliveryReady()) {
+		console.error('Registration access notification skipped', { provider: 'EmailJS', code: 'not_configured' });
+		return;
+	}
 	try {
 		const [row] = await db.select({ event: events, email: registrations.email }).from(registrations)
 			.innerJoin(events, eq(events.id, registrations.eventId)).where(eq(registrations.id, registrationId)).limit(1);

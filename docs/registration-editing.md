@@ -1,6 +1,9 @@
 # Competitor registration editing
 
-Competitors use **Manage registration** on the event or payment confirmation page.
+Competitors receive an edit link automatically after payment confirmation or member
+registration. The event page also has a **Send registration edit link** button with
+an email field, so missing or expired links can be replaced without leaving the event.
+Both that form and **Manage registration** use the same protected resend action.
 They enter their registration email to receive a private, single-use link valid for
 30 minutes. A deliberate Continue submission exchanges it for an HttpOnly browser
 session lasting two hours. Email scanners opening the link do not consume it.
