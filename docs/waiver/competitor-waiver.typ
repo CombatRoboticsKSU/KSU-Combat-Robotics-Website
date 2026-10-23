@@ -5,32 +5,30 @@
 #set document(title: "Competitor Waiver and Safety Acknowledgement", author: "KSU Combat Robotics")
 #set text(font: ("Arial", "Segoe UI"), size: 11pt, fill: rgb("#202630"))
 #set par(leading: 0.48em, spacing: 0.85em, justify: false)
+// kent-state-logo.png is the main blue and gold logo from kent.edu/ucm/university-logos.
 #set page(
   paper: "us-letter",
-  margin: (left: 0.55in, right: 0.55in, top: 1.3in, bottom: 0.7in),
-  header-ascent: 0.18in,
+  margin: (left: 0.6in, right: 0.6in, top: 1.35in, bottom: 0.75in),
+  header-ascent: 0.2in,
   header: [
-    #block(width: 100%, fill: navy, inset: 12pt)[
-      #grid(columns: (1fr, auto), column-gutter: 10pt,
-        [
-          #text(size: 16pt, weight: "bold", fill: white)[KSU COMBAT ROBOTICS]
-          #v(5pt)
-          #text(size: 8.2pt, weight: "bold", fill: gold)[COMPETITOR WAIVER AND SAFETY ACKNOWLEDGEMENT]
-        ],
-        align(right + horizon)[
-          #text(size: 8pt, fill: white)[Kent State University \ ksucombat.club]
-        ],
-      )
-    ]
-    #v(-3pt)
-    #line(length: 100%, stroke: 2.5pt + gold)
+    #grid(columns: (auto, 1fr, auto), column-gutter: 12pt, align: horizon,
+      image("ksu-combat-logo.png", height: 0.62in),
+      [
+        #text(size: 13pt, weight: "bold", fill: navy)[Competitor Waiver and Safety Acknowledgement]
+        #v(-6pt)
+        #text(size: 8.5pt, fill: rgb("#5a6270"))[KSU Combat Robotics #h(4pt) | #h(4pt) Kent State University #h(4pt) | #h(4pt) ksucombat.club]
+      ],
+      image("kent-state-logo.png", height: 0.38in),
+    )
+    #v(-2pt)
+    #grid(columns: (3fr, 1fr), line(length: 100%, stroke: 2.5pt + navy), line(length: 100%, stroke: 2.5pt + gold))
   ],
   footer: context [
-    #line(length: 100%, stroke: 0.5pt + navy)
-    #v(5pt)
+    #line(length: 100%, stroke: 0.5pt + rgb("#c8ccd4"))
+    #v(4pt)
     #grid(columns: (1fr, auto), column-gutter: 8pt,
-      text(size: 6.4pt, fill: navy, "KSU COMBAT ROBOTICS // COMPETITOR WAIVER // DRAFT - pending risk management review"),
-      text(size: 7pt, fill: navy)[Page #counter(page).display() of #counter(page).final().first()],
+      text(size: 6.6pt, fill: rgb("#5a6270"), "KSU COMBAT ROBOTICS  //  COMPETITOR WAIVER  //  DRAFT - pending risk management review"),
+      text(size: 7pt, fill: navy, weight: "bold")[Page #counter(page).display() of #counter(page).final().first()],
     )
   ],
 )
@@ -72,7 +70,42 @@ By registering for a KSU Combat Robotics event at Kent State University, I ackno
 15. I acknowledge that registration fees are non-refundable except where stated in the event listing.
 ```.text
 
+#let paragraphs = waiver-text.trim().split("\n\n")
+#let item(num, content) = block(breakable: false, below: 0.7em)[
+  #grid(columns: (20pt, 1fr), column-gutter: 8pt,
+    box(width: 20pt, height: 20pt, radius: 3pt, fill: navy,
+      align(center + horizon, text(size: 8.5pt, weight: "bold", fill: white, num))),
+    pad(top: 3pt, content),
+  )
+]
+
+// Risk warning: the first two paragraphs.
+#block(width: 100%, fill: rgb("#fff6dc"), stroke: (left: 4pt + gold), inset: (x: 12pt, y: 10pt), radius: (right: 3pt), below: 1em)[
+  #text(size: 12pt, weight: "bold", fill: navy, paragraphs.at(0))
+  #v(-2pt)
+  #paragraphs.at(1)
+]
+
+#text(weight: "bold", paragraphs.at(2))
+#v(2pt)
+
 // Keep each numbered acknowledgement together and balance the two pages.
-#for paragraph in waiver-text.trim().split("\n\n") {
-  block(breakable: false)[#paragraph]
+#for paragraph in paragraphs.slice(3) {
+  let m = paragraph.match(regex("^(\\d+)\\. (.*)$"))
+  if m != none { item(m.captures.at(0), m.captures.at(1)) } else { block(breakable: false, paragraph) }
 }
+
+#v(1.2em)
+#block(width: 100%, breakable: false, stroke: 0.75pt + rgb("#c8ccd4"), radius: 3pt, inset: 12pt)[
+  #text(size: 8pt, weight: "bold", fill: navy)[DOCUMENT INFORMATION]
+  #v(-2pt)
+  #set text(size: 9pt)
+  #grid(columns: (auto, 1fr), column-gutter: 14pt, row-gutter: 7pt,
+    text(fill: rgb("#5a6270"))[Issued by], [KSU Combat Robotics, a registered student organization of Kent State University],
+    text(fill: rgb("#5a6270"))[Status], [Draft, pending risk management review],
+    text(fill: rgb("#5a6270"))[Applies to], [All competitors at KSU Combat Robotics events],
+    text(fill: rgb("#5a6270"))[Questions], [ksu.fightingrobotics\@gmail.com #h(4pt) | #h(4pt) ksucombat.club],
+  )
+]
+#v(0.8em)
+#text(size: 8.5pt, fill: rgb("#5a6270"))[This online acknowledgement is completed at registration. The signed in-person waiver collected at check-in is the legal release.]
