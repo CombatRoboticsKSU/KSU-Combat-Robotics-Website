@@ -9,7 +9,7 @@ and spectator admission remain separate.
 
 1. Apply `drizzle/spectator-tickets.manual.sql` to the target database **before**
    deploying this code. The new tables are required by the webhook and event admin.
-   The migration has been applied to the development database, not production.
+   The migration was applied to development and production on October 23, 2026.
 2. Deploy with the target environment’s Stripe key and webhook signing secret.
    Use the existing snapshot webhook subscriptions: `checkout.session.completed`,
    `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`,

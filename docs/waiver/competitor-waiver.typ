@@ -27,7 +27,7 @@
     #line(length: 100%, stroke: 0.5pt + rgb("#c8ccd4"))
     #v(4pt)
     #grid(columns: (1fr, auto), column-gutter: 8pt,
-      text(size: 6.6pt, fill: rgb("#5a6270"), "KSU COMBAT ROBOTICS  //  COMPETITOR WAIVER  //  DRAFT - pending risk management review"),
+      text(size: 6.6pt, fill: rgb("#5a6270"), "KSU COMBAT ROBOTICS  //  COMPETITOR WAIVER"),
       text(size: 7pt, fill: navy, weight: "bold")[Page #counter(page).display() of #counter(page).final().first()],
     )
   ],
@@ -102,7 +102,7 @@ By registering for a KSU Combat Robotics event at Kent State University, I ackno
   #set text(size: 9pt)
   #grid(columns: (auto, 1fr), column-gutter: 14pt, row-gutter: 7pt,
     text(fill: rgb("#5a6270"))[Issued by], [KSU Combat Robotics, a registered student organization of Kent State University],
-    text(fill: rgb("#5a6270"))[Status], [Draft, pending risk management review],
+    text(fill: rgb("#5a6270"))[Status], [Approved for use],
     text(fill: rgb("#5a6270"))[Applies to], [All competitors at KSU Combat Robotics events],
     text(fill: rgb("#5a6270"))[Questions], [ksu.fightingrobotics\@gmail.com #h(4pt) | #h(4pt) ksucombat.club],
   )
