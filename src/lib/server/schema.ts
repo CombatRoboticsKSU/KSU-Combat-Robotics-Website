@@ -292,7 +292,7 @@ export const spectatorTickets = pgTable('spectator_tickets', {
 export const registrations = pgTable('registrations', {
 	id: serial('id').primaryKey(),
 	eventId: integer('event_id').notNull().references(() => events.id),
-	// 'pending' | 'paid' | 'expired' | 'refunded' | 'member' | 'paid_offline' | 'cancelled'
+	// 'registered' | 'cancelled'; legacy: 'pending' | 'paid' | 'expired' | 'refunded' | 'member' | 'paid_offline'
 	status: text('status').notNull().default('pending'),
 	builderName: text('builder_name').notNull(),
 	email: text('email').notNull(),

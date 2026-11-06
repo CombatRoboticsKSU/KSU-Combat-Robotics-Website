@@ -100,14 +100,6 @@
 			<div class="panel actions-panel">
 				<!-- Competitor -->
 				{#snippet competitorMeta(showSpots: boolean)}
-					{#if data.event.competitorPriceId === '' && data.memberCodeEnabled}
-						<p class="action-note">Members register with the code from Discord.</p>
-					{:else if data.event.competitorPrice}
-						<div class="price">
-							<span class="price-value">{data.event.competitorPrice}</span>
-							<span class="price-label">Entry fee, per robot</span>
-						</div>
-					{/if}
 					{#if data.event.competitorNote}<p class="action-note">{data.event.competitorNote}</p>{/if}
 					{#if showSpots && data.spotsLeft !== null}
 						<div class="spots">
@@ -129,9 +121,6 @@
 							{data.event.competitorLabel}
 							<ChevronRight size={18} />
 						</a>
-					{:else if data.event.competitorPriceId === '' && !data.memberCodeEnabled}
-						{@render competitorMeta(false)}
-						<p class="action-disabled">Coming soon</p>
 					{:else if data.isFull}
 						{@render competitorMeta(true)}
 						<p class="action-disabled">Registration full</p>
@@ -162,12 +151,6 @@
 				<!-- Spectator -->
 				<div class="action-block">
 					<h2 class="action-heading"><Ticket size={18} /> Watch</h2>
-					{#if data.event.spectatorPrice}
-						<div class="price">
-							<span class="price-value">{data.event.spectatorPrice}</span>
-							<span class="price-label">Spectator ticket</span>
-						</div>
-					{/if}
 					{#if data.event.spectatorNote}<p class="action-note">{data.event.spectatorNote}</p>{/if}
 					{#if data.event.spectatorUrl}
 						<a
@@ -532,26 +515,6 @@
 
 	.action-heading :global(svg) {
 		color: var(--gold);
-	}
-
-	.price {
-		display: flex;
-		align-items: baseline;
-		flex-wrap: wrap;
-		gap: 0.25rem 0.625rem;
-	}
-
-	.price-value {
-		font-size: 1.625rem;
-		font-weight: 800;
-		letter-spacing: -0.01em;
-		line-height: 1.1;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.price-label {
-		font-size: 0.875rem;
-		color: var(--text-secondary);
 	}
 
 	.action-note {

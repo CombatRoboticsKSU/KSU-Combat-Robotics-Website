@@ -343,6 +343,7 @@
 	margin-top: 0.625rem;
 }
 
+.status-pill.registered,
 .status-pill.member,
 .status-pill.paid_offline {
 	background: rgba(34, 197, 94, 0.1);

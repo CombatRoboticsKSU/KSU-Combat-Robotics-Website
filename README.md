@@ -1,22 +1,21 @@
 # KSU Combat Robotics Website
 
-Website for KSU Combat Robotics at Kent State University: club info, leadership, bots, projects, blog posts, sponsors, and event registration with online payment.
+Website for KSU Combat Robotics at Kent State University: club info, leadership, bots, projects, blog posts, sponsors, and free event registration.
 
 ## Stack
 
 - SvelteKit 2 with Svelte 5 and TypeScript
 - Drizzle ORM on Neon Postgres
 - better-auth for admin login
-- Stripe Checkout and Payment Links for event payments
 - Vercel Blob for uploads (images, PDFs, hazard bot documents, bot photos)
 - Deployed on Vercel
 
 ## Features
 
 - Public pages: home, events, leadership, bots, projects, blog, history, calendar, sponsorship, contact, wiki
-- Events: event pages with documents (rules, waiver), competitor registration with Stripe Checkout, spectator tickets via Stripe Payment Links
-- Registration: required bot photo, competitor waiver, hazard bot declaration with document upload, free registration for club members via a per-event access code
-- Admin (`/admin`): manage content, events, registrations (edit, change status, add manually, delete), hazard bot review, roster filters with email export, CSV export, sponsor codes for free spectator tickets
+- Events: event pages with documents (rules, waiver), free competitor registration, spectator info with an optional external link
+- Registration: required bot photo, competitor waiver, hazard bot declaration with document upload
+- Admin (`/admin`): manage content, events, registrations (edit, change status, add manually, delete), hazard bot review, roster filters with email export, CSV export
 
 ## Getting started
 
@@ -38,17 +37,7 @@ Create a `.env` file in the project root:
 | `BETTER_AUTH_SECRET` | better-auth signing secret |
 | `BETTER_AUTH_URL` | Base URL of the site, for example `http://localhost:5173` |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob token |
-| `STRIPE_SECRET_KEY` | Stripe secret key (test key for dev) |
-| `STRIPE_WEBHOOK_SECRET` | Signing secret for `/api/stripe/webhook` |
 | `PUBLIC_EMAILJS_SERVICE_ID`, `PUBLIC_EMAILJS_TEMPLATE_ID`, `PUBLIC_EMAILJS_USER_ID` | EmailJS for the contact form |
-
-### Stripe webhooks locally
-
-```sh
-stripe listen --forward-to localhost:5173/api/stripe/webhook --events checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.expired,checkout.session.async_payment_failed,charge.refunded
-```
-
-Put the printed `whsec_...` value in `STRIPE_WEBHOOK_SECRET`.
 
 ## Database
 

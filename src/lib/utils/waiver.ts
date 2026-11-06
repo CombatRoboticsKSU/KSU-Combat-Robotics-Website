@@ -39,9 +39,7 @@ By registering for a KSU Combat Robotics event at Kent State University, I ackno
 
 13. I acknowledge that my robot and equipment may be damaged, destroyed, or lost. I accept responsibility for that risk and understand that registration does not provide equipment protection or a promise of reimbursement from KSU Combat Robotics or Kent State University.
 
-14. I will sign the full in-person waiver at check-in before competing. I acknowledge that this online acknowledgement is not the legal release and does not replace the signed in-person waiver.
-
-15. I acknowledge that registration fees are non-refundable except where stated in the event listing.`;
+14. I will sign the full in-person waiver at check-in before competing. I acknowledge that this online acknowledgement is not the legal release and does not replace the signed in-person waiver.`;
 
 // Blank per-event text falls back to the default so events created before the waiver
 // field existed keep showing something meaningful.

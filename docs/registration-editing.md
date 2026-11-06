@@ -63,7 +63,7 @@ another link later. Offline entries can use the same request form.
 
 ## Editing rules
 
-- Confirmed `paid`, `member`, and `paid_offline` entries are eligible. Pending,
+- Confirmed `registered` entries (and legacy `paid`, `member`, `paid_offline`) are eligible. Pending,
   expired, refunded, and cancelled entries are blocked, including changes that
   occur after the editing page loads.
 - Editable: builder name, phone, team and bot names, weapon type, notes, bot photo,

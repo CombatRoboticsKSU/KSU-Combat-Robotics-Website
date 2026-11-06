@@ -19,15 +19,10 @@ export const actions: Actions = {
 		const event = await loadAdminEvent(params.id);
 		const form = await request.formData();
 		const values = readRegistrationFields(form);
-		const rawStatus = form.get('status');
-		const status = typeof rawStatus === 'string' ? rawStatus : '';
 		const validationError = registrationFieldError(values);
-		if (validationError) return fail(400, { error: validationError, values, status });
-		if (status !== 'member' && status !== 'paid_offline') {
-			return fail(400, { error: 'Initial status must be member or paid offline.', values, status });
-		}
+		if (validationError) return fail(400, { error: validationError, values });
 		await db.insert(registrations).values({
-			...values, eventId: event.id, status, waiverAck: false, ageAck: false, hazardDocs: [],
+			...values, eventId: event.id, status: 'registered', waiverAck: false, ageAck: false, hazardDocs: [],
 			hazardStatus: values.hazardPneumatic || values.hazardHighMass ? 'pending_review' : 'not_required'
 		});
 		throw redirect(303, `/admin/events/${event.id}/registrations`);

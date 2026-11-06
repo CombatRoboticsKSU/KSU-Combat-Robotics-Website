@@ -22,7 +22,7 @@ async function reviewHazard(request: Request, eventId: string, status: 'approved
 		.where(and(
 			eq(registrations.id, registrationId),
 			eq(registrations.eventId, id),
-			inArray(registrations.status, ['paid', 'member', 'paid_offline']),
+			inArray(registrations.status, ['registered', 'paid', 'member', 'paid_offline']),
 			ne(registrations.hazardStatus, 'not_required')
 		))
 		.returning({ id: registrations.id });
@@ -49,6 +49,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		.orderBy(desc(registrations.createdAt));
 
 	const counts = {
+		registered: rows.filter((r) => r.status === 'registered').length,
 		member: rows.filter((r) => r.status === 'member').length,
 		paid_offline: rows.filter((r) => r.status === 'paid_offline').length,
 		cancelled: rows.filter((r) => r.status === 'cancelled').length,

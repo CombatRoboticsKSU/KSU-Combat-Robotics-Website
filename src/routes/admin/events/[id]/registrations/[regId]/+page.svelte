@@ -3,7 +3,7 @@
 	import RegistrationFields from '$lib/components/admin/RegistrationFields.svelte';
 	let { data, form } = $props();
 	const registration = $derived(data.registration);
-	const canSetStatus = $derived(['pending', 'expired', 'member', 'paid_offline', 'cancelled', 'paid'].includes(registration.status));
+	const canSetStatus = $derived(['registered', 'pending', 'expired', 'member', 'paid_offline', 'cancelled', 'paid'].includes(registration.status));
 	const canDelete = $derived(registration.stripePaymentIntentId === null && !['pending', 'paid', 'refunded'].includes(registration.status));
 </script>
 
@@ -52,15 +52,13 @@
 			<form method="POST" action="?/setStatus">
 				<div class="field-group">
 					<label class="field-label" for="status">Status</label>
-					<select class="field-input" id="status" name="status" value={registration.status === 'paid' ? 'cancelled' : ['expired', 'pending'].includes(registration.status) ? 'member' : registration.status}>
-						{#if registration.status !== 'paid'}<option value="member">Member</option><option value="paid_offline">Paid offline</option>{/if}
+					<select class="field-input" id="status" name="status" value={registration.status === 'paid' || registration.status === 'cancelled' ? 'cancelled' : 'registered'}>
+						{#if registration.status !== 'paid'}<option value="registered">Registered</option>{/if}
 						<option value="cancelled">Cancelled</option>
 					</select>
 				</div>
-				{#if registration.status === 'pending'}
-					<p class="help-text">This registration has not paid yet. Changing its status closes the open Stripe checkout so the builder can no longer pay online.</p>
-				{:else}
-					<p class="help-text">Cancelling does not refund a payment. Refund in the Stripe dashboard if appropriate.</p>
+				{#if registration.status === 'paid'}
+					<p class="help-text">Cancelling does not refund the past payment. Refund in the Stripe dashboard if appropriate.</p>
 				{/if}
 				<div class="form-actions"><button class="btn-admin primary" type="submit">Update Status</button></div>
 			</form>
@@ -68,15 +66,15 @@
 			<p class="help-text">Refunded registrations are final and cannot be changed manually.</p>
 		{/if}
 	</div>
-	<div class="form-card">
-		<h3>Stripe Payment Details</h3>
+	{#if registration.stripeSessionId || registration.stripePaymentIntentId}<div class="form-card">
+		<h3>Past Payment Details</h3>
 		<dl class="registration-details">
 			<dt>Session ID</dt><dd>{registration.stripeSessionId ?? 'None'}</dd>
 			<dt>Payment intent</dt><dd>{registration.stripePaymentIntentId ?? 'None'}</dd>
 			<dt>Amount (cents)</dt><dd>{registration.amountTotal ?? 'None'}</dd>
 			<dt>Paid at</dt><dd>{registration.paidAt ? new Date(registration.paidAt).toLocaleString() : 'None'}</dd>
 		</dl>
-	</div>
+	</div>{/if}
 	<div class="form-card">
 		<h3>Delete Registration</h3>
 		{#if canDelete}

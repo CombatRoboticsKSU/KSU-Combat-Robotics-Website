@@ -77,7 +77,7 @@ export const actions: Actions = {
 			with original as (
 				select r.* from registrations r join events e on e.id = r.event_id
 				where r.id = ${id} and r.event_id = ${event.id} and lower(r.email) = ${grant.email}
-				and r.status in ('paid', 'member', 'paid_offline') and e.published = true and e.status <> 'past'
+				and r.status in ('registered', 'paid', 'member', 'paid_offline') and e.published = true and e.status <> 'past'
 				and (now() at time zone 'America/New_York')::date < e.sort_date::date
 				and (e.registration_edit_deadline = '' or to_char(now() at time zone 'America/New_York', 'YYYY-MM-DD') <= e.registration_edit_deadline)
 				for update of r, e
@@ -103,6 +103,6 @@ export const actions: Actions = {
 			select c.id, row_to_json(o), row_to_json(c) from changed c join original o on c.id = o.id returning id
 		`);
 		if (!result.rows.length) return fail(409, { error: 'This entry changed or is no longer editable. Reload the page before saving again.' });
-		return { success: 'Registration saved. Your payment is unchanged. Any changed Hazard Bot details have been sent back for technical review.' };
+		return { success: 'Registration saved. Any changed Hazard Bot details have been sent back for technical review.' };
 	}
 };

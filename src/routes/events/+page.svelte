@@ -15,7 +15,7 @@
 	}
 
 	function badgeFor(e: (typeof data.upcoming)[number]) {
-		return eventBadge(e.status, e.registrationOpen, e.isFull, e.competitorPriceId !== '' || e.memberCodeEnabled);
+		return eventBadge(e.status, e.registrationOpen, e.isFull);
 	}
 </script>
 

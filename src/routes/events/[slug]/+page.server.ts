@@ -28,15 +28,13 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const isFull = isEventFull(ev.capacity, taken);
 
-	const { memberCode, ...event } = ev;
-	const memberCodeEnabled = memberCode.trim() !== '';
+	const { memberCode: _memberCode, ...event } = ev;
 	return {
 		event,
 		registrationEditsOpen: registrationEditsOpen(ev),
-		memberCodeEnabled,
 		isFull,
 		spotsLeft: ev.capacity > 0 ? Math.max(0, ev.capacity - taken) : null,
-		canRegister: canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull, memberCodeEnabled)
+		canRegister: canRegister(ev.status, ev.registrationOpen, isFull)
 	};
 };
 

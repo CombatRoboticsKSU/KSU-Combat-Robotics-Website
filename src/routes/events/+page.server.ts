@@ -21,9 +21,8 @@ export const load: PageServerLoad = async () => {
 	const takenByEvent: Record<number, number> = {};
 	for (const row of takenCounts) takenByEvent[row.eventId] = row.value;
 
-	const withFull = all.map(({ memberCode, ...e }) => ({
+	const withFull = all.map(({ memberCode: _memberCode, ...e }) => ({
 		...e,
-		memberCodeEnabled: memberCode.trim() !== '',
 		isFull: isEventFull(e.capacity, takenByEvent[e.id] ?? 0)
 	}));
 

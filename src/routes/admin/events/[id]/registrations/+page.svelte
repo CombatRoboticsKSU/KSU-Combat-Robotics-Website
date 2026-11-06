@@ -7,8 +7,9 @@
 
 	const statusFilters: Record<string, { label: string; match: (r: Registration) => boolean }> = {
 		all: { label: 'All statuses', match: () => true },
-		confirmed: { label: 'Confirmed (paid, member, paid offline)', match: (r) => ['paid', 'member', 'paid_offline'].includes(r.status) },
-		active: { label: 'Active (confirmed + pending)', match: (r) => ['paid', 'member', 'paid_offline', 'pending'].includes(r.status) },
+		confirmed: { label: 'Confirmed', match: (r) => ['registered', 'paid', 'member', 'paid_offline'].includes(r.status) },
+		active: { label: 'Active (confirmed + pending)', match: (r) => ['registered', 'paid', 'member', 'paid_offline', 'pending'].includes(r.status) },
+		registered: { label: 'Registered', match: (r) => r.status === 'registered' },
 		paid: { label: 'Paid', match: (r) => r.status === 'paid' },
 		member: { label: 'Member', match: (r) => r.status === 'member' },
 		paid_offline: { label: 'Paid offline', match: (r) => r.status === 'paid_offline' },
@@ -80,8 +81,6 @@
 			<a href="/admin/events" class="item-sub">&larr; Back to Events</a>
 		</div>
 		<div class="item-actions">
-			<a class="btn-admin ghost" href="/admin/events/{data.event.id}/spectators">Spectator tickets</a>
-			<a class="btn-admin ghost" href="/admin/events/{data.event.id}/sponsor-codes">Sponsor Codes</a>
 			<a class="btn-admin primary" href="/admin/events/{data.event.id}/registrations/new">Add Registration</a>
 			<a class="btn-admin ghost" href="/admin/events/{data.event.id}/registrations/export" download>Download CSV</a>
 		</div>
@@ -91,23 +90,7 @@
 		<h2>Registration Counts</h2>
 	</div>
 	<div class="form-card stat-row">
-		<div>
-			<div class="item-sub">Paid</div>
-			<div class="item-name stat-value">{data.counts.paid}</div>
-		</div>
-		<div>
-			<div class="item-sub">Pending</div>
-			<div class="item-name stat-value">{data.counts.pending}</div>
-		</div>
-		<div>
-			<div class="item-sub">Expired</div>
-			<div class="item-name stat-value">{data.counts.expired}</div>
-		</div>
-		<div>
-			<div class="item-sub">Refunded</div>
-			<div class="item-name stat-value">{data.counts.refunded}</div>
-		</div>
-		{#each [['Member', data.counts.member], ['Paid offline', data.counts.paid_offline], ['Cancelled', data.counts.cancelled]] as [label, value]}
+		{#each [['Registered', data.counts.registered], ['Cancelled', data.counts.cancelled], ['Paid', data.counts.paid], ['Pending', data.counts.pending], ['Expired', data.counts.expired], ['Refunded', data.counts.refunded], ['Member', data.counts.member], ['Paid offline', data.counts.paid_offline]] as [label, value]}
 			<div><div class="item-sub">{label}</div><div class="item-name stat-value">{value}</div></div>
 		{/each}
 		{#if data.event.capacity > 0}
@@ -170,7 +153,6 @@
 						<th>Phone</th>
 						<th>Notes</th>
 						<th>Created</th>
-						<th>Paid</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -197,7 +179,7 @@
 									{/each}
 									{#if r.hazardReviewNote}<p class="hazard-note">{r.hazardReviewNote}</p>{/if}
 									{#if r.hazardReviewedAt}<div class="item-sub">Reviewed {formatDate(r.hazardReviewedAt)}</div>{/if}
-									{#if ['paid', 'member', 'paid_offline'].includes(r.status) && r.hazardStatus !== 'not_required'}
+									{#if ['registered', 'paid', 'member', 'paid_offline'].includes(r.status) && r.hazardStatus !== 'not_required'}
 										<form method="POST" action="?/approveHazard" class="hazard-review-form">
 											<input type="hidden" name="registrationId" value={r.id} />
 											<div class="field-group">
@@ -208,7 +190,6 @@
 												<button class="btn-admin primary sm" type="submit"><Check size={14} /> Approve</button>
 												<button class="btn-admin danger sm" type="submit" formaction="?/rejectHazard"><X size={14} /> Reject</button>
 											</div>
-											<p class="item-sub">If rejecting, refund in Stripe if appropriate.</p>
 										</form>
 									{/if}
 								</div>
@@ -219,12 +200,11 @@
 							<td>{r.phone}</td>
 							<td>{r.notes}</td>
 							<td>{formatDate(r.createdAt)}</td>
-							<td>{formatDate(r.paidAt)}</td>
 							<td><a class="btn-admin ghost sm" href="/admin/events/{data.event.id}/registrations/{r.id}">Edit</a></td>
 						</tr>
 					{/each}
 					{#if filtered.length === 0}
-						<tr><td colspan="13" class="item-sub">No registrations match these filters.</td></tr>
+						<tr><td colspan="12" class="item-sub">No registrations match these filters.</td></tr>
 					{/if}
 				</tbody>
 			</table>

@@ -1,4 +1,4 @@
-export const EDITABLE_REGISTRATION_STATUSES = ['paid', 'member', 'paid_offline'];
+export const EDITABLE_REGISTRATION_STATUSES = ['registered', 'paid', 'member', 'paid_offline'];
 
 export function registrationEditsOpen(event: { status: string; sortDate: Date | string; registrationEditDeadline: string }, now = new Date()) {
 	const today = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });

@@ -118,7 +118,7 @@ export async function accessSession(eventId: number, session: string) {
 	return grant ?? null;
 }
 
-// Email failures must never undo a successful payment or a member registration.
+// Email failures must never undo a successful registration.
 export async function notifyRegistrationAccess(registrationId: number) {
 	if (!emailDeliveryReady()) {
 		console.error('Registration access notification skipped', { provider: 'EmailJS', code: 'not_configured' });

@@ -1,21 +1,22 @@
 import { db } from '$lib/server/db';
 import { events, registrations } from '$lib/server/schema';
-import { eq, asc, count, sql } from 'drizzle-orm';
+import { asc, count, eq, inArray, sql } from 'drizzle-orm';
+import { ACTIVE_REGISTRATION_STATUSES } from '$lib/utils/events';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const allEvents = await db.select().from(events).orderBy(asc(events.sortOrder));
-	const paidCounts = await db
+	const registeredCounts = await db
 		.select({ eventId: registrations.eventId, value: count() })
 		.from(registrations)
-		.where(eq(registrations.status, 'paid'))
+		.where(inArray(registrations.status, ACTIVE_REGISTRATION_STATUSES))
 		.groupBy(registrations.eventId);
 
-	const paidByEvent: Record<number, number> = {};
-	for (const row of paidCounts) paidByEvent[row.eventId] = row.value;
+	const registeredByEvent: Record<number, number> = {};
+	for (const row of registeredCounts) registeredByEvent[row.eventId] = row.value;
 
-	return { events: allEvents, paidByEvent };
+	return { events: allEvents, registeredByEvent };
 };
 
 function parseJsonField<T>(raw: FormDataEntryValue | null, fallback: T): T {
@@ -49,15 +50,11 @@ function readEventFields(form: FormData) {
 		waiverPdfUrl: (form.get('waiverPdfUrl') as string) ?? '',
 		registrationOpen: form.get('registrationOpen') === 'on',
 		registrationEditDeadline: typeof form.get('registrationEditDeadline') === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(String(form.get('registrationEditDeadline'))) ? String(form.get('registrationEditDeadline')) : '',
-		memberCode: typeof form.get('memberCode') === 'string' ? String(form.get('memberCode')).trim() : '',
-		competitorPriceId: (form.get('competitorPriceId') as string)?.trim() ?? '',
 		competitorLabel: (form.get('competitorLabel') as string) || 'Register to Compete',
-		competitorPrice: (form.get('competitorPrice') as string) ?? '',
 		competitorNote: (form.get('competitorNote') as string) ?? '',
 		capacity: parseInt(form.get('capacity') as string) || 0,
 		spectatorUrl: (form.get('spectatorUrl') as string)?.trim() ?? '',
-		spectatorLabel: (form.get('spectatorLabel') as string) || 'Buy Spectator Tickets',
-		spectatorPrice: (form.get('spectatorPrice') as string) ?? '',
+		spectatorLabel: (form.get('spectatorLabel') as string) || 'Spectator Info',
 		spectatorNote: (form.get('spectatorNote') as string) ?? '',
 		schedule: parseJsonField<{ time: string; label: string }[]>(form.get('schedule'), []),
 		faq: parseJsonField<{ question: string; answer: string }[]>(form.get('faq'), []),
@@ -149,19 +146,19 @@ export const actions: Actions = {
 				AND NOT EXISTS (SELECT 1 FROM spectator_orders WHERE event_id = ${id})
 				AND NOT EXISTS (
 					SELECT 1 FROM registrations WHERE event_id = ${id}
-					AND (status IN ('pending', 'paid', 'refunded', 'member', 'paid_offline')
+					AND (status IN ('registered', 'pending', 'paid', 'refunded', 'member', 'paid_offline')
 						OR stripe_payment_intent_id IS NOT NULL)
 				)
 			), removed AS (
 				DELETE FROM registrations WHERE event_id IN (SELECT id FROM eligible)
-				AND status NOT IN ('pending', 'paid', 'refunded', 'member', 'paid_offline')
+				AND status NOT IN ('registered', 'pending', 'paid', 'refunded', 'member', 'paid_offline')
 				AND stripe_payment_intent_id IS NULL RETURNING id
 			)
 			DELETE FROM events WHERE id IN (SELECT id FROM eligible)
 			AND (SELECT count(*) FROM removed) >= 0 RETURNING id
 		`);
 		if (result.rows.length === 0) {
-			return fail(400, { error: 'Event not found or it has active registrations, spectator orders, or payment records and cannot be deleted. Wait for pending checkouts to resolve, or mark the event past instead.' });
+			return fail(400, { error: 'Event not found or it has active registrations, spectator orders, or payment records and cannot be deleted. Mark the event past instead.' });
 		}
 		return { success: true };
 	}

@@ -326,22 +326,6 @@
 					<input id="eEditDeadline" name="registrationEditDeadline" type="date" class="field-input" value={editing?.registrationEditDeadline ?? ''} />
 					<p class="help-text">Leave blank to allow edits through the day before the event. Edits always close on event day. This does not affect new registrations or staff editing.</p>
 				</div>
-				<div class="field-group">
-					<label class="field-label" for="eMemberCode">Member Access Code</label>
-					<input id="eMemberCode" name="memberCode" type="text" class="field-input" value={editing?.memberCode ?? ''} autocomplete="off" />
-					<p class="help-text">Share with club members in Discord. Members who enter it register without paying. Use 8+ characters and change it for each event. Leave blank to disable.</p>
-				</div>
-
-				<div class="field-group">
-					<label class="field-label" for="eCompetitorPriceId">Competitor Stripe Price ID</label>
-					<input
-						id="eCompetitorPriceId"
-						name="competitorPriceId"
-						type="text"
-						class="field-input"
-						value={editing?.competitorPriceId ?? ''}
-					/>
-				</div>
 
 				<div class="field-group">
 					<label class="field-label" for="eCompetitorLabel">Competitor Button Label</label>
@@ -351,17 +335,6 @@
 						type="text"
 						class="field-input"
 						value={editing?.competitorLabel ?? 'Register to Compete'}
-					/>
-				</div>
-
-				<div class="field-group">
-					<label class="field-label" for="eCompetitorPrice">Competitor Price (display text)</label>
-					<input
-						id="eCompetitorPrice"
-						name="competitorPrice"
-						type="text"
-						class="field-input"
-						value={editing?.competitorPrice ?? ''}
 					/>
 				</div>
 
@@ -388,7 +361,7 @@
 				</div>
 
 				<div class="field-group">
-					<label class="field-label" for="eSpectatorUrl">Spectator Ticket URL</label>
+					<label class="field-label" for="eSpectatorUrl">Spectator Link URL (optional)</label>
 					<input id="eSpectatorUrl" name="spectatorUrl" type="text" class="field-input" value={editing?.spectatorUrl ?? ''} />
 				</div>
 
@@ -399,18 +372,7 @@
 						name="spectatorLabel"
 						type="text"
 						class="field-input"
-						value={editing?.spectatorLabel ?? 'Buy Spectator Tickets'}
-					/>
-				</div>
-
-				<div class="field-group">
-					<label class="field-label" for="eSpectatorPrice">Spectator Price (display text)</label>
-					<input
-						id="eSpectatorPrice"
-						name="spectatorPrice"
-						type="text"
-						class="field-input"
-						value={editing?.spectatorPrice ?? ''}
+						value={editing?.spectatorLabel ?? 'Spectator Info'}
 					/>
 				</div>
 
@@ -487,12 +449,11 @@
 						<span class="item-name">{e.name}</span>
 						<span class="item-sub">
 							{e.slug} &middot; {e.eventDate} &middot; {e.published ? 'Published' : 'Draft'} &middot;
-							{data.paidByEvent[e.id] ?? 0} paid
+							{data.registeredByEvent[e.id] ?? 0} registered
 						</span>
 					</div>
 					<div class="item-actions">
 						<a href="/admin/events/{e.id}/registrations" class="btn-admin ghost sm">View roster</a>
-						<a href="/admin/events/{e.id}/spectators" class="btn-admin ghost sm">Spectator tickets</a>
 						<button class="btn-admin ghost sm" onclick={() => openEdit(e)}>Edit</button>
 						<form method="POST" action="?/deleteEvent" use:enhance>
 							<input type="hidden" name="id" value={e.id} />

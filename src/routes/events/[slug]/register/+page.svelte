@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { ArrowLeft, ArrowRight, Calendar, Check, FileText, MapPin, ShieldAlert, Upload, Weight, X, Camera } from 'lucide-svelte';
+	import { ArrowLeft, ArrowRight, Calendar, Check, FileText, MapPin, Upload, Weight, X, Camera } from 'lucide-svelte';
 	import { upload } from '@vercel/blob/client';
 	import WaiverModal from '$lib/components/WaiverModal.svelte';
 	import { onMount } from 'svelte';
 
 	let { data, form } = $props();
-
-	const canceled = $derived(page.url.searchParams.get('canceled') !== null);
 
 	let waiverModal: WaiverModal;
 	// Seeded from the failed-submit values so a server-side rejection on another field does
@@ -43,7 +40,6 @@
 	let botPhotoUrl = $state(form?.values?.botPhotoUrl ?? '');
 	let photoUploading = $state(false);
 	let photoError = $state('');
-	let memberCode = $state('');
 	let uploading = $state(false);
 	let uploadError = $state('');
 	const isHazard = $derived(hazardPneumatic || hazardHighMass);
@@ -167,33 +163,19 @@
 <div class="container reg-layout">
 	<aside class="reg-rail">
 		<div class="panel summary">
-			{#if memberCode.trim()}
-				<div class="price">
-					<span class="price-value">Free</span>
-					<span class="price-label">Club member registration</span>
-				</div>
-			{:else if data.event.competitorPrice}
-				<div class="price">
-					<span class="price-value">{data.event.competitorPrice}</span>
-					<span class="price-label">Entry fee, per robot</span>
-				</div>
-			{/if}
+			<div class="price">
+				<span class="price-value">Free</span>
+				<span class="price-label">No entry fee</span>
+			</div>
 			{#if data.event.competitorNote}
 				<p class="summary-note">{data.event.competitorNote}</p>
 			{/if}
-			<div class="summary-info">
-				<ShieldAlert size={18} />
-				<span>{memberCode.trim() ? 'Member registrations do not require payment.' : 'You will be redirected to Stripe to complete payment.'}</span>
-			</div>
 		</div>
 	</aside>
 
 	<form class="reg-form" method="POST">
 		{#if form?.error}
 			<div class="form-error" role="alert">{form.error}</div>
-		{/if}
-		{#if canceled}
-			<div class="form-notice">Payment canceled, you can try again.</div>
 		{/if}
 
 		<p class="required-hint"><span class="req" aria-hidden="true">*</span> Required</p>
@@ -301,17 +283,6 @@
 			<input type="hidden" name="hazardDocs" value={JSON.stringify(hazardDocs)} />
 		</fieldset>
 
-		{#if data.memberCodeEnabled}
-			<section class="form-section">
-				<h2 class="section-heading">Club members</h2>
-				<div class="form-group">
-					<label for="memberCode">Member access code</label>
-					<input id="memberCode" name="memberCode" type="text" bind:value={memberCode} autocomplete="off" />
-				</div>
-				<p class="section-intro">Enter the code from Discord to register without paying.</p>
-			</section>
-		{/if}
-
 		<section class="form-section">
 			<h2 class="section-heading">Waiver</h2>
 
@@ -368,7 +339,7 @@
 
 		<div class="submit-area">
 			<button type="submit" class="btn btn-primary submit-btn" disabled={submitBlocked}>
-				{memberCode.trim() ? 'Register as a Member' : 'Continue to Payment'}
+				Register
 				<ArrowRight size={16} />
 			</button>
 			{#if submitHint}
@@ -534,22 +505,6 @@
 		color: var(--text-secondary);
 	}
 
-	.summary-info {
-		display: flex;
-		align-items: flex-start;
-		gap: 0.5rem;
-		padding-top: 0.875rem;
-		border-top: 1px solid var(--border-color);
-		font-size: 0.8125rem;
-		line-height: 1.5;
-		color: var(--text-secondary);
-	}
-
-	.summary-info :global(svg) {
-		flex-shrink: 0;
-		color: var(--gold);
-	}
-
 	/* Form */
 	.form-section {
 		min-width: 0;
@@ -648,10 +603,6 @@
 	.form-group textarea {
 		resize: vertical;
 		min-height: 88px;
-	}
-
-	.form-section > .form-group + .section-intro {
-		margin: 0.5rem 0 0;
 	}
 
 	.photo-field {
@@ -816,16 +767,6 @@
 
 	.hazard-upload .form-error {
 		margin-top: 0.75rem;
-	}
-
-	.form-notice {
-		padding: 0.75rem 1rem;
-		border-radius: var(--radius-md);
-		background: rgba(235, 171, 33, 0.1);
-		border: 1px solid rgba(235, 171, 33, 0.25);
-		color: var(--gold);
-		font-size: 0.875rem;
-		font-weight: 500;
 	}
 
 	/* Waiver */

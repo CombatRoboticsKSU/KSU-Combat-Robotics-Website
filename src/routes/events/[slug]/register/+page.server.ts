@@ -1,8 +1,6 @@
-import { timingSafeEqual } from 'node:crypto';
 import { db } from '$lib/server/db';
 import { blobStoreOrigin, botPhotoPathname, hazardDocumentPathname } from '$lib/server/blob';
 import { events, registrations } from '$lib/server/schema';
-import { stripe } from '$lib/server/stripe';
 import { notifyRegistrationAccess } from '$lib/server/registration-access';
 import { ACTIVE_REGISTRATION_STATUSES, isEventFull, canRegister } from '$lib/utils/events';
 import { resolveWaiverText } from '$lib/utils/waiver';
@@ -43,21 +41,20 @@ async function loadOpenEvent(slug: string) {
 export const load: PageServerLoad = async ({ params }) => {
 	const { ev, isFull } = await loadOpenEvent(params.slug);
 
-	if (!canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, isFull, ev.memberCode.trim() !== '')) {
+	if (!canRegister(ev.status, ev.registrationOpen, isFull)) {
 		throw redirect(303, `/events/${ev.slug}`);
 	}
 
-	const { memberCode, ...event } = ev;
+	const { memberCode: _memberCode, ...event } = ev;
 	return {
 		event,
-		memberCodeEnabled: memberCode.trim() !== '',
 		waiverText: resolveWaiverText(ev.waiverText),
 		waiverPdfUrl: ev.waiverPdfUrl
 	};
 };
 
 export const actions: Actions = {
-	default: async ({ request, params, url }) => {
+	default: async ({ request, params }) => {
 		const form = await request.formData();
 		const values = {
 			builderName: readField(form, 'builderName'),
@@ -128,20 +125,9 @@ export const actions: Actions = {
 
 		const { ev, isFull } = await loadOpenEvent(params.slug);
 
-		const enteredCode = readField(form, 'memberCode');
-		let isMember = false;
-		if (enteredCode) {
-			const entered = Buffer.from(enteredCode.toLowerCase());
-			const expected = Buffer.from(ev.memberCode.trim().toLowerCase());
-			isMember = expected.length > 0 && entered.length === expected.length && timingSafeEqual(entered, expected);
-			if (!isMember) {
-				return fail(400, { error: 'That member access code is not valid for this event.', values });
-			}
-		}
-
 		// isFull is checked separately below so it can carry its own message; pass isFull: false
 		// here so this call only covers the "closed" reasons canRegister otherwise folds together.
-		if (!canRegister(ev.status, ev.registrationOpen, ev.competitorPriceId, false, isMember)) {
+		if (!canRegister(ev.status, ev.registrationOpen, false)) {
 			return fail(400, { error: 'Registration is closed for this event.', values });
 		}
 		if (isFull) {
@@ -149,7 +135,7 @@ export const actions: Actions = {
 		}
 
 		// neon-http batches run in one transaction. Lock the event before the insert's
-		// capacity check so concurrent member and Stripe requests cannot take the same spot.
+		// capacity check so concurrent requests cannot take the same spot.
 		const [, inserted] = await db.batch([
 			db.execute(sql`select pg_advisory_xact_lock(${7301}, ${ev.id})`),
 			db.execute<{ id: number }>(sql`
@@ -158,7 +144,7 @@ export const actions: Actions = {
 					weapon_type, bot_photo_url, hazard_pneumatic, hazard_high_mass, hazard_docs,
 					hazard_status, notes, waiver_ack, age_ack
 				)
-				select ${ev.id}, ${isMember ? 'member' : 'pending'},
+				select ${ev.id}, 'registered',
 					${values.builderName}, ${values.email}, ${values.phone}, ${values.teamName},
 					${values.botName}, ${values.weaponType}, ${botPhotoUrl}, ${values.hazardPneumatic},
 					${values.hazardHighMass}, ${JSON.stringify(hazardDocs)}::json,
@@ -180,47 +166,7 @@ export const actions: Actions = {
 			return fail(400, { error: 'This event is full.', values });
 		}
 
-		if (isMember) {
-			await notifyRegistrationAccess(row.id);
-			throw redirect(303, `/events/${ev.slug}/register/success?member=1${isHazard ? '&hazard=1' : ''}`);
-		}
-
-		let checkoutUrl: string;
-		try {
-			const session = await stripe.checkout.sessions.create({
-				mode: 'payment',
-				line_items: [{ price: ev.competitorPriceId, quantity: 1 }],
-				customer_email: values.email,
-				client_reference_id: String(row.id),
-				metadata: { registrationId: String(row.id), eventId: String(ev.id) },
-				success_url: `${url.origin}/events/${ev.slug}/register/success?session_id={CHECKOUT_SESSION_ID}`,
-				cancel_url: `${url.origin}/events/${ev.slug}/register?canceled=1`
-			});
-
-			if (!session.url) throw new Error('Stripe returned no checkout URL');
-
-			await db
-				.update(registrations)
-				.set({ stripeSessionId: session.id })
-				.where(eq(registrations.id, row.id));
-
-			checkoutUrl = session.url;
-		} catch (e) {
-			console.error('Stripe checkout session creation failed', e);
-			try {
-				// Free the capacity slot the pending row was holding.
-				await db.delete(registrations).where(eq(registrations.id, row.id));
-			} catch (cleanupError) {
-				// The original Stripe error above is still the one we report to the user;
-				// log this separately so an orphaned pending row doesn't hide silently.
-				console.error('Failed to clean up pending registration after Stripe error', cleanupError);
-			}
-			return fail(500, { error: 'Could not start checkout. Please try again.', values });
-		}
-
-		// redirect() is thrown by SvelteKit, so it must stay outside the try/catch above:
-		// if it were thrown from inside the try, the catch would swallow it and then delete
-		// the registration of a customer who was already on their way to pay.
-		throw redirect(303, checkoutUrl);
+		await notifyRegistrationAccess(row.id);
+		throw redirect(303, `/events/${ev.slug}/register/success${isHazard ? '?hazard=1' : ''}`);
 	}
 };
