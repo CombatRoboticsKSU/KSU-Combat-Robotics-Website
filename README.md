@@ -13,7 +13,7 @@ Website for KSU Combat Robotics at Kent State University: club info, leadership,
 ## Features
 
 - Public pages: home, events, leadership, bots, projects, blog, history, calendar, sponsorship, contact, wiki
-- Events: event pages with documents (rules, waiver), free competitor registration, spectator info with an optional external link
+- Events: event pages with documents (rules, waiver), free competitor registration, an optional spectator note
 - Registration: required bot photo, competitor waiver, hazard bot declaration with document upload
 - Admin (`/admin`): manage content, events, registrations (edit, change status, add manually, delete), hazard bot review, roster filters with email export, CSV export
 

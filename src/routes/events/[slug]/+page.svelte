@@ -149,23 +149,12 @@
 				</div>
 
 				<!-- Spectator -->
-				<div class="action-block">
-					<h2 class="action-heading"><Ticket size={18} /> Watch</h2>
-					{#if data.event.spectatorNote}<p class="action-note">{data.event.spectatorNote}</p>{/if}
-					{#if data.event.spectatorUrl}
-						<a
-							class="btn btn-secondary action-btn"
-							href={data.event.spectatorUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							{data.event.spectatorLabel}
-							<ExternalLink size={16} />
-						</a>
-					{:else}
-						<p class="action-disabled">Coming soon</p>
-					{/if}
-				</div>
+				{#if data.event.spectatorNote}
+					<div class="action-block">
+						<h2 class="action-heading"><Ticket size={18} /> Watch</h2>
+						<p class="action-note">{data.event.spectatorNote}</p>
+					</div>
+				{/if}
 			</div>
 		</aside>
 	{/if}

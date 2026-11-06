@@ -53,8 +53,6 @@ function readEventFields(form: FormData) {
 		competitorLabel: (form.get('competitorLabel') as string) || 'Register to Compete',
 		competitorNote: (form.get('competitorNote') as string) ?? '',
 		capacity: parseInt(form.get('capacity') as string) || 0,
-		spectatorUrl: (form.get('spectatorUrl') as string)?.trim() ?? '',
-		spectatorLabel: (form.get('spectatorLabel') as string) || 'Spectator Info',
 		spectatorNote: (form.get('spectatorNote') as string) ?? '',
 		schedule: parseJsonField<{ time: string; label: string }[]>(form.get('schedule'), []),
 		faq: parseJsonField<{ question: string; answer: string }[]>(form.get('faq'), []),

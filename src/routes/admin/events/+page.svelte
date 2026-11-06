@@ -361,22 +361,6 @@
 				</div>
 
 				<div class="field-group">
-					<label class="field-label" for="eSpectatorUrl">Spectator Link URL (optional)</label>
-					<input id="eSpectatorUrl" name="spectatorUrl" type="text" class="field-input" value={editing?.spectatorUrl ?? ''} />
-				</div>
-
-				<div class="field-group">
-					<label class="field-label" for="eSpectatorLabel">Spectator Button Label</label>
-					<input
-						id="eSpectatorLabel"
-						name="spectatorLabel"
-						type="text"
-						class="field-input"
-						value={editing?.spectatorLabel ?? 'Spectator Info'}
-					/>
-				</div>
-
-				<div class="field-group">
 					<label class="field-label" for="eSpectatorNote">Spectator Note</label>
 					<input
 						id="eSpectatorNote"
