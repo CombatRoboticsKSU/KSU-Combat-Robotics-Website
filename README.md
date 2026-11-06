@@ -19,7 +19,7 @@ Website for KSU Combat Robotics at Kent State University: club info, leadership,
 
 ## Getting started
 
-Requires Node 22.13 or newer.
+Requires Node 24.
 
 ```sh
 npm install
