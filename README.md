@@ -19,7 +19,7 @@ Website for KSU Combat Robotics at Kent State University: club info, leadership,
 
 ## Getting started
 
-Requires Node 24.
+Requires Node 22.13 through 25 (Vercel builds on 24).
 
 ```sh
 npm install
